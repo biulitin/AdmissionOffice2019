@@ -104,6 +104,86 @@ create table AbiturientAdress (
 	foreign key (id_typeSettlement) references TypeSettlement(id) on update cascade on delete set null
 );
 
+--Вступительные_испытания
+create table EntranceExam (
+	id int primary key,	--код
+	name varchar(MAX),			--наименование
+	codeFIS varchar(MAX),		--код выгрузки в ФИС
+	min_score int		--минимальный балл
+);
+
+--Формат_испытания
+create table FormOfExam (
+	id int primary key,	--код
+	name varchar(MAX),			 --наименование
+	codeFIS varchar(MAX)		 --код выгрузки в ФИС
+);
+
+--Язык_испытания
+create table LanguageOfExam (
+	id int primary key,	--код
+	name varchar(MAX),			 --наименование
+	codeFIS varchar(MAX)		 --код выгрузки в ФИС
+);
+
+--Основание оценки
+create table BasisMark (
+	id int primary key,	--код
+	name varchar(MAX),			 --наименование
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--Абитуриент_Вступительные испытания
+create table AbiturientEntranceExam (
+	id_abiturient int,       	 --код абитуриента
+	id_entranceExam int,    	 --код испытания
+	id_formOfExam int,     		 --код формата испытания
+	id_languageOfExam int,		 --код языка испытания 
+	group varchar(MAX),			--группа
+	numberIn_group varchar(MAX),		--порядковый номер в группе
+	dateOf_exam date,				--дата испытания
+	score int,					--балл
+	id_basisMark int,		 --код основания оценки 
+	pass_mark int,			 --отметка сдачи
+
+	--Внешние ключи
+	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+	foreign key (id_entranceExam) references EntranceExam(id) on update cascade on delete set null,
+	foreign key (id_formOfExam) references FormOfExam(id) on update cascade on delete set null,
+	foreign key (id_languageOfExam) references LanguageOfExam(id) on update cascade on delete set null,
+	foreign key (id_basisMark) references BasisMark(id) on update cascade on delete set null
+);
+
+--Уровень образования
+create table LevelEducation (
+	id int primary key,	--код
+	name varchar(MAX),			 --наименование
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--Тип образования
+create table TypeEducation (
+	id int primary key,	--код
+	name varchar(MAX),			 --наименование
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--Абитуриент_образование 
+create table AbiturientEducation (
+	id_abiturient int,       	 --код абитуриента
+	id_levelEducation int,    	 --код уровня образования
+	id_typeEducation int,     	 --код типа образования
+	series_document varchar(MAX),			--серия документа
+	number_document varchar(MAX),           	--номер документа
+	name_eduInstitution varchar(MAX),	--название учебного заведения 
+	dateOf_issue date,       	 	--дата выдачи
+	yearOf_graduation int,			--год окончания 
+	
+	--Внешние ключи
+	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+	foreign key (id_levelEducation) references LevelEducation(id) on update cascade on delete set null,
+	foreign key (id_typeEducation) references TypeEducation(id) on update cascade on delete set null
+);
 
 --Пользователи
 create table Users(
