@@ -1,44 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="367.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
+
+<AnchorPane prefHeight="367.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
    <children>
-      <GridPane layoutX="276.0" layoutY="139.0" prefHeight="367.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="-1.0" prefHeight="43.0" prefWidth="754.0">
+         <top>
+            <MenuBar prefHeight="7.0" prefWidth="734.0" style="-fx-border-color: darkgray;" BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="Справочники">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Вступительные испытания" />
+                        <MenuItem mnemonicParsing="false" text="Блоки испытаний" />
+                        <MenuItem mnemonicParsing="false" text="Основания для оценки" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Типы паспортов" />
+                        <MenuItem mnemonicParsing="false" text="Регионы" />
+                        <MenuItem mnemonicParsing="false" text="Типы населенных пунктов" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Пол" />
+                        <MenuItem mnemonicParsing="false" text="Гражданство" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Причины возврата" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Индивидуальные" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Направления обучения" />
+                        <MenuItem mnemonicParsing="false" text="Формы обучения" />
+                        <MenuItem mnemonicParsing="false" text="Специальности" />
+                        <MenuItem mnemonicParsing="false" text="Кафедры" />
+                        <MenuItem mnemonicParsing="false" text="Конкурсные группы" />
+                        <MenuItem mnemonicParsing="false" text="Целевые организации" />
+                        <MenuItem mnemonicParsing="false" text="Стандарты образования" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="План приема" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Пользователи" />
+                     </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Документы">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Заявление" />
+                        <MenuItem mnemonicParsing="false" text="Опись/расписка" />
+                        <MenuItem mnemonicParsing="false" text="Лист вступительных испытаний" />
+                     </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Отчетность">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Список подавших документы" />
+                        <MenuItem mnemonicParsing="false" text="Списки групп на вступительные" />
+                        <MenuItem mnemonicParsing="false" text="Результаты вступительных" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Сатистика" />
+                     </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Конкурс">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Предварительные расчеты" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Сыграть конкурс" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Внутренний рейтинг" />
+                        <MenuItem mnemonicParsing="false" text="Ранжированный список" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Конкурсный список" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Сброс результатов конкурса" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Экспорт">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Целевые организации" />
+                        <MenuItem mnemonicParsing="false" text="Конкурсные группы" />
+                        <MenuItem mnemonicParsing="false" text="План приема" />
+                        <MenuItem mnemonicParsing="false" text="Заявления абитуриентов" />
+                        <MenuItem mnemonicParsing="false" text="Результаты конкурса" />
+                    </items>
+                  </Menu>
+              </menus>
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </BorderPane.margin>
+            </MenuBar>
+         </top>
+      </BorderPane>
+      <GridPane layoutY="40.0" prefHeight="322.0" prefWidth="754.0" style="-fx-padding: 10px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="45.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="366.0" minWidth="10.0" prefWidth="278.6666666666667" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="468.0" minWidth="10.0" prefWidth="454.6666666666667" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="320.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <GridPane GridPane.columnIndex="1">
+            <GridPane alignment="TOP_CENTER" prefHeight="317.0" prefWidth="270.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="338.0" minHeight="10.0" prefHeight="332.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="276.33331298828125" minHeight="10.0" prefHeight="276.33331298828125" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="153.0" minHeight="10.0" prefHeight="44.333353678385436" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                     <children>
-                        <JFXButton fx:id="insertButton" layoutX="316.0" layoutY="5.0" onAction="#inputeDataFromGUI" text="Insert" />
-                     </children></Pane>
-                  <FlowPane fx:id="paneForElems" prefHeight="200.0" prefWidth="200.0" />
+                  <TableView prefHeight="268.0" prefWidth="263.0" style="-fx-border-color: darkgray;">
+                    <columns>
+                      <TableColumn prefWidth="45.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="№Л/д" />
+                      <TableColumn prefWidth="95.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="Фамилия" />
+                        <TableColumn prefWidth="50.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="Имя" />
+                        <TableColumn prefWidth="85.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="Отчество" />
+                    </columns>
+                  </TableView>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </GridPane>
+            <GridPane prefHeight="312.0" prefWidth="390.0" GridPane.columnIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="222.6666717529297" minHeight="10.0" prefHeight="179.33331298828125" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="155.33334350585938" minHeight="10.0" prefHeight="140.66668701171875" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TabPane prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tab.css" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
+                    <tabs>
+                      <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Конк-ые группы">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="103.0" prefWidth="447.0" style="-fx-border-color: darkgray; -fx-background-color: white;">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Вступ-ые испытания">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
+                        </content>
+                      </Tab>
+                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Привилегии">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />
+                          </content>
+                        </Tab>
+                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="100 б.">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />
+                          </content>
+                        </Tab>
+                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Образование">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />
+                          </content>
+                        </Tab>
+                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Адрес и контакты">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
+                          </content>
+                        </Tab>
+                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Паспорт и ИНН">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
+                          </content>
+                        </Tab>
+                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Допсведения">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
+                          </content>
+                        </Tab>
+                    </tabs>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </TabPane>
                </children>
             </GridPane>
-            <Pane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <TableView fx:id="tableView" prefHeight="367.0" prefWidth="376.0" />
-               </children>
-            </Pane>
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </GridPane>
    </children>
 </AnchorPane>
