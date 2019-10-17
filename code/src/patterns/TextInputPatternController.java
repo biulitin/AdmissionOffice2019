@@ -1,4 +1,4 @@
-package application;
+package code.src.patterns;
 
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
