@@ -185,6 +185,95 @@ create table AbiturientEducation (
 	foreign key (id_typeEducation) references TypeEducation(id) on update cascade on delete set null
 );
 
+--Индивидуальные достижения
+create table IndividualAchievements(
+    id int primary key,	--код
+	name varchar(MAX),			 --наименование
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+    score int   --балл за индивидуальные достижения
+);
+
+--Абитуриент_Индивидуальные достижения
+create table AbiturientIndividAchievements(
+	id_abiturient int,    --код абитуриента
+    id_individualAchievements int,   --код индвидуального достижения
+    name varchar(MAX),    --название документа
+	series varchar(MAX),           --серия
+	number varchar(MAX),           --номер
+	issued_by varchar(MAX),        --кем выдан
+	dateOf_issue date,     --дата выдачи
+    
+    --Внешние ключи
+	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+    foreign key(id_individualAchievements) references IndividualAchievements(id) on update cascade on delete set null
+);
+
+--Специальность
+create table Speciality(
+    id int primary key,	--код
+	name varchar(MAX),			--название пола (для отображения в интерфейсе)
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--Форма обучения
+create table FormOfEducation(	
+    id int primary key,	--код
+	name varchar(MAX),			--название пола (для отображения в интерфейсе)
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--Конкурсная группа
+create table CompetitiveGroup(
+    id int primary key,	--код
+	name varchar(MAX),			--название пола (для отображения в интерфейсе)
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--Целевая организация
+create table TargetOrganization(
+    id int primary key,	--код
+	name varchar(MAX),			--название пола (для отображения в интерфейсе)
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--План приёма
+create table AdmissionPlan(
+    id_speciality int,   --код специальности
+    id_formOfEducation int,    --код формы обучения
+    id_competitiveGroup int,    --код конкурсной группы
+    id_targetOrganization int,    --код целевой организации
+    amount_of_places int,        --количество мест
+    amount_of_places_quota int     --количество мест по квоте
+    
+    --Внешние ключи
+    foreign key(id_speciality) references Speciality(id) on update cascade on delete set null,
+    foreign key(id_formOfEducation) references FormOfeducation(id) on update cascade on delete set null,
+    foreign key(id_competitiveGroup) references CompetitiveGroup(id) on update cascade on delete set null,
+    foreign key(id_targetOrganization) references TargetOrganization(id) on update cascade on delete set null
+);
+
+--Абитуриент_Конкурсные группы
+create table AbiturientCompetitiveGroup(
+  id_abiturient int,  --код абитуриента
+  id_speciality int,   --код специальности 
+  id_formOfEducation int,   --код формы обучения
+  id_competitiveGroup int,   --код конкурсной группы 
+  id_targetedOrganization int,   --код целевой организации
+  basisForBVI int,   --метка "Право на поступление без вступительных испытаний"
+  basisForQuota int,   --метка "Право на поступление в рамках квоты"
+  havePreemptitiveRight int,   --метка "Право на поступление с преимущественным правом"
+  competitiveScore int,   --конкурсный балл
+  scoresIndAchievements int,  --сумма баллов за индивидуальные достижения
+  is_enrolled int, --метка о зачислении
+  
+  --Внешние ключи
+  foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+  foreign key(id_speciality) references Speciality(id) on update cascade on delete set null,
+  foreign key(id_formOfEducation) references FormOfEducation(id) on update cascade on delete set null,
+  foreign key(id_competitiveGroup) references CompetitiveGroup(id) on update cascade on delete set null,
+  foreign key(id_targetOrganization) references TargetOrganization(id) on update cascade on delete set null
+);
+
 --Пользователи
 create table Users(
       id int primary key, --идентификатор
