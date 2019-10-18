@@ -9,14 +9,14 @@ public class TextInputPatternController {
     private JFXTextField fieldData;
 
     @FXML
-    private Text nameOfFiled;
+    private Text nameOfField;
     
     public String getFieldData() {
     	System.out.println(fieldData.getText());
     	return fieldData.getText();
     }
     
-    public void setParameters(String nameOfFiled) {
-    	this.nameOfFiled.setText(nameOfFiled);
+    public void setParameters(String nameOfField) {
+    	this.nameOfField.setText(nameOfField);
     }
 }
