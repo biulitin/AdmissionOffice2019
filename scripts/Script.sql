@@ -274,6 +274,58 @@ create table AbiturientCompetitiveGroup(
   foreign key(id_targetOrganization) references TargetOrganization(id) on update cascade on delete set null
 );
 
+--Тип_БВИ
+create table TypeOfWithoutEnteransExams(
+	id int primary key,	--код
+	name varchar(MAX),		--наименование
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+--Абитуриент_БВИ
+create table AbiturientWithoutEnteransExam(
+	id_abiturient int,  --код абитуриента
+	id_typeOfWithoutEnteransExam int,   --код типа БВИ
+
+--Внешние ключи
+	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+	foreign key(id_typeOfWithoutEnteransExa) references TypeOfWithoutEnteransExam (id) on update cascade on delete set null
+);
+
+--Категория_допсведений
+create table CategoryOfExtraInfo(
+	id int primary key,	--код
+	name varchar(MAX),			-- наименование
+	codeFIS varchar(MAX)		--код выгрузки в ФИС
+);
+
+--Абитуриент_допсведения
+create table AbiturientExtraInfo (
+	id_abiturient int,  --код абитуриента
+	id_categoryOfExtraInfo int,   --код допсведений 
+	name_of_document varchar(MAX), --Наименование документа
+	series_of_document  varchar(MAX), --Документ серия
+	number_of_document varchar(MAX), --Документ номер 
+	issued_by  varchar(MAX), --Кем выдан
+	dateOf_issue date --Дата выдачи	
+
+--Внешние ключи
+	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+	foreign key(id_typeOfWithoutEnteransExa) references TypeOfWithoutEnteransExam (id) on update cascade on delete set null
+);
+
+--Абитуриент_документ_БВИ
+create table AbiturientDocumentsithoutEnteransExams (
+	id_abiturient int,  --код абитуриента
+	name_of_document varchar(MAX), --Наименование документа
+	series  varchar(MAX), --Документ серия
+	number varchar(MAX), --Документ номер 
+	issued_by  varchar(MAX), --Кем выдан
+	dateOf_issue date --Дата выдачи	
+
+--Внешний ключ
+	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade
+);	
+
+
 --Пользователи
 create table Users(
       id int primary key, --идентификатор
