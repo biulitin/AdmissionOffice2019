@@ -89,6 +89,17 @@ public class MainWindowController {
 				intInputPatternController.setParameters(rs.getString(1));
 				break;
 			case "double precision":
+				loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("DoubleInputPattern.fxml"));
+
+				newPane = (Pane) loader.load();
+				columnsControllers[i - 1] = loader;
+
+				paneForElems.getChildren().add(newPane);
+
+				DoubleInputPatternController doubleInputPatternController = loader.getController();
+				doubleInputPatternController.setParameters(rs.getString(1));
+				break;
 			case "password":
 				loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("PasswordPattern.fxml"));
@@ -124,6 +135,18 @@ public class MainWindowController {
 
 		        DateInputPatternController dateInputPatternController = loader.getController();
 		        dateInputPatternController.setParameters(rs.getString(1));
+				break;
+			case "choice":
+				loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("ChoiceInputPattern.fxml"));
+
+				newPane = (Pane) loader.load();
+				columnsControllers[i - 1] = loader;
+
+				paneForElems.getChildren().add(newPane);
+
+				ChoiceInputPatternController choiceInputPatternController = loader.getController();
+				choiceInputPatternController.setParameters(rs.getString(1));
 				break;
 			case "boolean":
 		        loader = new FXMLLoader();
@@ -179,6 +202,9 @@ public class MainWindowController {
 				query += "'" + intInputPatternController.getFieldData() + "',";
 				break;
 			case "double precision":
+				DoubleInputPatternController doubleInputPatternController = columnsControllers[i].getController();
+				query += "'" + doubleInputPatternController.getFieldData() + "',";
+				break;
 			case "password":
 				PasswordPatternController passwordPatternController = columnsControllers[i].getController();
 				query += "'" + passwordPatternController.getFieldData() + "',";
@@ -190,6 +216,10 @@ public class MainWindowController {
 			case "date":
 		        DateInputPatternController dateInputPatternController = columnsControllers[i].getController();
 		        query += "'" + dateInputPatternController.getFieldData() + "',";
+				break;
+			case "choice":
+				ChoiceInputPatternController choiceInputPatternController = columnsControllers[i].getController();
+				query += "'" + choiceInputPatternController.getFieldData() + "',";
 				break;
 			}
 			i++;
