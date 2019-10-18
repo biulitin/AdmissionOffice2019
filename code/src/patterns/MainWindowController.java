@@ -77,6 +77,17 @@ public class MainWindowController {
 			// Create a form for input of data into the column according to its type
 			switch (rs.getString(2)) {
 			case "integer":
+				loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("IntInputPattern.fxml"));
+
+				newPane = (Pane) loader.load();
+				columnsControllers[i - 1] = loader;
+
+				paneForElems.getChildren().add(newPane);
+
+				IntInputPatternController intInputPatternController = loader.getController();
+				intInputPatternController.setParameters(rs.getString(1));
+				break;
 			case "double precision":
 			case "password":
 				loader = new FXMLLoader();
@@ -164,6 +175,9 @@ public class MainWindowController {
 		for(Node s : paneForElems.getChildren()) {
 			switch (columnsTypes[i]) {
 			case "integer":
+				IntInputPatternController intInputPatternController = columnsControllers[i].getController();
+				query += "'" + intInputPatternController.getFieldData() + "',";
+				break;
 			case "double precision":
 			case "password":
 				PasswordPatternController passwordPatternController = columnsControllers[i].getController();
