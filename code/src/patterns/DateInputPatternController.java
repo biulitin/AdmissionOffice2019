@@ -10,15 +10,15 @@ public class DateInputPatternController {
     private DatePicker fieldData;
 
     @FXML
-    private Text nameOfFiled;
+    private Text nameOfField;
     
     public String getFieldData() {
     	System.out.println(fieldData.getValue());
     	return fieldData.getValue().toString();
     }
     
-    public void setParameters(String nameOfFiled) {
-    	this.nameOfFiled.setText(nameOfFiled);
+    public void setParameters(String nameOfField) {
+    	this.nameOfField.setText(nameOfField);
     }
 
 }
