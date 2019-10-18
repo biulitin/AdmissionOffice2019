@@ -78,6 +78,18 @@ public class MainWindowController {
 			switch (rs.getString(2)) {
 			case "integer":
 			case "double precision":
+			case "varchar": // password
+				loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("PasswordPattern.fxml"));
+
+				newPane = (Pane) loader.load();
+				columnsControllers[i - 1] = loader;
+
+				paneForElems.getChildren().add(newPane);
+
+				PasswordPatternController passwordPatternController = loader.getController();
+				passwordPatternController.setParameters(rs.getString(1));
+				break;
 			case "text":
 		        loader = new FXMLLoader();
 		        loader.setLocation(getClass().getResource("TextInputPattern.fxml"));
@@ -153,6 +165,10 @@ public class MainWindowController {
 			switch (columnsTypes[i]) {
 			case "integer":
 			case "double precision":
+			case "varchar":
+				PasswordPatternController passwordPatternController = columnsControllers[i].getController();
+				query += "'" + passwordPatternController.getFieldData() + "',";
+				break;
 			case "text":
 		        TextInputPatternController textInputPatternController = columnsControllers[i].getController();
 		        query += "'" + textInputPatternController.getFieldData() + "',";
