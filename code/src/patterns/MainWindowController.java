@@ -78,7 +78,7 @@ public class MainWindowController {
 			switch (rs.getString(2)) {
 			case "integer":
 			case "double precision":
-			case "varchar": // password
+			case "password":
 				loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("PasswordPattern.fxml"));
 
@@ -165,7 +165,7 @@ public class MainWindowController {
 			switch (columnsTypes[i]) {
 			case "integer":
 			case "double precision":
-			case "varchar":
+			case "password":
 				PasswordPatternController passwordPatternController = columnsControllers[i].getController();
 				query += "'" + passwordPatternController.getFieldData() + "',";
 				break;
