@@ -333,3 +333,60 @@ create table Users(
       password varchar(MAX), --пароль
       fio varchar(MAX) --ФИО
 );
+
+--Тип Квоты
+create table QuotaType (
+	id int primary key, -- id
+	name varchar(255), -- наименование
+	codeFIS varchar(255) -- Код_ФИС
+);
+
+--Абитуриент_Квота
+create table AbiturientQuota (
+	aid int, -- id абитуриента
+	id_quotaType int, -- id типа квоты
+
+--Внешний ключ	
+	foreign key(aid) references Abiturient(id) on update cascade.
+	foreign key(id_quotaType) references QuotaType(id) on update cascade	
+);
+
+--Абитуриент_Документ Квота
+create table AbiturientDocumentQuota (
+	aid int, -- id абитуриента
+	name varchar(255), -- Наименование документа
+	series varchar(255), -- Серия
+	num varchar(255), -- Номер
+	issuedBy varchar(255), -- Кем_выдан
+	issueDate date, -- Дата_выдачи
+
+--Внешний ключ	
+	foreign key(aid) references Abiturient(id) on update cascade		
+);
+
+create table PreemptitiveRightType (
+	id int primary key, -- id
+	name varchar(255), -- Наименование
+	codeFIS varchar(255) -- Код_ФИС	
+);
+
+create table AbiturientPreemptitiveRight (
+	aid int, -- id абитуриента
+	id_preemptitiveRight int, -- id типа преимущественного права
+
+--Внешний ключ	
+	foreign key(aid) references Abiturient(id) on update cascade	
+	foreign key(id_quotaType) references PreemptitiveRightType(id) on update cascade	
+);
+
+create table AbiturientDocumentPreemptitiveRight (
+	aid int,  -- id абитуриента
+	name varchar(255), -- Наименование документа
+	series varchar(255), -- Серия
+	num varchar(255), -- Номер
+	issuedBy varchar(255), -- Кем_выдан
+	issueDate date, -- Дата_выдачи
+
+--Внешний ключ	
+	foreign key(aid) references Abiturient(id) on update cascade	
+);
