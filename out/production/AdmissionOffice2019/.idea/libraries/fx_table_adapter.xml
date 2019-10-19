@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="fx_table_adapter">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/code/libs/fx_table_adapter.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
