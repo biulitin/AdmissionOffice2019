@@ -157,8 +157,8 @@ public class MainWindowController {
 		        
 		        paneForElems.getChildren().add(newPane);
 
-		        //DateInputPatternController dateInputPatternController = loader.getController();
-		        //dateInputPatternController.setParameters(rs.getString(1));
+		        BoolInputPatternController boolInputPatternController = loader.getController();
+		        boolInputPatternController.setParameters(rs.getString(1));
 				break;
 			}
 		}
@@ -197,30 +197,34 @@ public class MainWindowController {
 		int i = 0;
 		for(Node s : paneForElems.getChildren()) {
 			switch (columnsTypes[i]) {
-			case "integer":
-				IntInputPatternController intInputPatternController = columnsControllers[i].getController();
-				query += "'" + intInputPatternController.getFieldData() + "',";
-				break;
-			case "double precision":
-				DoubleInputPatternController doubleInputPatternController = columnsControllers[i].getController();
-				query += "'" + doubleInputPatternController.getFieldData() + "',";
-				break;
-			case "password":
-				PasswordPatternController passwordPatternController = columnsControllers[i].getController();
-				query += "'" + passwordPatternController.getFieldData() + "',";
-				break;
-			case "text":
-		        TextInputPatternController textInputPatternController = columnsControllers[i].getController();
-		        query += "'" + textInputPatternController.getFieldData() + "',";
-				break;
-			case "date":
-		        DateInputPatternController dateInputPatternController = columnsControllers[i].getController();
-		        query += "'" + dateInputPatternController.getFieldData() + "',";
-				break;
-			case "choice":
-				ChoiceInputPatternController choiceInputPatternController = columnsControllers[i].getController();
-				query += "'" + choiceInputPatternController.getFieldData() + "',";
-				break;
+                case "boolean":
+                    BoolInputPatternController boolInputPatternController = columnsControllers[i].getController();
+                    query += "'" + boolInputPatternController.getFieldData() + "',";
+                    break;
+                case "integer":
+                    IntInputPatternController intInputPatternController = columnsControllers[i].getController();
+                    query += "'" + intInputPatternController.getFieldData() + "',";
+                    break;
+                case "double precision":
+                    DoubleInputPatternController doubleInputPatternController = columnsControllers[i].getController();
+                    query += "'" + doubleInputPatternController.getFieldData() + "',";
+                    break;
+                case "password":
+                    PasswordPatternController passwordPatternController = columnsControllers[i].getController();
+                    query += "'" + passwordPatternController.getFieldData() + "',";
+                    break;
+                case "text":
+                    TextInputPatternController textInputPatternController = columnsControllers[i].getController();
+                    query += "'" + textInputPatternController.getFieldData() + "',";
+                    break;
+                case "date":
+                    DateInputPatternController dateInputPatternController = columnsControllers[i].getController();
+                    query += "'" + dateInputPatternController.getFieldData() + "',";
+                    break;
+                case "choice":
+                    ChoiceInputPatternController choiceInputPatternController = columnsControllers[i].getController();
+                    query += "'" + choiceInputPatternController.getFieldData() + "',";
+                    break;
 			}
 			i++;
 		}
