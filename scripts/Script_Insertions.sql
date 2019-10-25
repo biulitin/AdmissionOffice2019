@@ -163,11 +163,11 @@ insert into CompetitiveGroup values
 (2, 'Общий конкурс', null),
 (3, 'По договорам', null);
 
-insert into TargetOrganisation values
+insert into TargetOrganization values
 (1, 'Департамент здравоохранения Владимирской обл.', null),
 (2, 'Министерство здравоохранения Нижегородской обл.', null);
 
-insert into TypeBVI values
+insert into TypeOfBVI values
 (1, 'Победитель Всероссийской олимпиады школьников', null),
 (2, 'Победитель олимпиады I уровня', null);
 
@@ -175,11 +175,11 @@ insert into TypeOfQuote values
 (1, 'Ребенок-инвалид', null),
 (2, 'Инвалид с детства', null);
 
-insert into TypeOfPrefRight values
+insert into TypeOfPreferredRight values
 (1, 'Ребенок погибшего сотрудника госслужбы', null),
 (2, 'Ребенок ликвидатора аварии Чернобыльской АЭС', null);
 
-insert into AdditionalInfCategory values
+insert into CategoryOfExtraInfo values
 (1, 'Выпускник курсов ПИМУ', null);
 
 insert into Users values

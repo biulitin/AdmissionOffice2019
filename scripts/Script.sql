@@ -139,12 +139,13 @@ create table AbiturientEntranceExam (
 	id_entranceExam int,    	 --код испытания
 	id_formOfExam int,     		 --код формата испытания
 	id_languageOfExam int,		 --код языка испытания 
-	group varchar(MAX),			--группа
+	groupExam varchar(MAX),			--группа
 	numberIn_group varchar(MAX),		--порядковый номер в группе
 	dateOf_exam date,				--дата испытания
 	score int,					--балл
 	id_basisMark int,		 --код основания оценки 
 	pass_mark int,			 --отметка сдачи
+	has_100 int,			--флаг о наличии права на 100 баллов по предмету
 
 	--Внешние ключи
 	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
@@ -152,6 +153,32 @@ create table AbiturientEntranceExam (
 	foreign key (id_formOfExam) references FormOfExam(id) on update cascade on delete set null,
 	foreign key (id_languageOfExam) references LanguageOfExam(id) on update cascade on delete set null,
 	foreign key (id_basisMark) references BasisMark(id) on update cascade on delete set null
+);
+
+--Олимпиады
+create table Olympiad(
+	id int primary key,	-- идентификатор  
+	name varchar(MAX),		-- наименование
+
+	codeFIS varchar(MAX)		--код_ФИС
+);
+
+--Абитуриент_документы, подтверждающие право на 100 баллов по предметам
+create table AbiturientDocumentsFor100balls(
+	id_abiturient int, --id абитуриента
+	id_olympiad int, --id олимпиады
+	nameOfDocument varchar(MAX), --Наименование документа
+	diplomaDegree varchar(MAX),       --Степень диплома
+	diplomaSubject varchar(MAX),      --Предмет олимпиады
+	olympLevel varchar(MAX),          --Уровень олимпиады
+	series_document varchar(MAX),    --серия документа
+	number_document varchar(MAX),    --номер документа
+	date_of_issue date,      --дата выдачи 
+	issued_by varchar(MAX),          --кем выдан
+	
+--Внешние ключи
+	foreign key(id_abiturient) references Abiturient(aid) on update cascade, --идентификатор абитуриента
+	foreign key(id_olympiad) references Olympiad(id) on update cascade --идентификатор абитуриента
 );
 
 --Уровень образования
@@ -186,17 +213,18 @@ create table AbiturientEducation (
 );
 
 --Индивидуальные достижения
-create table IndividualAchievements(
+create table IndividualAchievement(
     id int primary key,	--код
 	name varchar(MAX),			 --наименование
-	codeFIS varchar(MAX)		--код выгрузки в ФИС
-    score int   --балл за индивидуальные достижения
+	codeFIS varchar(MAX),		--код выгрузки в ФИС
+    max_score int   --максимальный балл за индивидуальное достижение
 );
 
 --Абитуриент_Индивидуальные достижения
-create table AbiturientIndividAchievements(
+create table AbiturientIndividAchievement(
 	id_abiturient int,    --код абитуриента
     id_individualAchievements int,   --код индвидуального достижения
+	score int,   --балл за индивидуальное достижение
     name varchar(MAX),    --название документа
 	series varchar(MAX),           --серия
 	number varchar(MAX),           --номер
@@ -205,7 +233,7 @@ create table AbiturientIndividAchievements(
     
     --Внешние ключи
 	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
-    foreign key(id_individualAchievements) references IndividualAchievements(id) on update cascade on delete set null
+    foreign key(id_individualAchievements) references IndividualAchievement(id) on update cascade on delete set null
 );
 
 --Специальность
@@ -258,10 +286,10 @@ create table AbiturientCompetitiveGroup(
   id_speciality int,   --код специальности 
   id_formOfEducation int,   --код формы обучения
   id_competitiveGroup int,   --код конкурсной группы 
-  id_targetedOrganization int,   --код целевой организации
-  basisForBVI int,   --метка "Право на поступление без вступительных испытаний"
-  basisForQuota int,   --метка "Право на поступление в рамках квоты"
-  havePreemptitiveRight int,   --метка "Право на поступление с преимущественным правом"
+  id_targetOrganization int,   --код целевой организации
+  haveBasisForBVI int,   --метка "Право на поступление без вступительных испытаний"
+  haveBasisForQuota int,   --метка "Право на поступление в рамках квоты"
+  havePreferredRight int,   --метка "Право на поступление с преимущественным правом"
   competitiveScore int,   --конкурсный балл
   scoresIndAchievements int,  --сумма баллов за индивидуальные достижения
   is_enrolled int, --метка о зачислении
@@ -275,19 +303,19 @@ create table AbiturientCompetitiveGroup(
 );
 
 --Тип_БВИ
-create table TypeOfWithoutEnteransExams(
+create table TypeOfBVI(
 	id int primary key,	--код
 	name varchar(MAX),		--наименование
 	codeFIS varchar(MAX)		--код выгрузки в ФИС
 );
 --Абитуриент_БВИ
-create table AbiturientWithoutEnteransExam(
+create table AbiturientBVI(
 	id_abiturient int,  --код абитуриента
-	id_typeOfWithoutEnteransExam int,   --код типа БВИ
+	id_typeOfBVI int,   --код типа БВИ
 
 --Внешние ключи
 	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
-	foreign key(id_typeOfWithoutEnteransExa) references TypeOfWithoutEnteransExam (id) on update cascade on delete set null
+	foreign key(id_typeOfBVI) references TypeOfBVI (id) on update cascade on delete set null
 );
 
 --Категория_допсведений
@@ -309,11 +337,11 @@ create table AbiturientExtraInfo (
 
 --Внешние ключи
 	foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
-	foreign key(id_typeOfWithoutEnteransExa) references TypeOfWithoutEnteransExam (id) on update cascade on delete set null
+	foreign key(id_categoryOfExtraInfo) references CategoryOfExtraInfo (id) on update cascade on delete set null
 );
 
 --Абитуриент_документ_БВИ
-create table AbiturientDocumentsithoutEnteransExams (
+create table AbiturientDocumentsBVI (
 	id_abiturient int,  --код абитуриента
 	name_of_document varchar(MAX), --Наименование документа
 	series  varchar(MAX), --Документ серия
@@ -335,7 +363,7 @@ create table Users(
 );
 
 --Тип Квоты
-create table QuotaType (
+create table TypeOfQuote (
 	id int primary key, -- id
 	name varchar(255), -- наименование
 	codeFIS varchar(255) -- Код_ФИС
@@ -343,17 +371,17 @@ create table QuotaType (
 
 --Абитуриент_Квота
 create table AbiturientQuota (
-	aid int, -- id абитуриента
+	id_abiturient int, -- id абитуриента
 	id_quotaType int, -- id типа квоты
 
 --Внешний ключ	
-	foreign key(aid) references Abiturient(id) on update cascade.
-	foreign key(id_quotaType) references QuotaType(id) on update cascade	
+	foreign key(id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+	foreign key(id_quotaType) references TypeOfQuote(id) on update cascade on delete set null	
 );
 
 --Абитуриент_Документ Квота
 create table AbiturientDocumentQuota (
-	aid int, -- id абитуриента
+	id_abiturient int, -- id абитуриента
 	name varchar(255), -- Наименование документа
 	series varchar(255), -- Серия
 	num varchar(255), -- Номер
@@ -361,26 +389,26 @@ create table AbiturientDocumentQuota (
 	issueDate date, -- Дата_выдачи
 
 --Внешний ключ	
-	foreign key(aid) references Abiturient(id) on update cascade		
+	foreign key(id_abiturient) references Abiturient(aid) on update cascade on delete cascade
 );
 
-create table PreemptitiveRightType (
+create table TypeOfPreferredRight (
 	id int primary key, -- id
 	name varchar(255), -- Наименование
 	codeFIS varchar(255) -- Код_ФИС	
 );
 
 create table AbiturientPreemptitiveRight (
-	aid int, -- id абитуриента
+	id_abiturient int, -- id абитуриента
 	id_preemptitiveRight int, -- id типа преимущественного права
 
 --Внешний ключ	
-	foreign key(aid) references Abiturient(id) on update cascade	
-	foreign key(id_quotaType) references PreemptitiveRightType(id) on update cascade	
+	foreign key(id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
+	foreign key(id_preemptitiveRight) references TypeOfPreferredRight(id) on update cascade on delete set null
 );
 
-create table AbiturientDocumentPreemptitiveRight (
-	aid int,  -- id абитуриента
+create table AbiturientDocumentsPreferredRight (
+	id_abiturient int,  -- id абитуриента
 	name varchar(255), -- Наименование документа
 	series varchar(255), -- Серия
 	num varchar(255), -- Номер
@@ -388,5 +416,5 @@ create table AbiturientDocumentPreemptitiveRight (
 	issueDate date, -- Дата_выдачи
 
 --Внешний ключ	
-	foreign key(aid) references Abiturient(id) on update cascade	
+	foreign key(id_abiturient) references Abiturient(aid) on update cascade on delete cascade	
 );
