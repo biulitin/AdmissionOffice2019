@@ -2,9 +2,12 @@ package controllers_simple;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 
 public class ChoiceInputPatternController {
+    @FXML
+    public FlowPane flowPane;
 
     @FXML
     private ChoiceBox<?> fieldData;
@@ -21,4 +24,11 @@ public class ChoiceInputPatternController {
         this.nameOfField.setText(nameOfField);
     }
 
+    public void setWidthHeight(Double width, Double height) {
+        this.flowPane.setPrefWidth(width);
+        this.flowPane.setPrefHeight(height);
+
+        this.fieldData.setPrefWidth(width*0.577);
+        this.fieldData.setPrefHeight(height*0.714);
+    }
 }

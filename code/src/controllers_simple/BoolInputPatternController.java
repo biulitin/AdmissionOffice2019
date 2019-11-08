@@ -1,9 +1,13 @@
 package controllers_simple;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.layout.FlowPane;
 
 
 public class BoolInputPatternController {
+    @FXML
+    public FlowPane flowPane;
+
     @FXML
     private CheckBox fieldData;
 
@@ -17,7 +21,10 @@ public class BoolInputPatternController {
     }
 
     public void setWidthHeight(Double width, Double height) {
-        this.fieldData.setPrefWidth(width);
-        this.fieldData.setPrefHeight(height);
+        this.flowPane.setPrefWidth(width);
+        this.flowPane.setPrefHeight(height);
+
+        this.fieldData.setPrefWidth(width*0.926);
+        this.fieldData.setPrefHeight(height*0.714);
     }
 }
