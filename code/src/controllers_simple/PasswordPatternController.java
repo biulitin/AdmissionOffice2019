@@ -28,6 +28,7 @@ public class PasswordPatternController {
         this.flowPane.setPrefWidth(width);
         this.flowPane.setPrefHeight(height);
 
+        this.nameOfField.setWrappingWidth(width*0.275);
         this.fieldData.setPrefWidth(width*0.577);
         this.fieldData.setPrefHeight(height*0.714);
     }
