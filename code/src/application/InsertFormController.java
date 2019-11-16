@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import controllers_simple.*;
 import javafx.fxml.FXML;
@@ -33,7 +34,7 @@ public class InsertFormController {
     public void createForm() throws Exception {
 		url = "jdbc:sqlserver://" + "localhost" + ":1433;databaseName=" + "Abiturient" + ";user="
 				+ "igor_sa" + ";password=" + "200352" + ";";
-		
+
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		conn = DriverManager.getConnection(url);
 		
@@ -63,108 +64,132 @@ public class InsertFormController {
 		Pane newPane;
 
     	//Sample values
-    	/*fields[0] = "Требуется ли общежитие?";
+    	/*fields[0] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?";
     	fieldsTypes[0] = "boolean";
-    	fields[1] = "Тип паспорта";
+    	fields[1] = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
     	fieldsTypes[1] = "choice"; // Think over
-    	fields[2] = "Дата рождения";
+    	fields[2] = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
     	fieldsTypes[2] = "date";
-    	fields[3] = "Средний балл аттестата";
+    	fields[3] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
     	fieldsTypes[3] = "double precision";
-    	fields[4] = "Год окончания ОУ";
+    	fields[4] = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ";
     	fieldsTypes[4] = "integer";
-    	fields[5] = "Пароль";
+    	fields[5] = "пїЅпїЅпїЅпїЅпїЅпїЅ";
     	fieldsTypes[5] = "password"; // Think over
-    	fields[6] = "ФИО";
+    	fields[6] = "пїЅпїЅпїЅ";
     	fieldsTypes[6] = "text";*/
-    	
-    	for (int i = 0; i < countFields; i++) {
+
+		for (int i = 0; i < countFields; i++) {
 			switch (fieldsTypes[i]) {
-			case "boolean":
-		        loader = new FXMLLoader();
-		        loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
+				case "date":
+					loader = new FXMLLoader();
+					loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
 
-		        newPane = (Pane) loader.load();
-		        fieldsControllers[i] = loader;
+					newPane = (Pane) loader.load();
+					fieldsControllers[i] = loader;
 
-		        fieldsPane.getChildren().add(newPane);
+					fieldsPane.getChildren().add(newPane);
 
-		        BoolInputPatternController boolInputPatternController = loader.getController();
-		        boolInputPatternController.setParameters(fields[i]);
-				break;
-			case "choice": // Think over
-		        loader = new FXMLLoader();
-		        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+					DateInputPatternController dateInputPatternController = loader.getController();
+					dateInputPatternController.setParameters(fields[i]);
+					break;
+				case "double":
+					loader = new FXMLLoader();
+					loader.setLocation(getClass().getResource("../patterns_simple/DoubleInputPattern.fxml"));
 
-		        newPane = (Pane) loader.load();
-		        fieldsControllers[i] = loader;
+					newPane = (Pane) loader.load();
+					fieldsControllers[i] = loader;
 
-		        fieldsPane.getChildren().add(newPane);
+					fieldsPane.getChildren().add(newPane);
 
-		        ChoiceInputPatternController choiceInputPatternController = loader.getController();
-		        choiceInputPatternController.setParameters(fields[i]);
-				break;
-			case "date":
-		        loader = new FXMLLoader();
-		        loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
+					DoubleInputPatternController doubleInputPatternController = loader.getController();
+					doubleInputPatternController.setParameters(fields[i]);
+					break;
+				case "int":
+					if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+						loader = new FXMLLoader();
+						loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
-		        newPane = (Pane) loader.load();
-		        fieldsControllers[i] = loader;
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-		        fieldsPane.getChildren().add(newPane);
+						fieldsPane.getChildren().add(newPane);
 
-		        DateInputPatternController dateInputPatternController = loader.getController();
-		        dateInputPatternController.setParameters(fields[i]);
-				break;
-			case "double":
-		        loader = new FXMLLoader();
-		        loader.setLocation(getClass().getResource("../patterns_simple/DoubleInputPattern.fxml"));
+						ChoiceInputPatternController choiceInputPatternController = loader.getController();
+						choiceInputPatternController.setParameters(fields[i]);
+						break;
+					}
+					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+						loader = new FXMLLoader();
+						loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
 
-		        newPane = (Pane) loader.load();
-		        fieldsControllers[i] = loader;
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-		        fieldsPane.getChildren().add(newPane);
+						fieldsPane.getChildren().add(newPane);
 
-		        DoubleInputPatternController doubleInputPatternController = loader.getController();
-		        doubleInputPatternController.setParameters(fields[i]);
-				break;
-			case "int":
-		        loader = new FXMLLoader();
-		        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+						BoolInputPatternController boolInputPatternController = loader.getController();
+						boolInputPatternController.setParameters(fields[i]);
+						break;
+					}
+					/* If we don't need "is_enrolled" change select or:
+                    if(Pattern.compile("(is_).*").matcher(fields[i]).matches())
+                        break;*/
+					else{
+						loader = new FXMLLoader();
+						loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
 
-		        newPane = (Pane) loader.load();
-		        fieldsControllers[i] = loader;
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-		        fieldsPane.getChildren().add(newPane);
+						fieldsPane.getChildren().add(newPane);
 
-		        IntInputPatternController intInputPatternController = loader.getController();
-		        intInputPatternController.setParameters(fields[i]);
-				break;
-			case "password": // Think over
-		        loader = new FXMLLoader();
-		        loader.setLocation(getClass().getResource("../patterns_simple/PasswordPattern.fxml"));
+						IntInputPatternController intInputPatternController = loader.getController();
+						intInputPatternController.setParameters(fields[i]);
+						break;
+					}
+				case "varchar":
+					if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+						loader = new FXMLLoader();
+						loader.setLocation(getClass().getResource("../patterns_simple/PhoneNumberInputPattern.fxml"));
 
-		        newPane = (Pane) loader.load();
-		        fieldsControllers[i] = loader;
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-		        fieldsPane.getChildren().add(newPane);
+						fieldsPane.getChildren().add(newPane);
 
-		        PasswordPatternController passwordInputPatternController = loader.getController();
-		        passwordInputPatternController.setParameters(fields[i]);
-				break;
-			case "varchar":
-		        loader = new FXMLLoader();
-		        loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+						PhoneMaskInputPatternController phoneMaskInputPatternController = loader.getController();
+						phoneMaskInputPatternController.setParameters(fields[i]);
+						break;
+					}
+					if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+						loader = new FXMLLoader();
+						loader.setLocation(getClass().getResource("../patterns_simple/PasswordPattern.fxml"));
 
-		        newPane = (Pane) loader.load();
-		        fieldsControllers[i] = loader;
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-		        fieldsPane.getChildren().add(newPane);
+						fieldsPane.getChildren().add(newPane);
 
-		        TextInputPatternController textInputPatternController = loader.getController();
-		        textInputPatternController.setParameters(fields[i]);
-				break;
+						PasswordPatternController passwordInputPatternController = loader.getController();
+						passwordInputPatternController.setParameters(fields[i]);
+						break;
+					}
+					else {
+						loader = new FXMLLoader();
+						loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
+
+						fieldsPane.getChildren().add(newPane);
+
+						TextInputPatternController textInputPatternController = loader.getController();
+						textInputPatternController.setParameters(fields[i]);
+						break;
+					}
 			}
-    	}
-    }
+		}
+	}
 }
+
