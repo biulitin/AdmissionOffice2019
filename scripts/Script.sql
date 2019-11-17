@@ -293,6 +293,9 @@ create table AbiturientCompetitiveGroup(
   competitiveScore int,   --конкурсный балл
   scoresIndAchievements int,  --сумма баллов за индивидуальные достижения
   is_enrolled int, --метка о зачислении
+  priority int,	--Приоритет (определяет порядок отображения в таблице)
+  originalsReceivedDate Date, --Дата предоставлениz оригинала
+  agreementReceivedDate Date, --Дата предоставления согласия на зачисление
   
   --Внешние ключи
   foreign key (id_abiturient) references Abiturient(aid) on update cascade on delete cascade,

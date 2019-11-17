@@ -190,6 +190,19 @@ public class InsertFormController {
 					}
 			}
 		}
+		
+		
+		loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
+
+		//buttonsPane = (Pane) loader.load();
+		buttonsPane.getChildren().removeAll();
+		newPane = (Pane) loader.load();
+		buttonsPane.getChildren().add(newPane);
+
+		AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
+		addEditDeleteButtonsController.setParameters("SampleTab", fields, fieldsTypes, fieldsControllers);
+		
 	}
 }
 

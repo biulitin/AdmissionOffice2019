@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="423.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers_simple.AddEditDeleteButtonsController">
+
+<Pane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers_simple.AddEditDeleteButtonsController">
    <children>
-      <Pane prefHeight="75.0" prefWidth="141.0">
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="423.0">
          <children>
-            <Button fx:id="addButton" alignment="CENTER" layoutX="4.0" layoutY="25.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 100px; -fx-font-weight: bold; -fx-cursor: hand;" text="Добавить" />
+            <Pane prefHeight="75.0" prefWidth="141.0">
+               <children>
+                  <Button fx:id="addButton" alignment="CENTER" layoutX="4.0" layoutY="25.0" mnemonicParsing="false" onAction="#addButtonAction" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 100px; -fx-font-weight: bold; -fx-cursor: hand;" text="Добавить" />
+               </children>
+            </Pane>
+            <Pane prefHeight="75.0" prefWidth="141.0">
+               <children>
+                  <Button fx:id="editButton" alignment="CENTER" layoutX="4.0" layoutY="25.0" mnemonicParsing="false" onAction="#editButtonAction" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 100px; -fx-font-weight: bold; -fx-cursor: hand;" text="Редактировать" />
+               </children>
+            </Pane>
+            <Pane prefHeight="75.0" prefWidth="141.0">
+               <children>
+                  <Button fx:id="deleteButton" alignment="CENTER" layoutX="4.0" layoutY="25.0" mnemonicParsing="false" onAction="#deleteButtonAction" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 100px; -fx-font-weight: bold; -fx-cursor: hand;" text="Удалить" />
+               </children>
+            </Pane>
          </children>
-      </Pane>
-      <Pane prefHeight="75.0" prefWidth="141.0">
-         <children>
-            <Button fx:id="editButton" alignment="CENTER" layoutX="4.0" layoutY="25.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 100px; -fx-font-weight: bold; -fx-cursor: hand;" text="Редактировать" />
-         </children>
-      </Pane>
-      <Pane prefHeight="75.0" prefWidth="141.0">
-         <children>
-            <Button fx:id="deleteButton" alignment="CENTER" layoutX="4.0" layoutY="25.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 100px; -fx-font-weight: bold; -fx-cursor: hand;" text="Удалить" />
-         </children>
-      </Pane>
+      </HBox>
    </children>
-</HBox>
+</Pane>
