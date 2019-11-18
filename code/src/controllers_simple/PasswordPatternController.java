@@ -32,4 +32,8 @@ public class PasswordPatternController {
         this.fieldData.setPrefWidth(width*0.577);
         this.fieldData.setPrefHeight(height*0.714);
     }
+
+    public void setEditable(Boolean editChoice) {
+        this.fieldData.setDisable(!editChoice);
+    }
 }

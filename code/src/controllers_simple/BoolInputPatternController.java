@@ -27,4 +27,8 @@ public class BoolInputPatternController {
         this.fieldData.setPrefWidth(width*0.926);
         this.fieldData.setPrefHeight(height*0.714);
     }
+
+    public void setEditable(Boolean editChoice) {
+        this.fieldData.setDisable(!editChoice);
+    }
 }
