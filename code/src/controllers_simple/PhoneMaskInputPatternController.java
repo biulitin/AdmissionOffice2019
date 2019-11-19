@@ -17,8 +17,12 @@ public class PhoneMaskInputPatternController {
     private Text nameOfField;
 
     public String getFieldData() {
-        System.out.println(fieldData.getText());
-        return fieldData.getText();
+        if (fieldData.getText().trim().isEmpty())
+            return "";
+        else {
+            System.out.println(fieldData.getText());
+            return fieldData.getText();
+        }
     }
 
     public void setParameters(String nameOfField) { this.nameOfField.setText(nameOfField); }

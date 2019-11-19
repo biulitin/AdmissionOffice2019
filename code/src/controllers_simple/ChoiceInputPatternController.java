@@ -16,8 +16,12 @@ public class ChoiceInputPatternController {
     private Text nameOfField;
 
     public String getFieldData() {
-        System.out.println(fieldData.getSelectionModel().getSelectedItem());
-        return fieldData.getSelectionModel().getSelectedItem().toString();
+        if (fieldData.getSelectionModel().isEmpty())
+            return "";
+        else {
+            System.out.println(fieldData.getSelectionModel().getSelectedItem());
+            return fieldData.getSelectionModel().getSelectedItem().toString();
+        }
     }
 
     public void setParameters(String nameOfField) {

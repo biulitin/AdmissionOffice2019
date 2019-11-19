@@ -16,8 +16,12 @@ public class DateInputPatternController {
     private Text nameOfField;
     
     public String getFieldData() {
-    	System.out.println(fieldData.getValue());
-    	return fieldData.getValue().toString();
+        if (fieldData.equals(""))
+            return "";
+        else {
+            System.out.println(fieldData.getValue());
+            return fieldData.getValue().toString();
+        }
     }
     
     public void setParameters(String nameOfField) {
