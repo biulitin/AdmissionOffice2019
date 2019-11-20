@@ -40,4 +40,13 @@ public class PasswordPatternController {
     public void setEditable(Boolean editChoice) {
         this.fieldData.setDisable(!editChoice);
     }
+
+    public int checkData(){
+        if(fieldData.getText().trim().isEmpty())
+        return 1;
+        //do we need more constraints?
+        if(fieldData.getText().trim().length()<4)
+            return 2;
+        else return 0;
+    }
 }

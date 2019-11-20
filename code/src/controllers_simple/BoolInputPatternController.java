@@ -35,4 +35,8 @@ public class BoolInputPatternController {
     public void setEditable(Boolean editChoice) {
         this.fieldData.setDisable(!editChoice);
     }
+
+    public int checkData(){
+        return 0;
+    }
 }

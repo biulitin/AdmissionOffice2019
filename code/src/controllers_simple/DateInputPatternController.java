@@ -5,6 +5,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class DateInputPatternController {
     @FXML
     public FlowPane flowPane;
@@ -39,5 +42,17 @@ public class DateInputPatternController {
 
     public void setEditable(Boolean editChoice) {
         this.fieldData.setDisable(!editChoice);
+    }
+
+    public int checkData(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            format.parse(String.valueOf(fieldData.getValue()));
+            return 0;
+        }
+        // if null or incorrect value we always get null
+        catch(ParseException e){
+            return 1;
+        }
     }
 }

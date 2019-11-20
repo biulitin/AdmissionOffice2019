@@ -40,4 +40,10 @@ public class ChoiceInputPatternController {
     public void setEditable(Boolean editChoice) {
         this.fieldData.setDisable(!editChoice);
     }
+
+    public int checkData(){
+        if(fieldData.getSelectionModel().isEmpty())
+            return 1;
+        else return 0;
+    }
 }

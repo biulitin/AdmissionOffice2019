@@ -40,4 +40,10 @@ public class TextInputPatternController {
     public void setEditable(Boolean editChoice) {
         this.fieldData.setDisable(!editChoice);
     }
+
+    public int checkData(){
+        if(fieldData.getText().trim().isEmpty())
+            return 1;
+        else return 0;
+    }
 }

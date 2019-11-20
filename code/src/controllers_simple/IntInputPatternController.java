@@ -5,6 +5,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 
+import java.util.regex.Pattern;
+
 public class IntInputPatternController {
     @FXML
     public FlowPane flowPane;
@@ -39,5 +41,13 @@ public class IntInputPatternController {
 
     public void setEditable(Boolean editChoice) {
         this.fieldData.setDisable(!editChoice);
+    }
+
+    public int checkData(){
+        if(fieldData.getText().trim().isEmpty())
+            return 1;
+        if(Pattern.compile("(?!0)\\d+").matcher(fieldData.getText()).matches() || Pattern.compile("(0)").matcher(fieldData.getText()).matches())
+            return 0;
+        else return 2;
     }
 }
