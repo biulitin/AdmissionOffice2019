@@ -8,10 +8,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 
 public class AddEditDeleteButtonsController {
 	private String[] fields, fieldsTypes;
 	private FXMLLoader[] fieldsControllers;
+
+	@FXML
+	private HBox buttonsBox;
 
     @FXML
     private Button addButton;
@@ -104,11 +108,16 @@ public class AddEditDeleteButtonsController {
         //Here will be switch/case according to the tabName (on some AddButton/DeleteButton have to be hidden)
     }
 
+    @FXML
     public void setWidthHeight(Double width, Double height) {
-        /*this.flowPane.setPrefWidth(width);
-        this.flowPane.setPrefHeight(height);
+        buttonsBox.setPrefWidth(width);
+        buttonsBox.setPrefHeight(height);
 
-        this.fieldData.setPrefWidth(width*0.926);
-        this.fieldData.setPrefHeight(height*0.714);*/
+        this.addButton.setPrefWidth(width*0.3);
+        this.addButton.setPrefHeight(height*0.35);
+		this.editButton.setPrefWidth(width*0.33);
+		this.editButton.setPrefHeight(height*0.35);
+		this.deleteButton.setPrefWidth(width*0.3);
+		this.deleteButton.setPrefHeight(height*0.35);
     }
 }

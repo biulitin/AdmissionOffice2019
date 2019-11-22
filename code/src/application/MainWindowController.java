@@ -1,13 +1,18 @@
 package application;
 
+import com.google.common.base.Utf8;
 import controllers_simple.*;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Properties;
 
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import org.grios.tableadapter.DefaultTableAdapter;
 
 import com.jfoenix.controls.JFXButton;
@@ -21,7 +26,17 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
 public class MainWindowController {
-	/*int countColumns = 0, countRows = 0;
+    @FXML
+    public Pane infoPane;
+
+    @FXML
+    public FlowPane buttonsPane;
+
+    @FXML
+    public FlowPane returnInformationField;
+    public FlowPane mainField;
+
+    int countColumns = 0, countRows = 0;
 	String[] columns, columnsTypes;
 	String[][] data;
 	FXMLLoader[] columnsControllers;
@@ -42,6 +57,74 @@ public class MainWindowController {
 	private TableView tableView;
 
 	private DefaultTableAdapter dta;
+
+	public void fillInPatterns() throws Exception {
+        addButtons();
+        fillMainInfo();
+        fillReturnInfo();
+    }
+
+    public void addButtons() throws Exception {
+        FXMLLoader buttonsLoader = new FXMLLoader();
+
+        buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
+
+        buttonsPane.getChildren().removeAll();
+        Pane newButtonsPane = (Pane) buttonsLoader.load();
+        buttonsPane.getChildren().add(newButtonsPane);
+
+        AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
+        addEditDeleteButtonsController.setWidthHeight(320.0, 35.0);
+    }
+
+    public void fillMainInfo() throws Exception {
+	    mainField.getChildren().removeAll();
+
+	    FXMLLoader aidLoader = new FXMLLoader();
+	    aidLoader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+
+	    Pane documentsPane = (Pane) aidLoader.load();
+	    mainField.getChildren().add(documentsPane);
+	    IntInputPatternController intInputPatternController = aidLoader.getController();
+	    intInputPatternController.setParameters("№Л/д");
+
+	    FXMLLoader dateLoader = new FXMLLoader();
+        dateLoader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
+
+        documentsPane = (Pane) dateLoader.load();
+        mainField.getChildren().add(documentsPane);
+        DateInputPatternController dateInputPatternController = dateLoader.getController();
+        dateInputPatternController.setParameters("Дата приема документов");
+
+    }
+
+    public void fillReturnInfo() throws Exception {
+        returnInformationField.getChildren().removeAll();
+
+        FXMLLoader returnCauseLoader  = new FXMLLoader();
+        returnCauseLoader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+        Pane returnPane = (Pane) returnCauseLoader.load();
+        returnInformationField.getChildren().add(returnPane);
+        ChoiceInputPatternController choiceInputPatternController = returnCauseLoader.getController();
+        choiceInputPatternController.setParameters("Причина возврата");
+
+        FXMLLoader returnDateLoader = new FXMLLoader();
+        returnDateLoader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
+
+        returnPane = (Pane) returnDateLoader.load();
+        returnInformationField.getChildren().add(returnPane);
+        DateInputPatternController dateInputPatternController = returnDateLoader.getController();
+        dateInputPatternController.setParameters("Дата возврата документов");
+
+        FXMLLoader pickUpDocumentsLoader = new FXMLLoader();
+        pickUpDocumentsLoader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
+
+        returnPane = (Pane) pickUpDocumentsLoader.load();
+        returnInformationField.getChildren().add(returnPane);
+        BoolInputPatternController boolInputPatternController = pickUpDocumentsLoader.getController();
+        boolInputPatternController.setParameters("Забрал(-а) документы");
+    }
 
 	public void prepareTable() throws Exception {
 		// Connection to DB
@@ -238,7 +321,7 @@ public class MainWindowController {
 		st.executeUpdate(query);
 		
 		// Filling the created table with data
-		/*st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		rs = st.executeQuery("select * from student;");
 		rs.last();
 		countRows = rs.getRow();
@@ -254,10 +337,11 @@ public class MainWindowController {
 			i++;
 			System.out.println();
 		}
+		System.out.println(Arrays.deepToString(data));
 
 		dta = new DefaultTableAdapter(tableView, data, columns);
 
 		rs.close();
 		st.close();
-	}*/
+	}
 }
