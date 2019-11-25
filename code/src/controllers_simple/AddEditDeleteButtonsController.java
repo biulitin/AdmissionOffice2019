@@ -32,12 +32,12 @@ public class AddEditDeleteButtonsController {
     	String saveQuery = "";
     	
     	switch(editButton.getText()) {
-    		case "Редактировать":
-    			editButton.setText("Сохранить");
-    			//loop: each element have to be activated to editable mode
+			case "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ":
+				editButton.setText("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				//loop: each element have to be activated to editable mode
     			break;
-    		case "Сохранить":
-    			editButton.setText("Редактировать");
+			case "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ":
+				editButton.setText("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
     			for (int i = 0; i < fieldsControllers.length; i++) {
     				switch (fieldsTypes[i]) {
     					case "date":
