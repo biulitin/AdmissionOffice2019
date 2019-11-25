@@ -36,12 +36,56 @@ public class AddEditDeleteButtonsController {
     	String saveQuery = "";
     	
     	switch(editButton.getText()) {
-			case "�������������":
-				editButton.setText("���������");
+			case "Редактировать":
+				editButton.setText("Сохранить");
 				//loop: each element have to be activated to editable mode
-    			break;
-			case "���������":
-				editButton.setText("�������������");
+				for (int i = 0; i < fieldsControllers.length; i++) {
+					switch (fieldsTypes[i]) {
+						case "date":
+							DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+							dateInputPatternController.setEditable(true);
+							break;
+						case "double":
+							DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
+							doubleInputPatternController.setEditable(true);
+							break;
+						case "int":
+							if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+								ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+								choiceInputPatternController.setEditable(true);
+								break;
+							}
+							if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+								BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+								boolInputPatternController.setEditable(true);
+								break;
+							} else {
+								IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+								intInputPatternController.setEditable(true);
+								break;
+							}
+						case "varchar":
+							if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+								PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
+								phoneMaskInputPatternController.setEditable(true);
+								break;
+							}
+							if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+								PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
+								passwordInputPatternController.setEditable(true);
+								break;
+							}
+							else {
+								TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+								textInputPatternController.setEditable(true);
+								break;
+							}
+
+					}
+				}
+				break;
+			case "Сохранить":
+				editButton.setText("Редактировать");
     			for (int i = 0; i < fieldsControllers.length; i++) {
     				switch (fieldsTypes[i]) {
     					case "date":
@@ -91,6 +135,82 @@ public class AddEditDeleteButtonsController {
     			}
     			System.out.println(saveQuery);
     			//loop: each element have to be activated to non-editable mode
+				for (int i = 0; i < fieldsControllers.length; i++) {
+					switch (fieldsTypes[i]) {
+						case "date":
+							DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+							if (dateInputPatternController.checkData() == 0) {
+								dateInputPatternController.setEditable(false);
+								break;
+							}
+							else
+								break;
+						case "double":
+							DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
+							if (doubleInputPatternController.checkData() == 0) {
+								doubleInputPatternController.setEditable(false);
+								break;
+							}
+							else
+								break;
+						case "int":
+							if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+								ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+								if (choiceInputPatternController.checkData() == 0) {
+									choiceInputPatternController.setEditable(false);
+									break;
+								}
+								else
+									break;
+							}
+							if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+								BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+								if (boolInputPatternController.checkData() == 0) {
+									boolInputPatternController.setEditable(false);
+									break;
+								}
+								else
+									break;
+							} else{
+								IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+								if (intInputPatternController.checkData() == 0) {
+									intInputPatternController.setEditable(false);
+									break;
+								}
+								else
+									break;
+							}
+						case "varchar":
+							if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+								PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
+								if (phoneMaskInputPatternController.checkData() == 0) {
+									phoneMaskInputPatternController.setEditable(false);
+									break;
+								}
+								else
+									break;
+							}
+							if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+								PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
+								if (passwordInputPatternController.checkData() == 0) {
+									passwordInputPatternController.setEditable(false);
+									break;
+								}
+								else
+									break;
+							}
+							else {
+								TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+								if (textInputPatternController.checkData() == 0) {
+									textInputPatternController.setEditable(false);
+									break;
+								}
+								else
+									break;
+							}
+
+					}
+				}
     			break;
     	}
     }
@@ -99,7 +219,7 @@ public class AddEditDeleteButtonsController {
     void deleteButtonAction(ActionEvent event) {
 
     }
-    
+
     public void setParameters(String tabName, String[] fields, String[] fieldsTypes, FXMLLoader[] fieldsControllers) {
         this.fields = fields.clone();
         this.fieldsTypes = fieldsTypes.clone();
