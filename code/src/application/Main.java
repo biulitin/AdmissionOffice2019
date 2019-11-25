@@ -12,13 +12,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
         	FXMLLoader loader = new FXMLLoader();
-        	//loader.setLocation(getClass().getResource("MainWindow.fxml"));
+        	// loader.setLocation(getClass().getResource("MainWindow.fxml"));
         	loader.setLocation(getClass().getResource("InsertForm.fxml"));
         	
             AnchorPane root;
             root = (AnchorPane) loader.load();
             
-            //MainWindowController mainWindowController = loader.getController();
+            /* MainWindowController mainWindowController = loader.getController();
+            mainWindowController.fillInPatterns(); */
             
             InsertFormController insertFormController = loader.getController();
             insertFormController.createForm();
