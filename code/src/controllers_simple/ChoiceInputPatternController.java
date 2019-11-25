@@ -16,7 +16,7 @@ public class ChoiceInputPatternController {
     private Text nameOfField;
 
     public String getFieldData() {
-        if (fieldData.getSelectionModel().isEmpty())
+        if (checkData() != 0)
             return "";
         else {
             System.out.println(fieldData.getSelectionModel().getSelectedItem());

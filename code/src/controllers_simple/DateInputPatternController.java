@@ -19,7 +19,7 @@ public class DateInputPatternController {
     private Text nameOfField;
     
     public String getFieldData() {
-        if (fieldData.equals(""))
+        if (checkData() != 0)
             return "";
         else {
             System.out.println(fieldData.getValue());

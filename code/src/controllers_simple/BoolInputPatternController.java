@@ -12,7 +12,7 @@ public class BoolInputPatternController {
     private CheckBox fieldData;
 
     public Boolean getFieldData() {
-        if (!fieldData.isSelected())
+        if (checkData() != 0)
             return false;
         else {
             System.out.println(fieldData.isSelected());
