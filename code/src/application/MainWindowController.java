@@ -1,6 +1,5 @@
 package application;
 
-import com.google.common.base.Utf8;
 import controllers_simple.*;
 
 import java.io.IOException;
@@ -14,8 +13,6 @@ import java.util.Properties;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import org.grios.tableadapter.DefaultTableAdapter;
-
-import com.jfoenix.controls.JFXButton;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,9 +43,6 @@ public class MainWindowController {
 	Connection conn;
 	Statement st;
 	ResultSet rs;
-	
-    @FXML
-    private JFXButton insertButton;
     
 	@FXML
 	private FlowPane paneForElems;
