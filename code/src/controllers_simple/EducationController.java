@@ -1,135 +1,177 @@
 package controllers_simple;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.sql.*;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.util.*;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 public class EducationController {
 
     @FXML
-    private ResourceBundle resources;
+    public GridPane parentGridPane;
 
     @FXML
-    private URL location;
+    public GridPane childGridPane;
 
     @FXML
-    private ChoiceBox<?> levelOfEd;
+    public Pane buttonsPane;
 
-    @FXML
-    private ChoiceBox<?> typeOfEd;
+    String[] fields, fieldsTypes;
+    FXMLLoader[] fieldsControllers;
 
-    @FXML
-    private TextField series;
+    String url, query;
+    Connection conn;
+    CallableStatement cstmt;
+    ResultSet rset;
 
-    @FXML
-    private TextField number;
+    public void createForm() throws Exception {
+        url = "jdbc:sqlserver://" + "localhost" + ":1433;databaseName=" + "Abiturient" + ";user="
+                + "igor_sa" + ";password=" + "200352" + ";";
 
-    @FXML
-    private DatePicker dateOfIssue;
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        conn = DriverManager.getConnection(url);
 
-    @FXML
-    private TextField byWhomIssued;
+        query = "SELECT AbiturientEducation.id_levelEducation, AbiturientEducation.id_typeEducation, " +
+                "AbiturientEducation.name_eduInstitution, AbiturientEducation.dateOf_issue, " +
+                "AbiturientEducation.series_document, AbiturientEducation.number_document, " +
+                "AbiturientEducation.yearOf_graduation FROM AbiturientEducation join Abiturient " +
+                "ON (Abiturient.aid = AbiturientEducation.id_abiturient);";
 
-    @FXML
-    private Button editBtn;
+        cstmt = conn.prepareCall(query, 1004, 1007);
+        rset = cstmt.executeQuery();
 
-    @FXML
-    private Button saveBtn;
+        int countStrings = rset.last() ? rset.getRow() : 0;
+        rset.beforeFirst();
 
-    String numberMatcher = "^-?\\d+$";
+        ResultSetMetaData rsmd = rset.getMetaData();
+        int countFields = rsmd.getColumnCount();
 
-    @FXML
-    void edit(ActionEvent event) {
-        if(!checkFields()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Предупреждение");
-            alert.setHeaderText("Пожалуйста, заполните все поля");
-            alert.showAndWait();
-        } else {
-            //levelOfEd.setEditable(true);
-            //typeOfEd.setEditable(true);
-            /*series.setEditable(true);
-            number.setEditable(true);
-            dateOfIssue.setEditable(true);
-            byWhomIssued.setEditable(true);*/
-            levelOfEd.setDisable(false);
-            typeOfEd.setDisable(false);
-            series.setDisable(false);
-            number.setDisable(false);
-            dateOfIssue.setDisable(false);
-            byWhomIssued.setDisable(false);
-            editBtn.setDisable(true);
-            saveBtn.setDisable(false);
+        fields = new String[countFields];
+        fieldsTypes = new String[countFields];
+        fieldsControllers = new FXMLLoader[countFields];
+
+        for (int i = 0; i < countFields; i++) {
+            fields[i] = rsmd.getColumnLabel(i + 1);
+            fieldsTypes[i] = rsmd.getColumnTypeName(i + 1);
         }
 
-    }
+        FXMLLoader loader;
+        Pane newPane;
 
-    @FXML
-    void save(ActionEvent event) {
-        if(!checkFields()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Предупреждение");
-            alert.setHeaderText("Пожалуйста, заполните все поля");
-            alert.showAndWait();
-        } else {
-            //levelOfEd.setEditable(false);
-            //typeOfEd.setEditable(false);
-            /*series.setEditable(false);
-            number.setEditable(false);
-            dateOfIssue.setEditable(false);
-            byWhomIssued.setEditable(false);*/
-            levelOfEd.setDisable(true);
-            typeOfEd.setDisable(true);
-            series.setDisable(true);
-            number.setDisable(true);
-            dateOfIssue.setDisable(true);
-            byWhomIssued.setDisable(true);
-            editBtn.setDisable(false);
-            saveBtn.setDisable(true);
+        for (int i = 0; i < countFields; i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
+
+                    newPane = (Pane) loader.load();
+                    fieldsControllers[i] = loader;
+
+                    parentGridPane.add(newPane, 0, 3);
+
+                    DateInputPatternController dateInputPatternController = loader.getController();
+                    dateInputPatternController.setParameters(fields[i]);
+                    break;
+                case "int":
+                    if (Pattern.compile("(id_l).*").matcher(fields[i]).matches()) {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        parentGridPane.add(newPane,0,0);
+
+                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        choiceInputPatternController.setParameters(fields[i]);
+                        break;
+                    }
+                    if (Pattern.compile("(id_t).*").matcher(fields[i]).matches()) {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        parentGridPane.add(newPane,0,1);
+
+                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        choiceInputPatternController.setParameters(fields[i]);
+                        break;
+                    }
+                    else {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        childGridPane.add(newPane, 2, 0);
+
+                        IntInputPatternController intInputPatternController = loader.getController();
+                        intInputPatternController.setParameters(fields[i]);
+                        break;
+                    }
+                case "varchar":
+                    if (Pattern.compile("(series).*").matcher(fields[i]).matches()) {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        childGridPane.add(newPane, 0, 0);
+
+                        TextInputPatternController textInputPatternController = loader.getController();
+                        textInputPatternController.setParameters(fields[i]);
+                        break;
+                    }
+                    if (Pattern.compile("(number).*").matcher(fields[i]).matches()) {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        childGridPane.add(newPane, 1, 0);
+
+                        TextInputPatternController textInputPatternController = loader.getController();
+                        textInputPatternController.setParameters(fields[i]);
+                        break;
+                    }
+                    else {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        parentGridPane.add(newPane, 0, 2);
+
+                        TextInputPatternController textInputPatternController = loader.getController();
+                        textInputPatternController.setParameters(fields[i]);
+                        break;
+                    }
+            }
         }
-    }
 
-    boolean checkFields() {
-        if (levelOfEd.getSelectionModel().isEmpty() || typeOfEd.getSelectionModel().isEmpty() || series.getText().trim().isEmpty() ||
-                number.getText().trim().isEmpty() || dateOfIssue.equals("") || byWhomIssued.getText().trim().isEmpty()  ||
-                !series.getText().trim().matches(numberMatcher) || !number.getText().trim().matches(numberMatcher))
-            return false;
-        else
-            return true;
-    }
 
-    @FXML
-    void initialize() {
-        //editBtn.setDisable(true);
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
 
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
+        buttonsPane.getChildren().removeAll();
+        newPane = (Pane) loader.load();
+        buttonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        buttonsPane.getChildren().add(newPane);
 
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };
 
-        dateOfIssue.setConverter(converter);
-        dateOfIssue.setPromptText("ДД/ММ/ГГГГ");
+        AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
+        addEditDeleteButtonsController.setParameters("Образование", fields, fieldsTypes, fieldsControllers);
     }
 }
