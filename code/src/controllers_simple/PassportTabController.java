@@ -69,7 +69,7 @@ public class PassportTabController {
 
                     childGridPane.add(newPane,2,0);
                     DateInputPatternController dateInputPatternController = loader.getController();
-                    dateInputPatternController.setWidthHeight(290.0,10.0);
+                    // dateInputPatternController.setWidthHeight(290.0,10.0);
                     dateInputPatternController.setParameters(fields[i]);
                     break;
                 case "int":
@@ -82,7 +82,7 @@ public class PassportTabController {
 
                         parentGridPane.add(newPane,0,0);
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
-                        choiceInputPatternController.setWidthHeight(270.0,10.0);
+                        // choiceInputPatternController.setWidthHeight(270.0,10.0);
                         choiceInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -96,7 +96,7 @@ public class PassportTabController {
 
                         childGridPane.add( newPane,0,0);
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(190.0,10.0);
+                        // textInputPatternController.setWidthHeight(190.0,10.0);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -109,7 +109,7 @@ public class PassportTabController {
 
                         childGridPane.add(newPane,1,0);
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(190.0,10.0);
+                        // textInputPatternController.setWidthHeight(190.0,10.0);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -122,7 +122,7 @@ public class PassportTabController {
 
                         parentGridPane.add(newPane,0,2);
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(600.0,10.0);
+                        // textInputPatternController.setWidthHeight(600.0,10.0);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -135,7 +135,7 @@ public class PassportTabController {
 
                         parentGridPane.add(newPane,0,3);
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(600.0,10.0);
+                        // textInputPatternController.setWidthHeight(600.0,10.0);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -148,7 +148,7 @@ public class PassportTabController {
 
                         parentGridPane.add(newPane,0,4);
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(600.0,10.0);
+                        // textInputPatternController.setWidthHeight(600.0,10.0);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }

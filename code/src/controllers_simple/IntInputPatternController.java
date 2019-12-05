@@ -30,13 +30,13 @@ public class IntInputPatternController {
         this.nameOfField.setText(nameOfField);
     }
 
-    public void setWidthHeight(Double width, Double height) {
-        this.flowPane.setPrefWidth(width);
-        this.flowPane.setPrefHeight(height);
+    public void setWidthHeight(Double paneWidth, Double paneHeight, Double labelWidth) {
+        this.flowPane.setPrefWidth(paneWidth);
+        this.flowPane.setPrefHeight(paneHeight);
 
-        this.nameOfField.setWrappingWidth(width*0.275);
-        this.fieldData.setPrefWidth(width*0.577);
-        this.fieldData.setPrefHeight(height*0.714);
+        this.nameOfField.setWrappingWidth(labelWidth);
+        this.fieldData.setPrefWidth(paneWidth - labelWidth - 40.0);
+        this.fieldData.setPrefHeight(paneHeight*0.714);
     }
 
     public void setEditable(Boolean editChoice) {

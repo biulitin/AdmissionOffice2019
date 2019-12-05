@@ -9,7 +9,7 @@
     <children>
         <FlowPane fx:id="flowPane" alignment="CENTER" prefHeight="35.0" prefWidth="364.0">
             <children>
-                <Text fx:id="nameOfField" strokeType="OUTSIDE" strokeWidth="0.0" text="nameOfElement" wrappingWidth="100.0" />
+                <Text fx:id="nameOfField" strokeType="OUTSIDE" strokeWidth="0.0" text="nameOfElement" textAlignment="RIGHT" wrappingWidth="100.0" />
                 <MaskField fx:id="fieldData" mask="+7(###)###-##-##" prefWidth="210" prefHeight="25">
                     <FlowPane.margin>
                         <Insets left="20.0" />

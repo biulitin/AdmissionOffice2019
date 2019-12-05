@@ -3,12 +3,10 @@ package application;
 import controllers_simple.*;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -37,10 +35,15 @@ public class MainWindowController {
 	String[] columns, columnsTypes;
 	String[][] data;
 	FXMLLoader[] columnsControllers;
-	
-	String url;
-	Properties props;
+
+	String[] fields, fieldsTypes;
+	FXMLLoader[] fieldsControllers;
+
+	String url, query;
 	Connection conn;
+	CallableStatement cstmt;
+	ResultSet rset;
+	Properties props;
 	Statement st;
 	ResultSet rs;
     
@@ -53,10 +56,45 @@ public class MainWindowController {
 	private DefaultTableAdapter dta;
 
 	public void fillInPatterns() throws Exception {
+		url = "jdbc:sqlserver://" + "localhost" + ":1433;databaseName=" + "Abiturient" + ";user="
+				+ "igor_sa" + ";password=" + "200352" + ";";
+
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		conn = DriverManager.getConnection(url);
+
+		query = "SELECT Abiturient.aid, Abiturient.registrationdate, " +
+				"Abiturient.SName, Abiturient.id_gender, Abiturient.id_nationality," +
+				"Abiturient.FName, Abiturient.Birthday, Abiturient.needHostel," +
+				"Abiturient.MName, Abiturient.id_returnReason," +
+				"Abiturient.returnDate, Abiturient.is_enrolled\n" +
+				"FROM Abiturient JOIN ReturnReasons ON\n" +
+				"(ReturnReasons.id=Abiturient.id_returnReason)\n" +
+				"JOIN Nationality ON\n" +
+				"(Nationality.id=Abiturient.id_nationality)\n" +
+				"JOIN Gender ON\n" +
+				"Gender.id=Abiturient.id_gender;";
+		cstmt = conn.prepareCall(query, 1004, 1007);
+		rset = cstmt.executeQuery();
+
+		rset.beforeFirst();
+
+		ResultSetMetaData rsmd = rset.getMetaData();
+		int countFields = rsmd.getColumnCount();
+		fields = new String[countFields];
+		fieldsTypes = new String[countFields];
+		fieldsControllers = new FXMLLoader[countFields];
+
+		for (int i = 0; i < countFields; i++) {
+			fields[i] = rsmd.getColumnLabel (i + 1);
+			fieldsTypes[i] = rsmd.getColumnTypeName (i + 1);
+		}
+
         addButtons();
-        fillMainInfo();
-        fillReturnInfo();
+        fillMainInfo(countFields);
     }
+
+	FXMLLoader loader;
+	Pane newPane;
 
     public void addButtons() throws Exception {
         FXMLLoader buttonsLoader = new FXMLLoader();
@@ -71,53 +109,85 @@ public class MainWindowController {
         addEditDeleteButtonsController.setWidthHeight(320.0, 35.0);
     }
 
-    public void fillMainInfo() throws Exception {
-	    mainField.getChildren().removeAll();
+    public void fillMainInfo(int countFields) throws Exception {
+		for (int i = 0; i < countFields; i++) {
+			switch (fieldsTypes[i]) {
+				case "date":
+					loader = new FXMLLoader();
+					loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
 
-	    FXMLLoader aidLoader = new FXMLLoader();
-	    aidLoader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+					newPane = (Pane) loader.load();
+					fieldsControllers[i] = loader;
 
-	    Pane documentsPane = (Pane) aidLoader.load();
-	    mainField.getChildren().add(documentsPane);
-	    IntInputPatternController intInputPatternController = aidLoader.getController();
-	    intInputPatternController.setParameters("№Л/д");
+                    DateInputPatternController dateInputPatternController = loader.getController();
+					if (fields[i].equals("returnDate")) {
+						returnInformationField.getChildren().add(newPane);
+                        dateInputPatternController.setWidthHeight(330.0, 35.0, 100.0);
+					} else {
+						mainField.getChildren().add(newPane);
+                        dateInputPatternController.setWidthHeight(350.0, 35.0, 150.0);
+					}
+					dateInputPatternController.setParameters("Дата приема документов");
+					break;
+				case "int":
+					loader = new FXMLLoader();
+					if (Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+						loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
-	    FXMLLoader dateLoader = new FXMLLoader();
-        dateLoader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-        documentsPane = (Pane) dateLoader.load();
-        mainField.getChildren().add(documentsPane);
-        DateInputPatternController dateInputPatternController = dateLoader.getController();
-        dateInputPatternController.setParameters("Дата приема документов");
+						ChoiceInputPatternController choiceInputPatternController = loader.getController();
 
-    }
+						if (fields[i].equals("id_returnReason")) {
+							returnInformationField.getChildren().add(newPane);
+							choiceInputPatternController.setWidthHeight(900.0,35.0, 100.0);
+						} else {
+							mainField.getChildren().add(newPane);
+							choiceInputPatternController.setWidthHeight(285.0,35.0, 150.0);
+						}
+						choiceInputPatternController.setParameters(fields[i]);
+					} else if (fields[i].equals("needHostel") || fields[i].equals("is_enrolled")) {
+						loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
 
-    public void fillReturnInfo() throws Exception {
-        returnInformationField.getChildren().removeAll();
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-        FXMLLoader returnCauseLoader  = new FXMLLoader();
-        returnCauseLoader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+						BoolInputPatternController boolInputPatternController = loader.getController();
+						if (fields[i].equals("is_enrolled")) {
+							returnInformationField.getChildren().add(newPane);
+						} else {
+							mainField.getChildren().add(newPane);
+						}
+                        boolInputPatternController.setWidthHeight(200.0, 35.0);
+						boolInputPatternController.setParameters(fields[i]);
+					}
+					else {
+						loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
 
-        Pane returnPane = (Pane) returnCauseLoader.load();
-        returnInformationField.getChildren().add(returnPane);
-        ChoiceInputPatternController choiceInputPatternController = returnCauseLoader.getController();
-        choiceInputPatternController.setParameters("Причина возврата");
+						newPane = (Pane) loader.load();
+						fieldsControllers[i] = loader;
 
-        FXMLLoader returnDateLoader = new FXMLLoader();
-        returnDateLoader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
+						mainField.getChildren().add(newPane);
+						IntInputPatternController intInputPatternController = loader.getController();
+						intInputPatternController.setWidthHeight(350.0, 35.0, 150.0);
+						intInputPatternController.setParameters(fields[i]);
+					}
+					break;
+				case "varchar":
+					loader = new FXMLLoader();
+					loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
-        returnPane = (Pane) returnDateLoader.load();
-        returnInformationField.getChildren().add(returnPane);
-        DateInputPatternController dateInputPatternController = returnDateLoader.getController();
-        dateInputPatternController.setParameters("Дата возврата документов");
+					newPane = (Pane) loader.load();
+					fieldsControllers[i] = loader;
 
-        FXMLLoader pickUpDocumentsLoader = new FXMLLoader();
-        pickUpDocumentsLoader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
-
-        returnPane = (Pane) pickUpDocumentsLoader.load();
-        returnInformationField.getChildren().add(returnPane);
-        BoolInputPatternController boolInputPatternController = pickUpDocumentsLoader.getController();
-        boolInputPatternController.setParameters("Забрал(-а) документы");
+					mainField.getChildren().add(newPane);
+					TextInputPatternController textInputPatternController = loader.getController();
+					textInputPatternController.setWidthHeight(350.0, 35.0, 150.0);
+					textInputPatternController.setParameters(fields[i]);
+					break;
+			}
+		}
     }
 
 	public void prepareTable() throws Exception {
