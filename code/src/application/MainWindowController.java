@@ -22,9 +22,6 @@ import javafx.scene.layout.Pane;
 
 public class MainWindowController {
     @FXML
-    public Pane infoPane;
-
-    @FXML
     public FlowPane buttonsPane;
 
     @FXML

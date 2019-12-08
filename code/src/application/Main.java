@@ -1,5 +1,6 @@
 package application;
 
+import controllers_simple.CompetitiveGroupsTabController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -14,6 +15,7 @@ public class Main extends Application {
         	FXMLLoader loader = new FXMLLoader();
         	// loader.setLocation(getClass().getResource("MainWindow.fxml"));
         	loader.setLocation(getClass().getResource("InsertForm.fxml"));
+            // loader.setLocation(getClass().getResource("../patterns_simple/CompetitiveGroupsTab.fxml"));
         	
             AnchorPane root;
             root = (AnchorPane) loader.load();
@@ -23,6 +25,9 @@ public class Main extends Application {
             
             InsertFormController insertFormController = loader.getController();
             insertFormController.createForm();
+
+            /* CompetitiveGroupsTabController competitiveGroupsTabController = loader.getController();
+            competitiveGroupsTabController.fillTab(); */
             
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
