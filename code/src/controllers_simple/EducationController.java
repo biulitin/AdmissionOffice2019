@@ -76,6 +76,7 @@ public class EducationController {
                     parentGridPane.add(newPane, 0, 3);
 
                     DateInputPatternController dateInputPatternController = loader.getController();
+                    dateInputPatternController.setWidthHeight(345.0, 35.0, 100.0);
                     dateInputPatternController.setParameters(fields[i]);
                     break;
                 case "int":
@@ -89,6 +90,7 @@ public class EducationController {
                         parentGridPane.add(newPane,0,0);
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        choiceInputPatternController.setWidthHeight(364.0, 35.0, 120.0);
                         choiceInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -102,10 +104,11 @@ public class EducationController {
                         parentGridPane.add(newPane,0,1);
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        choiceInputPatternController.setWidthHeight(345.0, 35.0, 95.8);
                         choiceInputPatternController.setParameters(fields[i]);
                         break;
                     }
-                    else {
+                    if (Pattern.compile("(yearOf_).*").matcher(fields[i]).matches()) {
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
 
@@ -115,6 +118,8 @@ public class EducationController {
                         childGridPane.add(newPane, 2, 0);
 
                         IntInputPatternController intInputPatternController = loader.getController();
+                        intInputPatternController.setWidthHeight(340.0, 35.0, 80.8);
+                        // intInputPatternController.setWidthHeight(230.0, 35.0, 80.8);
                         intInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -129,6 +134,8 @@ public class EducationController {
                         childGridPane.add(newPane, 0, 0);
 
                         TextInputPatternController textInputPatternController = loader.getController();
+                        // textInputPatternController.setWidthHeight(170.0, 35.0, 45.74);
+                        textInputPatternController.setWidthHeight(285.0, 35.0, 45.74);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -142,10 +149,12 @@ public class EducationController {
                         childGridPane.add(newPane, 1, 0);
 
                         TextInputPatternController textInputPatternController = loader.getController();
+                        // textInputPatternController.setWidthHeight(190.0, 35.0, 39.9);
+                        textInputPatternController.setWidthHeight(290.0, 35.0, 39.9);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
-                    else {
+                    if (Pattern.compile("(name_).*").matcher(fields[i]).matches()) {
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
@@ -155,6 +164,8 @@ public class EducationController {
                         parentGridPane.add(newPane, 0, 2);
 
                         TextInputPatternController textInputPatternController = loader.getController();
+                        // textInputPatternController.setWidthHeight(432.0, 67.0, 67.44);
+                        textInputPatternController.setWidthHeight(480.0, 35.0, 67.44);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
