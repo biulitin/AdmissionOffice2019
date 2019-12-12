@@ -118,8 +118,8 @@ public class EducationController {
                         childGridPane.add(newPane, 2, 0);
 
                         IntInputPatternController intInputPatternController = loader.getController();
-                        intInputPatternController.setWidthHeight(340.0, 35.0, 80.8);
-                        // intInputPatternController.setWidthHeight(230.0, 35.0, 80.8);
+                        // intInputPatternController.setWidthHeight(340.0, 35.0, 80.8);
+                        intInputPatternController.setWidthHeight(230.0, 35.0, 80.8);
                         intInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -134,8 +134,8 @@ public class EducationController {
                         childGridPane.add(newPane, 0, 0);
 
                         TextInputPatternController textInputPatternController = loader.getController();
-                        // textInputPatternController.setWidthHeight(170.0, 35.0, 45.74);
-                        textInputPatternController.setWidthHeight(285.0, 35.0, 45.74);
+                        textInputPatternController.setWidthHeight(170.0, 35.0, 45.74);
+                        // textInputPatternController.setWidthHeight(285.0, 35.0, 45.74);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -149,8 +149,8 @@ public class EducationController {
                         childGridPane.add(newPane, 1, 0);
 
                         TextInputPatternController textInputPatternController = loader.getController();
-                        // textInputPatternController.setWidthHeight(190.0, 35.0, 39.9);
-                        textInputPatternController.setWidthHeight(290.0, 35.0, 39.9);
+                        textInputPatternController.setWidthHeight(190.0, 35.0, 39.9);
+                        // textInputPatternController.setWidthHeight(290.0, 35.0, 39.9);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
@@ -164,8 +164,8 @@ public class EducationController {
                         parentGridPane.add(newPane, 0, 2);
 
                         TextInputPatternController textInputPatternController = loader.getController();
-                        // textInputPatternController.setWidthHeight(432.0, 67.0, 67.44);
-                        textInputPatternController.setWidthHeight(480.0, 35.0, 67.44);
+                        textInputPatternController.setWidthHeight(432.0, 67.0, 67.44);
+                        // textInputPatternController.setWidthHeight(480.0, 35.0, 67.44);
                         textInputPatternController.setParameters(fields[i]);
                         break;
                     }
