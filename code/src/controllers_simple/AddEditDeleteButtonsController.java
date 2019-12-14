@@ -18,13 +18,13 @@ public class AddEditDeleteButtonsController {
 	private HBox buttonsBox;
 
     @FXML
-    private Button addButton;
+    public Button addButton;
 
     @FXML
-    private Button editButton;
+    public Button editButton;
 
     @FXML
-    private Button deleteButton;
+    public Button deleteButton;
 
     @FXML
     void addButtonAction(ActionEvent event) {
@@ -36,8 +36,8 @@ public class AddEditDeleteButtonsController {
     	String saveQuery = "";
     	
     	switch(editButton.getText()) {
-			case "Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ":
-				editButton.setText("РЎРѕС…СЂР°РЅРёС‚СЊ");
+			case "Редактировать":
+				editButton.setText("Сохранить");
 				//loop: each element have to be activated to editable mode
 				for (int i = 0; i < fieldsControllers.length; i++) {
 					switch (fieldsTypes[i]) {
@@ -84,8 +84,8 @@ public class AddEditDeleteButtonsController {
 					}
 				}
 				break;
-			case "РЎРѕС…СЂР°РЅРёС‚СЊ":
-				editButton.setText("Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ");
+			case "Сохранить":
+				editButton.setText("Редактировать");
     			for (int i = 0; i < fieldsControllers.length; i++) {
     				switch (fieldsTypes[i]) {
     					case "date":
@@ -240,4 +240,15 @@ public class AddEditDeleteButtonsController {
 		this.deleteButton.setPrefWidth(width*0.3);
 		this.deleteButton.setPrefHeight(height*0.35);
     }
+
+
+    public void hideButton(int numberOfButton) {
+    	if (numberOfButton == 0)
+    		addButton.setVisible(false);
+    	else if (numberOfButton == 1)
+    		editButton.setVisible(false);
+    	else if (numberOfButton == 2)
+    		deleteButton.setVisible(false);
+
+	}
 }
