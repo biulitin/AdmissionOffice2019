@@ -103,7 +103,7 @@ public class MainWindowController {
         buttonsPane.getChildren().add(newButtonsPane);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
-        addEditDeleteButtonsController.setWidthHeight(320.0, 35.0);
+        addEditDeleteButtonsController.setWidthHideButtons(320.0, 35.0, 3);
     }
 
     public void fillMainInfo(int countFields) throws Exception {
@@ -124,7 +124,7 @@ public class MainWindowController {
 						mainField.getChildren().add(newPane);
                         dateInputPatternController.setWidthHeight(350.0, 35.0, 150.0);
 					}
-					dateInputPatternController.setParameters("Дата приема документов");
+					dateInputPatternController.setParameters(fields[i]);
 					break;
 				case "int":
 					loader = new FXMLLoader();

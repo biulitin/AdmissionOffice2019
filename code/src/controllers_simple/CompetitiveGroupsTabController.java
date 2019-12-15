@@ -36,10 +36,10 @@ public class CompetitiveGroupsTabController {
 
     public void fillTab() throws IOException, SQLException, ClassNotFoundException {
         prepareData();
-        addButtons(buttonsPane);
+        addButtons(buttonsPane, 2);
     }
 
-    public void addButtons(Pane pane) throws IOException {
+    public void addButtons(Pane pane, int numberOfVisibleButtons) throws IOException {
         FXMLLoader buttonsLoader = new FXMLLoader();
         buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
 
@@ -49,12 +49,20 @@ public class CompetitiveGroupsTabController {
         pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
-        addEditDeleteButtonsController.setWidthHeight(320.0, 50.0);
+        if (numberOfVisibleButtons == 2) {
+            addEditDeleteButtonsController.hideButton(0);
+            addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 2);
+        }
+        else if (numberOfVisibleButtons == 1) {
+            addEditDeleteButtonsController.hideButton(0);
+            addEditDeleteButtonsController.hideButton(1);
+            addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 1);
+        }
     }
 
     public void prepareData() throws ClassNotFoundException, SQLException {
         url = "jdbc:sqlserver://" + "localhost" + ":1433;databaseName=" + "Abiturient" + ";user="
-                + "igor_sa" + ";password=" + "200352" + ";";
+                + "igor_sa" + ";password=" + "200354" + ";";
 
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conn = DriverManager.getConnection(url);
@@ -133,7 +141,7 @@ public class CompetitiveGroupsTabController {
         }
 
         FlowPane modalButtonsPane = new FlowPane();
-        addButtons(modalButtonsPane);
+        addButtons(modalButtonsPane, 1);
         modalButtonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         modalButtonsPane.setPrefWidth(450.0);
         flowPane.getChildren().add(modalButtonsPane);

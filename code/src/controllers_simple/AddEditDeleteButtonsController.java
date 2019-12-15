@@ -241,17 +241,32 @@ public class AddEditDeleteButtonsController {
 		this.deleteButton.setPrefHeight(height*0.35);
     }
 
+    @FXML
+	public void setWidthHideButtons(Double width, Double height, Integer visibleButtons) {
+		buttonsBox.setPrefWidth(width);
+		buttonsBox.setPrefHeight(height);
 
-    public void hideButton(int ... numberOfButton) {
-    	for (int i = 0; i < numberOfButton.length; i++) {
-			if (numberOfButton[i] == 0)
-				addButton.setVisible(false);
-			else if (numberOfButton[i] == 1)
-				editButton.setVisible(false);
-			else if (numberOfButton[i] == 2)
-				deleteButton.setVisible(false);
+		this.addButton.setPrefHeight(height*0.35);
+		this.editButton.setPrefHeight(height*0.35);
+		this.deleteButton.setPrefHeight(height*0.35);
+
+		if (visibleButtons == 3) {
+			this.addButton.setPrefWidth(width*0.3);
+			this.editButton.setPrefWidth(width*0.33);
+			this.deleteButton.setPrefWidth(width*0.3);
+		} else if (visibleButtons == 2) {
+			this.addButton.setPrefWidth(width*0.45);
+			this.editButton.setPrefWidth(width*0.45);
+			this.deleteButton.setPrefWidth(width*0.45);
+		} else if (visibleButtons == 1) {
+			this.addButton.setPrefWidth(width*0.85);
+			this.editButton.setPrefWidth(width*0.85);
+			this.deleteButton.setPrefWidth(width*0.85);
 		}
+	}
 
-
+	@FXML
+    public void hideButton(int numberOfButton) {
+		this.buttonsBox.getChildren().remove(numberOfButton);
 	}
 }
