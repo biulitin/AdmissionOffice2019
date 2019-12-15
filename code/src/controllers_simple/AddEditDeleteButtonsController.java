@@ -242,13 +242,16 @@ public class AddEditDeleteButtonsController {
     }
 
 
-    public void hideButton(int numberOfButton) {
-    	if (numberOfButton == 0)
-    		addButton.setVisible(false);
-    	else if (numberOfButton == 1)
-    		editButton.setVisible(false);
-    	else if (numberOfButton == 2)
-    		deleteButton.setVisible(false);
+    public void hideButton(int ... numberOfButton) {
+    	for (int i = 0; i < numberOfButton.length; i++) {
+			if (numberOfButton[i] == 0)
+				addButton.setVisible(false);
+			else if (numberOfButton[i] == 1)
+				editButton.setVisible(false);
+			else if (numberOfButton[i] == 2)
+				deleteButton.setVisible(false);
+		}
+
 
 	}
 }
