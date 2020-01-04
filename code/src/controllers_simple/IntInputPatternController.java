@@ -8,6 +8,8 @@ import javafx.scene.text.Text;
 import java.util.regex.Pattern;
 
 public class IntInputPatternController {
+	String fieldOriginalName;
+	
     @FXML
     public FlowPane flowPane;
 
@@ -25,8 +27,13 @@ public class IntInputPatternController {
             return fieldData.getText();
         }
     }
+    
+    public void setFieldData(String data) {
+    	fieldData.setText(data);
+    }
 
-    public void setParameters(String nameOfField) {
+    public void setParameters(String originalNameOfField, String nameOfField) {
+    	this.fieldOriginalName = originalNameOfField;
         this.nameOfField.setText(nameOfField);
     }
 

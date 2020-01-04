@@ -1,10 +1,13 @@
 package controllers_simple;
+import backend.ModelDBConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.FlowPane;
 
 
 public class BoolInputPatternController {
+	String fieldOriginalName;
+	
     @FXML
     public FlowPane flowPane;
 
@@ -19,8 +22,13 @@ public class BoolInputPatternController {
             return fieldData.isSelected();
         }
     }
+    
+    public void setFieldData(String data) {
+    	fieldData.setSelected(data.equals("0") ? false : true);
+    }
 
-    public void setParameters(String nameOfField) {
+    public void setParameters(String originalNameOfField, String nameOfField) {
+    	this.fieldOriginalName = originalNameOfField;
         this.fieldData.setText(nameOfField);
     }
 

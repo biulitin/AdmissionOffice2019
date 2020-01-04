@@ -8,6 +8,8 @@ import javafx.scene.text.Text;
 import java.util.regex.Pattern;
 
 public class DoubleInputPatternController {
+	String fieldOriginalName;
+	
     @FXML
     public FlowPane flowPane;
 
@@ -26,7 +28,12 @@ public class DoubleInputPatternController {
         }
     }
 
-    public void setParameters(String nameOfField) {
+    public void setFieldData(String data) {
+    	fieldData.setText(data);
+    }
+    
+    public void setParameters(String originalNameOfField, String nameOfField) {
+    	this.fieldOriginalName = originalNameOfField;
         this.nameOfField.setText(nameOfField);
     }
 

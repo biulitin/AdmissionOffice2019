@@ -1,10 +1,11 @@
-package controllers_simple;
+package controllers_tabs;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -15,11 +16,16 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public class IndividualAchievementsController {
+import backend.ModelDBConnection;
+import controllers_simple.*;
+
+public class CompetitiveGroupsTabController {
     @FXML
     public FlowPane buttonsPane;
+    @FXML
+    private Button addCompetitiveGroupButton;
 
-    String[] fields, fieldsTypes;
+    String[] fields, fieldsTypes, fieldsOriginalNames;
     FXMLLoader[] fieldsControllers;
     int countFields;
 
@@ -34,7 +40,7 @@ public class IndividualAchievementsController {
     FXMLLoader loader;
     Pane newPane;
 
-    public void fillTab() throws IOException, SQLException, ClassNotFoundException {
+    public void fillTab() throws Exception {
         prepareData();
         addButtons(buttonsPane, 2);
     }
@@ -58,33 +64,28 @@ public class IndividualAchievementsController {
             addEditDeleteButtonsController.hideButton(1);
             addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 1);
         }
+        addEditDeleteButtonsController.setEditable(false);
     }
 
-    public void prepareData() throws ClassNotFoundException, SQLException {
-        url = "jdbc:sqlserver://" + "localhost" + ":1433;databaseName=" + "Abiturient" + ";user="
-                + "igor_sa" + ";password=" + "200352" + ";";
+    public void prepareData() throws Exception {
+		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+		ModelDBConnection.initConnection();
 
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        conn = DriverManager.getConnection(url);
+        query = "SELECT AbiturientCompetitiveGroup.id_speciality, AbiturientCompetitiveGroup.id_competitiveGroup, " +
+                "AbiturientCompetitiveGroup.id_targetOrganization, AbiturientCompetitiveGroup.id_formOfEducation, " +
+                "AbiturientCompetitiveGroup.originalsReceivedDate, AbiturientCompetitiveGroup.is_enrolled " +
+                "FROM AbiturientCompetitiveGroup";
 
-        query = "SELECT AbiturientExtraInfo.name_of_document, AbiturientExtraInfo.series_of_document," +
-                "AbiturientExtraInfo.number_of_document, AbiturientExtraInfo.dateOf_issue," +
-                "AbiturientExtraInfo.issued_by\n" +
-                "FROM AbiturientExtraInfo";
-        cstmt = conn.prepareCall(query, 1004, 1007);
-        rset = cstmt.executeQuery();
-
-        rset.beforeFirst();
-
-        ResultSetMetaData rsmd = rset.getMetaData();
+		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(query);
         countFields = rsmd.getColumnCount();
+        
         fields = new String[countFields];
         fieldsTypes = new String[countFields];
         fieldsControllers = new FXMLLoader[countFields];
 
         for (int i = 0; i < countFields; i++) {
-            fields[i] = rsmd.getColumnLabel (i + 1);
-            fieldsTypes[i] = rsmd.getColumnTypeName (i + 1);
+            fields[i] = rsmd.getColumnLabel(i + 1);
+            fieldsTypes[i] = rsmd.getColumnTypeName(i + 1);
         }
     }
 
@@ -106,35 +107,36 @@ public class IndividualAchievementsController {
                     flowPane.getChildren().add(newPane);
 
                     DateInputPatternController dateInputPatternController = loader.getController();
-                    dateInputPatternController.setWidthHeight(300.0, 35.0, 120.0);
-                    dateInputPatternController.setParameters(fields[i]);
-                case "varchar":
-                    if(!fields[i].equals("dateOf_issue")) {
-                        loader = new FXMLLoader();
-
-                        loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+                    dateInputPatternController.setWidthHeight(350.0, 35.0, 140.0);
+                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
+                case "int":
+                    loader = new FXMLLoader();
+                    if (Pattern.compile("(id_).*").matcher(fields[i]).matches()) {
+                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
 
                         flowPane.getChildren().add(newPane);
 
-                        TextInputPatternController textInputPatternController = loader.getController();
-                        switch (fields[i]) {
-                            case "name_of_document":
-                                textInputPatternController.setWidthHeight(450.0, 35.0, 120.0);
-                                break;
-                            case "issued_by":
-                                textInputPatternController.setWidthHeight(450.0, 85.0, 120.0);
-                                break;
-                            case "series_of_document":
-                                textInputPatternController.setWidthHeight(230.0, 35.0, 120.0);
-                                break;
-                            case "number_of_document":
-                                textInputPatternController.setWidthHeight(220.0, 35.0, 80.0);
-                                break;
+                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        if (fields[i].equals("id_formOfEducation")) {
+                            choiceInputPatternController.setWidthHeight(450.0, 35.0, 250.0);
+                        } else {
+                            choiceInputPatternController.setWidthHeight(450.0, 35.0, 140.0);
                         }
-                        textInputPatternController.setParameters(fields[i]);
+                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
+                    } else if (fields[i].equals("is_enrolled")) {
+                        loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        flowPane.getChildren().add(newPane);
+
+                        BoolInputPatternController boolInputPatternController = loader.getController();
+                        boolInputPatternController.setWidthHeight(100.0, 35.0);
+                        boolInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
                     }
             }
         }

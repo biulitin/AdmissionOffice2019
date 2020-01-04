@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -18,7 +23,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="367.0" prefWidth="752.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
+<AnchorPane prefHeight="367.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
    <children>
       <BorderPane fx:id="menuPane" layoutX="-1.0" prefHeight="43.0" prefWidth="754.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -141,9 +146,9 @@
                 <RowConstraints maxHeight="155.33334350585938" minHeight="10.0" percentHeight="50" prefHeight="140.66668701171875" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TabPane prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tab.css" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
+                  <TabPane fx:id="tabsPane" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tab.css" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
                     <tabs>
-                      <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Конк-ые группы">
+                      <Tab fx:id="tabCompetitiveGroups" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Конк-ые группы">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="103.0" prefWidth="447.0" style="-fx-border-color: darkgray; -fx-background-color: white;">
                                  <opaqueInsets>
@@ -152,37 +157,37 @@
                               </AnchorPane>
                         </content>
                       </Tab>
-                      <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Вступ-ые испытания">
+                      <Tab fx:id="tabEntranceExams" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Вступ-ые испытания">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
                         </content>
                       </Tab>
-                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Привилегии">
+                        <Tab fx:id="tabPrivileges" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Привилегии">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />
                           </content>
                         </Tab>
-                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="100 б.">
+                        <Tab fx:id="tabBasisFor100balls" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="100 б.">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />
                           </content>
                         </Tab>
-                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Образование">
+                        <Tab fx:id="tabEducation" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Образование">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />
                           </content>
                         </Tab>
-                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Адрес и контакты">
+                        <Tab fx:id="tabAddressAndContacts" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Адрес и контакты">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
                           </content>
                         </Tab>
-                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Паспорт и ИНН">
+                        <Tab fx:id="tabPassportAndINN" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Паспорт и ИНН">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
                           </content>
                         </Tab>
-                        <Tab style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Допсведения">
+                        <Tab fx:id="tabExtraInfo" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Допсведения">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
                           </content>

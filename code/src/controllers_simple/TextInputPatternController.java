@@ -6,6 +6,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 
 public class TextInputPatternController {
+	String fieldOriginalName;
+	
     @FXML
     public FlowPane flowPane;
 
@@ -24,7 +26,12 @@ public class TextInputPatternController {
         }
     }
     
-    public void setParameters(String nameOfField) {
+    public void setFieldData(String data) {
+    	fieldData.setText(data);
+    }
+    
+    public void setParameters(String originalNameOfField, String nameOfField) {
+    	this.fieldOriginalName = originalNameOfField;
     	this.nameOfField.setText(nameOfField);
     }
 

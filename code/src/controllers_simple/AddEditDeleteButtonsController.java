@@ -34,59 +34,63 @@ public class AddEditDeleteButtonsController {
     @FXML
     void editButtonAction(ActionEvent event) {
     	String saveQuery = "";
+    	Boolean activate;
     	
     	switch(editButton.getText()) {
-			case "Редактировать":
-				editButton.setText("Сохранить");
+			case "Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ":
+				editButton.setText("РЎРѕС…СЂР°РЅРёС‚СЊ");
+				activate = true;
+				this.setEditable(activate);
 				//loop: each element have to be activated to editable mode
-				for (int i = 0; i < fieldsControllers.length; i++) {
+				for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
 					switch (fieldsTypes[i]) {
 						case "date":
 							DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
-							dateInputPatternController.setEditable(true);
+							dateInputPatternController.setEditable(activate);
 							break;
 						case "double":
 							DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
-							doubleInputPatternController.setEditable(true);
+							doubleInputPatternController.setEditable(activate);
 							break;
 						case "int":
 							if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
 								ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-								choiceInputPatternController.setEditable(true);
+								choiceInputPatternController.setEditable(activate);
 								break;
 							}
-							if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+							if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
 								BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
-								boolInputPatternController.setEditable(true);
+								boolInputPatternController.setEditable(activate);
 								break;
 							} else {
 								IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-								intInputPatternController.setEditable(true);
+								intInputPatternController.setEditable(activate);
 								break;
 							}
 						case "varchar":
 							if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
 								PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
-								phoneMaskInputPatternController.setEditable(true);
+								phoneMaskInputPatternController.setEditable(activate);
 								break;
 							}
 							if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
 								PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
-								passwordInputPatternController.setEditable(true);
+								passwordInputPatternController.setEditable(activate);
 								break;
 							}
 							else {
 								TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-								textInputPatternController.setEditable(true);
+								textInputPatternController.setEditable(activate);
 								break;
 							}
 
 					}
 				}
 				break;
-			case "Сохранить":
-				editButton.setText("Редактировать");
-    			for (int i = 0; i < fieldsControllers.length; i++) {
+			case "РЎРѕС…СЂР°РЅРёС‚СЊ":
+				editButton.setText("Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ");
+				activate = false;
+    			for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
     				switch (fieldsTypes[i]) {
     					case "date":
     						DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
@@ -102,7 +106,7 @@ public class AddEditDeleteButtonsController {
     							saveQuery += choiceInputPatternController.getFieldData() + ";";
     							break;
     						}
-    						if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+    						if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()  || Pattern.compile("(is).*").matcher(fields[i]).matches()){
     							BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
     							saveQuery += boolInputPatternController.getFieldData() + ";";
     							break;
@@ -135,12 +139,13 @@ public class AddEditDeleteButtonsController {
     			}
     			System.out.println(saveQuery);
     			//loop: each element have to be activated to non-editable mode
-				for (int i = 0; i < fieldsControllers.length; i++) {
+    			this.setEditable(activate);
+				for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
 					switch (fieldsTypes[i]) {
 						case "date":
 							DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
 							if (dateInputPatternController.checkData() == 0) {
-								dateInputPatternController.setEditable(false);
+								dateInputPatternController.setEditable(activate);
 								break;
 							}
 							else
@@ -148,7 +153,7 @@ public class AddEditDeleteButtonsController {
 						case "double":
 							DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
 							if (doubleInputPatternController.checkData() == 0) {
-								doubleInputPatternController.setEditable(false);
+								doubleInputPatternController.setEditable(activate);
 								break;
 							}
 							else
@@ -157,16 +162,16 @@ public class AddEditDeleteButtonsController {
 							if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
 								ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 								if (choiceInputPatternController.checkData() == 0) {
-									choiceInputPatternController.setEditable(false);
+									choiceInputPatternController.setEditable(activate);
 									break;
 								}
 								else
 									break;
 							}
-							if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+							if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
 								BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 								if (boolInputPatternController.checkData() == 0) {
-									boolInputPatternController.setEditable(false);
+									boolInputPatternController.setEditable(activate);
 									break;
 								}
 								else
@@ -174,7 +179,7 @@ public class AddEditDeleteButtonsController {
 							} else{
 								IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
 								if (intInputPatternController.checkData() == 0) {
-									intInputPatternController.setEditable(false);
+									intInputPatternController.setEditable(activate);
 									break;
 								}
 								else
@@ -184,7 +189,7 @@ public class AddEditDeleteButtonsController {
 							if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
 								PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
 								if (phoneMaskInputPatternController.checkData() == 0) {
-									phoneMaskInputPatternController.setEditable(false);
+									phoneMaskInputPatternController.setEditable(activate);
 									break;
 								}
 								else
@@ -193,7 +198,7 @@ public class AddEditDeleteButtonsController {
 							if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
 								PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
 								if (passwordInputPatternController.checkData() == 0) {
-									passwordInputPatternController.setEditable(false);
+									passwordInputPatternController.setEditable(activate);
 									break;
 								}
 								else
@@ -202,7 +207,7 @@ public class AddEditDeleteButtonsController {
 							else {
 								TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
 								if (textInputPatternController.checkData() == 0) {
-									textInputPatternController.setEditable(false);
+									textInputPatternController.setEditable(activate);
 									break;
 								}
 								else
@@ -225,10 +230,11 @@ public class AddEditDeleteButtonsController {
         this.fieldsTypes = fieldsTypes.clone();
         this.fieldsControllers = fieldsControllers.clone();
         
+        setEditable(false);
+        
         //Here will be switch/case according to the tabName (on some AddButton/DeleteButton have to be hidden)
     }
 
-    @FXML
     public void setWidthHeight(Double width, Double height) {
         buttonsBox.setPrefWidth(width);
         buttonsBox.setPrefHeight(height);
@@ -241,7 +247,6 @@ public class AddEditDeleteButtonsController {
 		this.deleteButton.setPrefHeight(height*0.35);
     }
 
-    @FXML
 	public void setWidthHideButtons(Double width, Double height, Integer visibleButtons) {
 		buttonsBox.setPrefWidth(width);
 		buttonsBox.setPrefHeight(height);
@@ -265,8 +270,16 @@ public class AddEditDeleteButtonsController {
 		}
 	}
 
-	@FXML
     public void hideButton(int numberOfButton) {
-		this.buttonsBox.getChildren().remove(numberOfButton);
+    	this.addButton.setVisible(numberOfButton == 0 ? false : true);
+    	this.editButton.setVisible(numberOfButton == 1 ? false : true);
+    	this.deleteButton.setVisible(numberOfButton == 2 ? false : true);
+
+		//this.buttonsBox.getChildren().remove(numberOfButton);
 	}
+
+    public void setEditable(Boolean value) {
+    	this.addButton.setDisable(!value);
+    	this.deleteButton.setDisable(!value);
+    }
 }

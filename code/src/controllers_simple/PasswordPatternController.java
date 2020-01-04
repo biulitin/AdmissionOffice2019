@@ -6,6 +6,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 
 public class PasswordPatternController {
+	String fieldOriginalName;
+	
     @FXML
     public FlowPane flowPane;
 
@@ -23,8 +25,13 @@ public class PasswordPatternController {
             return fieldData.getText();
         }
     }
+    
+    public void setFieldData(String data) {
+    	fieldData.setText(data);
+    }
 
-    public void setParameters(String nameOfField) {
+    public void setParameters(String originalNameOfField, String nameOfField) {
+    	this.fieldOriginalName = originalNameOfField;
         this.nameOfField.setText(nameOfField);
     }
 

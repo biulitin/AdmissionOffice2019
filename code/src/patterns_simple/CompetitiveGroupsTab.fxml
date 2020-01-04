@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
@@ -9,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers_simple.CompetitiveGroupsTabController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="controllers_tabs.CompetitiveGroupsTabController">
     <children>
         <GridPane layoutX="200.0" layoutY="200.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -24,7 +28,7 @@
             <TableView prefHeight="200.0" prefWidth="200.0" />
             <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="600.0" minWidth="200.0" mnemonicParsing="false" onAction="#openModalWindow" prefWidth="350.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 20px; -fx-cursor: hand;" text="Добавить конкурсную группу" />
+                  <Button fx:id="addCompetitiveGroupButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="600.0" minWidth="200.0" mnemonicParsing="false" onAction="#openModalWindow" prefWidth="350.0" style="-fx-background-color: #BDBDBD; -fx-background-radius: 20px; -fx-cursor: hand;" text="Добавить конкурсную группу" />
                </children>
             </FlowPane>
             <GridPane GridPane.rowIndex="2">

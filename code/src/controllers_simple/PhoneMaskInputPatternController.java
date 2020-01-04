@@ -7,6 +7,8 @@ import javafx.scene.text.Text;
 import controllers_simple.MaskField;
 
 public class PhoneMaskInputPatternController {
+	String fieldOriginalName;
+	
     @FXML
     public FlowPane flowPane;
 
@@ -24,8 +26,15 @@ public class PhoneMaskInputPatternController {
             return fieldData.getText();
         }
     }
+    
+    public void setFieldData(String data) {
+    	fieldData.setText(data);
+    }
 
-    public void setParameters(String nameOfField) { this.nameOfField.setText(nameOfField); }
+    public void setParameters(String originalNameOfField, String nameOfField) {
+    	this.fieldOriginalName = originalNameOfField;
+    	this.nameOfField.setText(nameOfField);
+    }
 
     public void setWidthHeight(Double paneWidth, Double paneHeight, Double labelWidth) {
         this.flowPane.setPrefWidth(paneWidth);
@@ -40,7 +49,7 @@ public class PhoneMaskInputPatternController {
         this.fieldData.setDisable(!editChoice);
     }
     
-         public int checkData(){
-             return 0;
-         }
+     public int checkData(){
+         return 0;
+     }
 }

@@ -1,15 +1,18 @@
-package controllers_simple;
+package controllers_tabs;
 
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import backend.ModelDBConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+
+import controllers_simple.*;
 
 public class EducationController {
 
@@ -22,7 +25,8 @@ public class EducationController {
     @FXML
     public Pane buttonsPane;
 
-    String[] fields, fieldsTypes;
+    int countFields = 0;
+    String[] fields, fieldsTypes, fieldsOriginalNames;
     FXMLLoader[] fieldsControllers;
 
     String url, query;
@@ -31,11 +35,8 @@ public class EducationController {
     ResultSet rset;
 
     public void createForm() throws Exception {
-        url = "jdbc:sqlserver://" + "localhost" + ":1433;databaseName=" + "Abiturient" + ";user="
-                + "igor_sa" + ";password=" + "200352" + ";";
-
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        conn = DriverManager.getConnection(url);
+		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+		ModelDBConnection.initConnection();
 
         query = "SELECT AbiturientEducation.id_levelEducation, AbiturientEducation.id_typeEducation, " +
                 "AbiturientEducation.name_eduInstitution, AbiturientEducation.dateOf_issue, " +
@@ -43,14 +44,8 @@ public class EducationController {
                 "AbiturientEducation.yearOf_graduation FROM AbiturientEducation join Abiturient " +
                 "ON (Abiturient.aid = AbiturientEducation.id_abiturient);";
 
-        cstmt = conn.prepareCall(query, 1004, 1007);
-        rset = cstmt.executeQuery();
-
-        int countStrings = rset.last() ? rset.getRow() : 0;
-        rset.beforeFirst();
-
-        ResultSetMetaData rsmd = rset.getMetaData();
-        int countFields = rsmd.getColumnCount();
+		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(query);
+		countFields = rsmd.getColumnCount();
 
         fields = new String[countFields];
         fieldsTypes = new String[countFields];
@@ -77,7 +72,7 @@ public class EducationController {
 
                     DateInputPatternController dateInputPatternController = loader.getController();
                     dateInputPatternController.setWidthHeight(345.0, 35.0, 100.0);
-                    dateInputPatternController.setParameters(fields[i]);
+                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                     break;
                 case "int":
                     if (Pattern.compile("(id_l).*").matcher(fields[i]).matches()) {
@@ -91,7 +86,8 @@ public class EducationController {
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
                         choiceInputPatternController.setWidthHeight(364.0, 35.0, 120.0);
-                        choiceInputPatternController.setParameters(fields[i]);
+                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        choiceInputPatternController.setFieldData("");
                         break;
                     }
                     if (Pattern.compile("(id_t).*").matcher(fields[i]).matches()) {
@@ -105,7 +101,8 @@ public class EducationController {
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
                         choiceInputPatternController.setWidthHeight(364.0, 35.0, 108.0);
-                        choiceInputPatternController.setParameters(fields[i]);
+                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        choiceInputPatternController.setFieldData("");
                         break;
                     }
                     if (Pattern.compile("(yearOf_).*").matcher(fields[i]).matches()) {
@@ -120,7 +117,7 @@ public class EducationController {
                         IntInputPatternController intInputPatternController = loader.getController();
                         // intInputPatternController.setWidthHeight(340.0, 35.0, 80.8);
                         intInputPatternController.setWidthHeight(230.0, 35.0, 120.8);
-                        intInputPatternController.setParameters(fields[i]);
+                        intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
                     }
                 case "varchar":
@@ -136,7 +133,7 @@ public class EducationController {
                         TextInputPatternController textInputPatternController = loader.getController();
                         textInputPatternController.setWidthHeight(230.0, 35.0, 105.74);
                         // textInputPatternController.setWidthHeight(285.0, 35.0, 45.74);
-                        textInputPatternController.setParameters(fields[i]);
+                        textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
                     }
                     if (Pattern.compile("(number).*").matcher(fields[i]).matches()) {
@@ -151,7 +148,7 @@ public class EducationController {
                         TextInputPatternController textInputPatternController = loader.getController();
                         textInputPatternController.setWidthHeight(250.0, 35.0, 120.9);
                         // textInputPatternController.setWidthHeight(290.0, 35.0, 39.9);
-                        textInputPatternController.setParameters(fields[i]);
+                        textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
                     }
                     if (Pattern.compile("(name_).*").matcher(fields[i]).matches()) {
@@ -166,7 +163,7 @@ public class EducationController {
                         TextInputPatternController textInputPatternController = loader.getController();
                         textInputPatternController.setWidthHeight(432.0, 67.0, 130.0);
                         // textInputPatternController.setWidthHeight(480.0, 35.0, 67.44);
-                        textInputPatternController.setParameters(fields[i]);
+                        textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
                     }
             }
@@ -181,8 +178,56 @@ public class EducationController {
         buttonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         buttonsPane.getChildren().add(newPane);
 
-
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
         addEditDeleteButtonsController.setParameters("Образование", fields, fieldsTypes, fieldsControllers);
+        
+        setEditable(false);
+    }
+    
+    public void setEditable(Boolean value) {
+		for (int i = 0; i < fieldsControllers.length; i++) {
+			switch (fieldsTypes[i]) {
+				case "date":
+					DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+					dateInputPatternController.setEditable(value);
+					break;
+				case "double":
+					DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
+					doubleInputPatternController.setEditable(value);
+					break;
+				case "int":
+					if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+						choiceInputPatternController.setEditable(value);
+						break;
+					}
+					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+						boolInputPatternController.setEditable(value);
+						break;
+					} else {
+						IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+						intInputPatternController.setEditable(value);
+						break;
+					}
+				case "varchar":
+					if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+						PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
+						phoneMaskInputPatternController.setEditable(value);
+						break;
+					}
+					if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+						PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
+						passwordInputPatternController.setEditable(value);
+						break;
+					}
+					else {
+						TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+						textInputPatternController.setEditable(value);
+						break;
+					}
+
+			}
+		}
     }
 }

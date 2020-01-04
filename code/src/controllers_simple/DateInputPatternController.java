@@ -5,10 +5,16 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class DateInputPatternController {
+	String fieldOriginalName;
+	
     @FXML
     public FlowPane flowPane;
 
@@ -27,7 +33,15 @@ public class DateInputPatternController {
         }
     }
     
-    public void setParameters(String nameOfField) {
+    public void setFieldData(String data) {
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    	LocalDate date = LocalDate.parse(data,dtf);
+
+    	fieldData.setValue(date);
+    }
+    
+    public void setParameters(String originalNameOfField, String nameOfField) {
+    	this.fieldOriginalName = originalNameOfField;
     	this.nameOfField.setText(nameOfField);
     }
 
