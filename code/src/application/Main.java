@@ -15,8 +15,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
         	FXMLLoader loader = new FXMLLoader();
-        	loader.setLocation(getClass().getResource("MainWindow.fxml"));
-        	//loader.setLocation(getClass().getResource("InsertForm.fxml"));
+        	//loader.setLocation(getClass().getResource("MainWindow.fxml"));
+        	loader.setLocation(getClass().getResource("InsertForm.fxml"));
             //loader.setLocation(getClass().getResource("../patterns_simple/IndividualAchievementsPattern.fxml"));
             //loader.setLocation(getClass().getResource("../patterns_simple/CompetitiveGroupsTab.fxml"));
         	//loader.setLocation(getClass().getResource("../patterns_simple/Education.fxml"));
@@ -25,11 +25,11 @@ public class Main extends Application {
             AnchorPane root;
             root = (AnchorPane) loader.load();
             
-            MainWindowController mainWindowController = loader.getController();
-            mainWindowController.fillInPatterns();
+            /*MainWindowController mainWindowController = loader.getController();
+            mainWindowController.fillInPatterns();*/
             
-            /*InsertFormController insertFormController = loader.getController();
-            insertFormController.createForm();*/
+            InsertFormController insertFormController = loader.getController();
+            insertFormController.createForm();
             
             /*IndividualAchievementsController individualAchievementsController = loader.getController();
             individualAchievementsController.fillTab();*/
@@ -38,7 +38,7 @@ public class Main extends Application {
             competitiveGroupsTabController.fillTab();*/
             
             /*EducationController educationTabController = loader.getController();
-            educationTabController.createForm();*/
+            educationTabController.fillTab();*/
 
             /*PassportTabController passportTabController = loader.getController();
             passportTabController.fillTab();*/

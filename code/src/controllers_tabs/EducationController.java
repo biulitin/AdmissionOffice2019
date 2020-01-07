@@ -34,7 +34,7 @@ public class EducationController {
     CallableStatement cstmt;
     ResultSet rset;
 
-    public void createForm() throws Exception {
+    public void fillTab() throws Exception {
 		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 

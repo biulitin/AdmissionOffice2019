@@ -96,7 +96,7 @@ public class InsertFormController {
 						choiceInputPatternController.setFieldData("");
 						break;
 					}
-					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
 						loader = new FXMLLoader();
 						loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
 
@@ -198,7 +198,7 @@ public class InsertFormController {
 						choiceInputPatternController.setEditable(value);
 						break;
 					}
-					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						boolInputPatternController.setEditable(value);
 						break;

@@ -65,8 +65,8 @@ create table TypePassport (
 create table AbiturientPassport (
 	id_abiturient int,     --код абитуриента
 	id_typePassport int,   --код паспорта
-	series varchar(MAX),           --серия
-	number varchar(MAX),           --номер
+	series_document varchar(MAX),           --серия
+	number_document varchar(MAX),           --номер
 	issued_by varchar(MAX),        --кем выдан
 	dateOf_issue date,     --дата выдачи
 
@@ -173,7 +173,7 @@ create table AbiturientDocumentsFor100balls(
 	olympLevel varchar(MAX),          --Уровень олимпиады
 	series_document varchar(MAX),    --серия документа
 	number_document varchar(MAX),    --номер документа
-	date_of_issue date,      --дата выдачи 
+	dateOf_issue date,      --дата выдачи 
 	issued_by varchar(MAX),          --кем выдан
 	
 --Внешние ключи
@@ -225,9 +225,9 @@ create table AbiturientIndividAchievement(
 	id_abiturient int,    --код абитуриента
     id_individualAchievements int,   --код индвидуального достижения
 	score int,   --балл за индивидуальное достижение
-    name varchar(MAX),    --название документа
-	series varchar(MAX),           --серия
-	number varchar(MAX),           --номер
+    nameOfDocument varchar(MAX),    --название документа
+	series_document varchar(MAX),           --серия
+	number_document varchar(MAX),           --номер
 	issued_by varchar(MAX),        --кем выдан
 	dateOf_issue date,     --дата выдачи
     
@@ -332,9 +332,9 @@ create table CategoryOfExtraInfo(
 create table AbiturientExtraInfo (
 	id_abiturient int,  --код абитуриента
 	id_categoryOfExtraInfo int,   --код допсведений 
-	name_of_document varchar(MAX), --Наименование документа
-	series_of_document  varchar(MAX), --Документ серия
-	number_of_document varchar(MAX), --Документ номер 
+	nameOfDocument varchar(MAX), --Наименование документа
+	series_document  varchar(MAX), --Документ серия
+	number_document varchar(MAX), --Документ номер 
 	issued_by  varchar(MAX), --Кем выдан
 	dateOf_issue date --Дата выдачи	
 
@@ -346,9 +346,9 @@ create table AbiturientExtraInfo (
 --Абитуриент_документ_БВИ
 create table AbiturientDocumentsBVI (
 	id_abiturient int,  --код абитуриента
-	name_of_document varchar(MAX), --Наименование документа
-	series  varchar(MAX), --Документ серия
-	number varchar(MAX), --Документ номер 
+	nameOfDocument varchar(MAX), --Наименование документа
+	series_document  varchar(MAX), --Документ серия
+	number_document varchar(MAX), --Документ номер 
 	issued_by  varchar(MAX), --Кем выдан
 	dateOf_issue date --Дата выдачи	
 
@@ -385,11 +385,11 @@ create table AbiturientQuota (
 --Абитуриент_Документ Квота
 create table AbiturientDocumentQuota (
 	id_abiturient int, -- id абитуриента
-	name varchar(255), -- Наименование документа
-	series varchar(255), -- Серия
-	num varchar(255), -- Номер
-	issuedBy varchar(255), -- Кем_выдан
-	issueDate date, -- Дата_выдачи
+	nameOfDocument varchar(255), -- Наименование документа
+	series_document varchar(255), -- Серия
+	number_document varchar(255), -- Номер
+	issued_by varchar(255), -- Кем_выдан
+	dateOf_issue date, -- Дата_выдачи
 
 --Внешний ключ	
 	foreign key(id_abiturient) references Abiturient(aid) on update cascade on delete cascade
@@ -401,22 +401,22 @@ create table TypeOfPreferredRight (
 	codeFIS varchar(255) -- Код_ФИС	
 );
 
-create table AbiturientPreemptitiveRight (
+create table AbiturientPreferredRight (
 	id_abiturient int, -- id абитуриента
-	id_preemptitiveRight int, -- id типа преимущественного права
+	id_preferredRight int, -- id типа преимущественного права
 
 --Внешний ключ	
 	foreign key(id_abiturient) references Abiturient(aid) on update cascade on delete cascade,
-	foreign key(id_preemptitiveRight) references TypeOfPreferredRight(id) on update cascade on delete set null
+	foreign key(id_preferredRight) references TypeOfPreferredRight(id) on update cascade on delete set null
 );
 
 create table AbiturientDocumentsPreferredRight (
 	id_abiturient int,  -- id абитуриента
-	name varchar(255), -- Наименование документа
-	series varchar(255), -- Серия
-	num varchar(255), -- Номер
-	issuedBy varchar(255), -- Кем_выдан
-	issueDate date, -- Дата_выдачи
+	nameOfDocument varchar(255), -- Наименование документа
+	series_document varchar(255), -- Серия
+	number_document varchar(255), -- Номер
+	issued_by varchar(255), -- Кем_выдан
+	dateOf_issue date, -- Дата_выдачи
 
 --Внешний ключ	
 	foreign key(id_abiturient) references Abiturient(aid) on update cascade on delete cascade	

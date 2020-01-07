@@ -70,8 +70,8 @@ public class IndividualAchievementsController {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conn = DriverManager.getConnection(url);
 
-        query = "SELECT AbiturientExtraInfo.name_of_document, AbiturientExtraInfo.series_of_document," +
-                "AbiturientExtraInfo.number_of_document, AbiturientExtraInfo.dateOf_issue," +
+        query = "SELECT AbiturientExtraInfo.nameOfDocument, AbiturientExtraInfo.series_document," +
+                "AbiturientExtraInfo.number_document, AbiturientExtraInfo.dateOf_issue," +
                 "AbiturientExtraInfo.issued_by\n" +
                 "FROM AbiturientExtraInfo";
         cstmt = conn.prepareCall(query, 1004, 1007);

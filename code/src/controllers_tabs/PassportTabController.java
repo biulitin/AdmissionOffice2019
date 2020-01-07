@@ -38,7 +38,7 @@ public class PassportTabController {
 		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
-        query = "SELECT AbiturientPassport.id_typePassport, AbiturientPassport.series,AbiturientPassport.number,AbiturientPassport.dateOf_issue,AbiturientPassport.issued_by,Abiturient.Birthplace,Abiturient.inn \n" +
+        query = "SELECT AbiturientPassport.id_typePassport, AbiturientPassport.series_document,AbiturientPassport.number_document,AbiturientPassport.dateOf_issue,AbiturientPassport.issued_by,Abiturient.Birthplace,Abiturient.inn \n" +
                 "FROM AbiturientPassport JOIN Abiturient ON\n" +
                 "(Abiturient.aid=AbiturientPassport.id_abiturient);";
         
@@ -87,7 +87,7 @@ public class PassportTabController {
                         break;
                     }
                 case "varchar":
-                    if(Pattern.compile("(series)").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(series).*").matcher(fields[i]).matches() ){
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
@@ -100,7 +100,7 @@ public class PassportTabController {
                         textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientPassport"));
                         break;
                     }
-                    if(Pattern.compile("(number)").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(number).*").matcher(fields[i]).matches() ){
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 

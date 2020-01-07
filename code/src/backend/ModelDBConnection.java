@@ -132,7 +132,6 @@ public class ModelDBConnection {
 			/*cstmt = con.prepareCall("{call getNamesFromTableOrderedById(?)}", 1004, 1007);
 
 			cstmt.setString(1, tableName);*/
-			System.out.println("select name from " + tableName + " order by id");
 
 			cstmt = con.prepareCall("select name from " + tableName + " order by id", 1004, 1007);
 
@@ -181,8 +180,6 @@ public class ModelDBConnection {
 					case "CategoryOfExtraInfo": return "Категория допсведений";
 					case "TypeOfQuote": return "Квота";
 					case "TypeOfPreferredRight": return "ПП";
-					case "AbiturientDocumentQuota": return "Наименование документа";
-					case "AbiturientDocumentsPreferredRight": return "Наименование документа";
 				}
 			case "min_score": return "Минимальный балл";
 			case "max_score": return "Максимальный балл за ИД";
@@ -210,8 +207,8 @@ public class ModelDBConnection {
 			//Таблица AbiturientPassport
 			case "id_abiturient": return "№ Личного дела";
 			case "id_typePassport": return "Тип документа (паспорт)";
-			case "series": return "Серия";
-			case "number": return "Номер";
+			case "series_document": return "Серия";
+			case "number_document": return "Номер";
 			case "issued_by": return "Кем выдан";
 			case "dateOf_issue": return "Дата выдачи";
 			//Таблица AbiturientAdress
@@ -236,8 +233,6 @@ public class ModelDBConnection {
 			case "diplomaDegree": return "Степень диплома";
 			case "diplomaSubject": return "Предмет олимпиады";
 			case "olympLevel": return "Уровень олимпиады";
-			case "series_document": return "Серия";
-			case "number_document": return "Номер";
 			//Таблица AbiturientEducation
 			case "id_levelEducation": return "Уровень образования";
 			case "id_typeEducation": return "Тип образования";
@@ -265,17 +260,11 @@ public class ModelDBConnection {
 			case "id_typeOfBVI": return "Категория БВИ";
 			//Таблица AbiturientExtraInfo
 			case "id_categoryOfExtraInfo": return "Категория допсведений";
-			case "name_of_document": return "Наименование документа";
-			case "series_of_document": return "Серия";
-			case "number_of_document": return "Номер";
 			//Таблица AbiturientQuota
 			case "id_quotaType": return "Квота";
 			//Таблица AbiturientDocumentQuota
-			case "num": return "Номер";
-			case "issuedBy": return "Кем выдан";
-			case "issueDate": return "Дата выдачи";
-			//Таблица AbiturientPreemptitiveRight
-			case "id_preemptitiveRight": return "ПП";
+			//Таблица AbiturientPreferredRight
+			case "id_preferredRight": return "ПП";
 		
 			default: return "";
 		}
