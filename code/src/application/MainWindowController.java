@@ -1,29 +1,22 @@
 package application;
 
-import controllers_simple.*;
-import controllers_tabs.*;
-
-import java.io.IOException;
-import java.sql.*;
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.regex.Pattern;
-
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import org.grios.tableadapter.DefaultTableAdapter;
-
 import backend.ModelDBConnection;
+import controllers_simple.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.TableView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import org.grios.tableadapter.DefaultTableAdapter;
+
+import java.sql.*;
+import java.util.Arrays;
+import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class MainWindowController {
     @FXML
