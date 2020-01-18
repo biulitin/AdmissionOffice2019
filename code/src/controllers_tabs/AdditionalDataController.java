@@ -16,7 +16,7 @@ public class AdditionalDataController {
     @FXML
     public FlowPane buttonsPane;
 
-    String[] fields, fieldsTypes, fieldsOriginalNames;
+    String[] fields, fieldsTypes;
     FXMLLoader[] fieldsControllers;
     int countFields;
 
@@ -48,10 +48,10 @@ public class AdditionalDataController {
 
     public void fillTab() throws Exception {
         prepareData();
-        addButtons(buttonsPane, 3);
+        addButtons(buttonsPane);
     }
 
-    public void addButtons(Pane pane, int numberOfVisibleButtons) throws IOException {
+    public void addButtons(Pane pane) throws IOException {
         FXMLLoader buttonsLoader = new FXMLLoader();
         buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
 
@@ -61,18 +61,7 @@ public class AdditionalDataController {
         pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
-        if (numberOfVisibleButtons == 3) {
-            addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 3);
-        }
-        else if (numberOfVisibleButtons == 2) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 2);
-        }
-        else if (numberOfVisibleButtons == 1) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.hideButton(1);
-            addEditDeleteButtonsController.setWidthHideButtons(150.0, 50.0, 1);
-        }
+        addEditDeleteButtonsController.setParameters("Допсведения", fields, fieldsTypes, fieldsControllers);
         addEditDeleteButtonsController.setEditable(false);
     }
 }
