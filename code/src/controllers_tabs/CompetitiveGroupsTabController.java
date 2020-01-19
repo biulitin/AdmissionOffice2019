@@ -68,7 +68,8 @@ public class CompetitiveGroupsTabController {
     }
 
     public void prepareData() throws Exception {
-		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+    	ModelDBConnection.setDefaultConnectionParameters();
+    	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
         query = "SELECT AbiturientCompetitiveGroup.id_speciality, AbiturientCompetitiveGroup.id_competitiveGroup, " +

@@ -33,7 +33,8 @@ public class InsertFormController {
 	ResultSet rset;
 
     public void createForm() throws Exception {
-		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+    	ModelDBConnection.setDefaultConnectionParameters();
+		//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
 		query = "select * from Abiturient";

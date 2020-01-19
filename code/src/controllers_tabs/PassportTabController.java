@@ -35,7 +35,8 @@ public class PassportTabController {
         parentGridPane.autosize();
         childGridPane.autosize();
 
-		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+        ModelDBConnection.setDefaultConnectionParameters();
+        //ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
         query = "SELECT AbiturientPassport.id_typePassport, AbiturientPassport.series_document,AbiturientPassport.number_document,AbiturientPassport.dateOf_issue,AbiturientPassport.issued_by,Abiturient.Birthplace,Abiturient.inn \n" +

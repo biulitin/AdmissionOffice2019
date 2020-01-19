@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import backend.ModelDBConnection;
 import controllers_simple.*;
 
-public class IndividualAchievementsController {
+public class IndividualAchievementsTabController {
     @FXML
     public FlowPane buttonsPane;
 

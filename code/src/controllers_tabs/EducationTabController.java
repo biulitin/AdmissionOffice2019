@@ -14,7 +14,7 @@ import javafx.scene.layout.Pane;
 
 import controllers_simple.*;
 
-public class EducationController {
+public class EducationTabController {
 
     @FXML
     public GridPane parentGridPane;
@@ -35,7 +35,8 @@ public class EducationController {
     ResultSet rset;
 
     public void fillTab() throws Exception {
-		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+    	ModelDBConnection.setDefaultConnectionParameters();
+    	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
         query = "SELECT AbiturientEducation.id_levelEducation, AbiturientEducation.id_typeEducation, " +

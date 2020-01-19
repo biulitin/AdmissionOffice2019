@@ -1,5 +1,9 @@
 package backend;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +14,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +33,31 @@ public class ModelDBConnection {
 	static Statement stmt = null;
 
 	static boolean DEBUG = false;
+
+	public static void setDefaultConnectionParameters() {
+		try {
+			Properties property = new Properties();
+			property.load(new FileInputStream(new File("").getAbsolutePath() + "/.conf"));
+			
+	        String serverType = property.getProperty("db.serverType");
+	        String serverAddress = property.getProperty("db.serverAddress");
+	        String dbName = property.getProperty("db.baseName");
+	        String login = property.getProperty("db.login");
+	        String password = property.getProperty("db.password");
+
+			ModelDBConnection.serverType = serverType;
+			ModelDBConnection.serverAddress = serverAddress;
+			ModelDBConnection.dbName = dbName;
+			ModelDBConnection.login = login;
+			ModelDBConnection.password = password;
+
+			ModelDBConnection.con = null;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void setConnectionParameters(String serverType, String serverAddress, String dbName, String login,
 			String password) {

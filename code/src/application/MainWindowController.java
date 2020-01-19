@@ -57,7 +57,8 @@ public class MainWindowController {
 	private DefaultTableAdapter dta;
 
 	public void fillInPatterns() throws Exception {
-		ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+		ModelDBConnection.setDefaultConnectionParameters();
+		//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
 		query = "SELECT Abiturient.aid, Abiturient.registrationdate, " +

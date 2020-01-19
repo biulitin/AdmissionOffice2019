@@ -2,7 +2,6 @@ package controllers_tabs;
 
 import backend.ModelDBConnection;
 import controllers_simple.AddEditDeleteButtonsController;
-import io.github.cdimascio.dotenv.Dotenv;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
@@ -12,7 +11,7 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.sql.ResultSetMetaData;
 
-public class AdditionalDataController {
+public class AdditionalInfoTabController {
     @FXML
     public FlowPane buttonsPane;
 
@@ -21,14 +20,10 @@ public class AdditionalDataController {
     int countFields;
 
     String query;
-    Dotenv dotenv = Dotenv.load();
 
     public void prepareData() throws Exception {
-        ModelDBConnection.setConnectionParameters("MSServer",
-                                                            dotenv.get("DB_HOST"),
-                                                            dotenv.get("DB_NAME"),
-                                                            dotenv.get("DB_USER"),
-                                                            dotenv.get("DB_PASS"));
+    	ModelDBConnection.setDefaultConnectionParameters();
+    	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
         ModelDBConnection.initConnection();
 
         query = "SELECT * FROM AbiturientExtraInfo";
