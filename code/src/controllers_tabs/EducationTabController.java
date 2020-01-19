@@ -72,7 +72,7 @@ public class EducationTabController {
                     parentGridPane.add(newPane, 0, 3);
 
                     DateInputPatternController dateInputPatternController = loader.getController();
-                    dateInputPatternController.setWidthHeight(345.0, 35.0, 100.0);
+                    dateInputPatternController.setWidthHeight(445.0, 35.0, 160.0);
                     dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                     break;
                 case "int":
@@ -86,7 +86,7 @@ public class EducationTabController {
                         parentGridPane.add(newPane,0,0);
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
-                        choiceInputPatternController.setWidthHeight(364.0, 35.0, 120.0);
+                        choiceInputPatternController.setWidthHeight(678.0, 35.0, 160.0);
                         choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         choiceInputPatternController.setFieldData("");
                         break;
@@ -101,7 +101,7 @@ public class EducationTabController {
                         parentGridPane.add(newPane,0,1);
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
-                        choiceInputPatternController.setWidthHeight(364.0, 35.0, 108.0);
+                        choiceInputPatternController.setWidthHeight(678.0, 35.0, 160.0);
                         choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         choiceInputPatternController.setFieldData("");
                         break;
@@ -117,7 +117,7 @@ public class EducationTabController {
 
                         IntInputPatternController intInputPatternController = loader.getController();
                         // intInputPatternController.setWidthHeight(340.0, 35.0, 80.8);
-                        intInputPatternController.setWidthHeight(230.0, 35.0, 120.8);
+                        intInputPatternController.setWidthHeight(210.0, 35.0, 80.8);
                         intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
                     }
@@ -132,7 +132,7 @@ public class EducationTabController {
                         childGridPane.add(newPane, 0, 0);
 
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(230.0, 35.0, 105.74);
+                        textInputPatternController.setWidthHeight(210.0, 35.0, 70.8);
                         // textInputPatternController.setWidthHeight(285.0, 35.0, 45.74);
                         textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
@@ -147,7 +147,7 @@ public class EducationTabController {
                         childGridPane.add(newPane, 1, 0);
 
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(250.0, 35.0, 120.9);
+                        textInputPatternController.setWidthHeight(210.0, 35.0, 70.8);
                         // textInputPatternController.setWidthHeight(290.0, 35.0, 39.9);
                         textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
@@ -162,7 +162,7 @@ public class EducationTabController {
                         parentGridPane.add(newPane, 0, 2);
 
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(432.0, 67.0, 130.0);
+                        textInputPatternController.setWidthHeight(678.0, 35.0, 160.0);
                         // textInputPatternController.setWidthHeight(480.0, 35.0, 67.44);
                         textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;

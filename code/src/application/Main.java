@@ -16,11 +16,11 @@ public class Main extends Application {
         try {
         	FXMLLoader loader = new FXMLLoader();
         	//loader.setLocation(getClass().getResource("MainWindow.fxml"));
-        	loader.setLocation(getClass().getResource("InsertForm.fxml"));
+        	//loader.setLocation(getClass().getResource("InsertForm.fxml"));
             //loader.setLocation(getClass().getResource("../patterns_tabs/IndividualAchievementsTab.fxml"));
             //loader.setLocation(getClass().getResource("../patterns_tabs/CompetitiveGroupsTab.fxml"));
         	//loader.setLocation(getClass().getResource("../patterns_tabs/EducationTab.fxml"));
-        	//loader.setLocation(getClass().getResource("../patterns_tabs/PassportTab.fxml"));
+        	loader.setLocation(getClass().getResource("../patterns_tabs/PassportTab.fxml"));
         	//loader.setLocation(getClass().getResource("../patterns_tabs/AdditionalInfoTab.fxml"));
         	
             AnchorPane root;
@@ -41,8 +41,8 @@ public class Main extends Application {
             /*EducationTabController educationTabController = loader.getController();
             educationTabController.fillTab();*/
 
-            /*PassportTabController passportTabController = loader.getController();
-            passportTabController.fillTab();*/
+            PassportTabController passportTabController = loader.getController();
+            passportTabController.fillTab();
             
             /*AdditionalInfoTabController additionalInfoTabController = loader.getController();
             additionalInfoTabController.fillTab();*/
