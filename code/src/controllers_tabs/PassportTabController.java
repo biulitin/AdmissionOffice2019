@@ -4,11 +4,8 @@ package controllers_tabs;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+
+import java.sql.*;
 import java.util.regex.Pattern;
 
 import backend.ModelDBConnection;
@@ -216,4 +213,55 @@ public class PassportTabController {
 			}
 		}
     }
+
+    public void setFieldsData(String aid) throws SQLException {
+        query = "SELECT AbiturientPassport.id_typePassport, AbiturientPassport.series_document,AbiturientPassport.number_document,AbiturientPassport.dateOf_issue,AbiturientPassport.issued_by,Abiturient.Birthplace,Abiturient.inn \n" +
+                "FROM AbiturientPassport JOIN Abiturient ON \n" +
+                "(Abiturient.aid=AbiturientPassport.id_abiturient)  WHERE Abiturient.aid = "+aid+";";
+        Statement statement = ModelDBConnection.getConnection().createStatement();
+        rset= statement.executeQuery(query);
+        if (rset.next()){
+        for (int i = 0; i < fieldsControllers.length; i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                    dateInputPatternController.setFieldData(rset.getString(4));
+                    break;
+                case "int":
+                    if (Pattern.compile("(id_t).*").matcher(fields[i]).matches()) {
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        choiceInputPatternController.setFieldData(rset.getString(1));
+                        break;
+                    }
+                case "varchar":
+                    if (Pattern.compile("(series).*").matcher(fields[i]).matches()) {
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        textInputPatternController.setFieldData(rset.getString(2));
+                        break;
+                    }
+                    if (Pattern.compile("(number).*").matcher(fields[i]).matches()) {
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        textInputPatternController.setFieldData(rset.getString(3));
+                        break;
+                    }
+                    if (Pattern.compile("(issued).*").matcher(fields[i]).matches()) {
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        textInputPatternController.setFieldData(rset.getString(5));
+                        break;
+                    }
+                    if (Pattern.compile("(Birthp).*").matcher(fields[i]).matches()) {
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        textInputPatternController.setFieldData(rset.getString(6));
+                        break;
+                    }
+                    if (Pattern.compile("(inn)").matcher(fields[i]).matches()) {
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        textInputPatternController.setFieldData(rset.getString(7));
+                        break;
+                    }
+                    break;
+            }
+        }
+    }
+}
 }
