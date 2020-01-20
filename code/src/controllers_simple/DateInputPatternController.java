@@ -34,7 +34,7 @@ public class DateInputPatternController {
     }
     
     public void setFieldData(String data) {
-    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     	LocalDate date = LocalDate.parse(data,dtf);
 
     	fieldData.setValue(date);
