@@ -20,32 +20,40 @@ public class Main extends Application {
             //loader.setLocation(getClass().getResource("../patterns_tabs/IndividualAchievementsTab.fxml"));
             //loader.setLocation(getClass().getResource("../patterns_tabs/CompetitiveGroupsTab.fxml"));
         	//loader.setLocation(getClass().getResource("../patterns_tabs/EducationTab.fxml"));
-        	loader.setLocation(getClass().getResource("../patterns_tabs/PassportTab.fxml"));
+        	//loader.setLocation(getClass().getResource("../patterns_tabs/PassportTab.fxml"));
         	//loader.setLocation(getClass().getResource("../patterns_tabs/AdditionalInfoTab.fxml"));
-        	
+        	//loader.setLocation(getClass().getResource("../patterns_tabs/OlympiadsTab.fxml"));
+        	loader.setLocation(getClass().getResource("../patterns_tabs/EntranceExamTab.fxml"));
+
             AnchorPane root;
             root = (AnchorPane) loader.load();
-            
-            /*MainWindowController mainWindowController = loader.getController();
-            mainWindowController.fillInPatterns();*/
-            
-            /*InsertFormController insertFormController = loader.getController();
-            insertFormController.createForm();*/
-            
-            /*IndividualAchievementsTabController individualAchievementsTabController = loader.getController();
-            individualAchievementsTabController.fillTab();*/
-            
-            /*CompetitiveGroupsTabController competitiveGroupsTabController = loader.getController();
-            competitiveGroupsTabController.fillTab();*/
-            
-            /*EducationTabController educationTabController = loader.getController();
-            educationTabController.fillTab();*/
 
-            PassportTabController passportTabController = loader.getController();
-            passportTabController.fillTab();
-            
+            /*MainWindowController mainWindowController = loader.getController();
+            mainWindowController.fillInPatterns(loader);*/
+
+            /*InsertFormController insertFormController = loader.getController();
+            insertFormController.createForm(loader);*/
+
+            /*IndividualAchievementsTabController individualAchievementsTabController = loader.getController();
+            individualAchievementsTabController.fillTab(loader);*/
+
+            /*CompetitiveGroupsTabController competitiveGroupsTabController = loader.getController();
+            competitiveGroupsTabController.fillTab(loader);*/
+
+            /*EducationTabController educationTabController = loader.getController();
+            educationTabController.fillTab(loader);*/
+
+            /*PassportTabController passportTabController = loader.getController();
+            passportTabController.fillTab(loader);*/
+
             /*AdditionalInfoTabController additionalInfoTabController = loader.getController();
-            additionalInfoTabController.fillTab();*/
+            additionalInfoTabController.fillTab(loader);*/
+
+            /*OlympiadsTabController olympiadsTabController = loader.getController();
+            olympiadsTabController.fillTab(loader);*/
+            
+            EntranceExamTabController entranceExamTabController = loader.getController();
+            entranceExamTabController.fillTab(loader);
 
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

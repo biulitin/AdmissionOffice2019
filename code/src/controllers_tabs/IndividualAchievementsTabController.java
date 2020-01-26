@@ -37,7 +37,7 @@ public class IndividualAchievementsTabController {
     FXMLLoader loader;
     Pane newPane;
 
-    public void fillTab() throws IOException, SQLException, ClassNotFoundException {
+    public void fillTab(FXMLLoader tabController) throws IOException, SQLException, ClassNotFoundException {
         prepareData();
         addButtons(buttonsPane, 2);
     }

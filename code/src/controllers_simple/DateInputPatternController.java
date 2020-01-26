@@ -34,10 +34,12 @@ public class DateInputPatternController {
     }
     
     public void setFieldData(String data) {
-    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    	LocalDate date = LocalDate.parse(data,dtf);
+    	if (!data.equals("")) {
+    		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    		LocalDate date = LocalDate.parse(data,dtf);
 
-    	fieldData.setValue(date);
+    		fieldData.setValue(date);
+    	}
     }
     
     public void setParameters(String originalNameOfField, String nameOfField) {
@@ -60,13 +62,14 @@ public class DateInputPatternController {
 
     public int checkData(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
         try {
             format.parse(String.valueOf(fieldData.getValue()));
             return 0;
         }
         // if null or incorrect value we always get null
         catch(ParseException e){
-            return 1;
+        	return (fieldData.getValue() == null) ? 1 : 2;
         }
     }
 }

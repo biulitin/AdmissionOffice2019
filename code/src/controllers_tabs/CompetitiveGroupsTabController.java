@@ -40,7 +40,7 @@ public class CompetitiveGroupsTabController {
     FXMLLoader loader;
     Pane newPane;
 
-    public void fillTab() throws Exception {
+    public void fillTab(FXMLLoader tabController) throws Exception {
         prepareData();
         addButtons(buttonsPane, 2);
     }

@@ -1,11 +1,7 @@
 package backend;
 
-import java.awt.Component;
-
-import javax.swing.JOptionPane;
-
 public abstract class MessageProcessing {
-	public static void displaySuccessMessage(Component parent, int messageType) {
+	public static void displaySuccessMessage(int messageType) {
 		String message = null, titleMessage = null;
 
 		switch (messageType) {
@@ -67,14 +63,14 @@ public abstract class MessageProcessing {
 			break;
 		}
 
-		JOptionPane.showMessageDialog(parent, message, titleMessage, JOptionPane.INFORMATION_MESSAGE);
+		System.out.println(titleMessage + "\n" + message);
 	}
 
-	public static void displayErrorMessage(Component parent, Exception e) {
-		JOptionPane.showMessageDialog(parent, e.toString(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+	public static void displayErrorMessage(Exception e) {
+		System.out.println("Ошибка\n" + e.toString());
 	}
 
-	public static void displayErrorMessage(Component parent, int messageType) {
+	public static void displayErrorMessage(int messageType) {
 		String message = null, titleMessage = null;
 
 		switch (messageType) {
@@ -192,65 +188,69 @@ public abstract class MessageProcessing {
 			break;
 		case 29:
 			titleMessage = "Результат проверки данных";
-			message = "Не выбран стандарт образования!";
+			message = "Не выбран тип образования!";
 			break;
 		case 30:
 			titleMessage = "Результат проверки данных";
-			message = "Такая конкурсная группа уже была добавлена ранее!";
+			message = "Не выбран уровень образования!";
 			break;
 		case 31:
 			titleMessage = "Результат проверки данных";
-			message = "Некорректный формат поля id!";
+			message = "Такая конкурсная группа уже была добавлена ранее!";
 			break;
 		case 32:
 			titleMessage = "Результат проверки данных";
-			message = "Некорректный формат поля с баллом!";
+			message = "Некорректный формат поля id!";
 			break;
 		case 33:
 			titleMessage = "Результат проверки данных";
-			message = "Некорректный формат поля с кодом ФИС!";
+			message = "Некорректный формат поля с баллом!";
 			break;
 		case 34:
 			titleMessage = "Результат проверки данных";
-			message = "Такой элемент справочника уже был добавлен ранее!\nПроверьте идентификатор и имя";
+			message = "Некорректный формат поля с кодом ФИС!";
 			break;
 		case 35:
 			titleMessage = "Результат проверки данных";
-			message = "Идентификатор не может быть пустым!";
+			message = "Такой элемент справочника уже был добавлен ранее!\nПроверьте идентификатор и имя";
 			break;
 		case 36:
 			titleMessage = "Результат проверки данных";
-			message = "Имя не может быть пустым!";
+			message = "Идентификатор не может быть пустым!";
 			break;
 		case 37:
 			titleMessage = "Результат проверки данных";
-			message = "В плане приема не может быть одинаковых строк!";
+			message = "Имя не может быть пустым!";
 			break;
 		case 38:
 			titleMessage = "Результат проверки данных";
-			message = "Некорректный формат поля с количеством мест приема!";
+			message = "В плане приема не может быть одинаковых строк!";
 			break;
 		case 39:
 			titleMessage = "Результат проверки данных";
-			message = "Количеством мест приема не может быть пустым!";
+			message = "Некорректный формат поля с количеством мест приема!";
 			break;
 		case 40:
 			titleMessage = "Результат проверки данных";
-			message = "Не выбрано наименование индивидуального достижения!";
+			message = "Количеством мест приема не может быть пустым!";
 			break;
 		case 41:
 			titleMessage = "Результат проверки данных";
-			message = "Не может быть двух одинаковых индивидуальных достижений!";
+			message = "Не выбрано наименование индивидуального достижения!";
 			break;
 		case 42:
 			titleMessage = "Результат проверки данных";
-			message = "Оригинал не может быть предоставлен в рамках нескольких конкурсных групп одновременно!";
+			message = "Не может быть двух одинаковых индивидуальных достижений!";
 			break;
 		case 43:
 			titleMessage = "Результат проверки данных";
-			message = "Некорректный формат поля с кодом направления!";
+			message = "Оригинал не может быть предоставлен в рамках нескольких конкурсных групп одновременно!";
 			break;
 		case 44:
+			titleMessage = "Результат проверки данных";
+			message = "Некорректный формат поля с кодом направления!";
+			break;
+		case 45:
 			titleMessage = "Результат проверки данных";
 			message = "Некорректный формат поля с кодом специальности по стандарту!";
 			break;
@@ -259,10 +259,10 @@ public abstract class MessageProcessing {
 			message = "Произошла неизвестная ошибка. Обратитесь к администратору!";
 		}
 
-		JOptionPane.showMessageDialog(parent, message, titleMessage, JOptionPane.ERROR_MESSAGE);
+		System.out.println(titleMessage + "\n" + message);
 	}
 
-	public static int displayDialogMessage(Component parent, int messageType) {
+	/*public static int displayDialogMessage(int messageType) {
 		String message = null, titleMessage = null;
 
 		switch (messageType) {
@@ -273,5 +273,5 @@ public abstract class MessageProcessing {
 		}
 
 		return JOptionPane.showConfirmDialog(parent, message, titleMessage, JOptionPane.YES_NO_OPTION);
-	}
+	}*/
 }

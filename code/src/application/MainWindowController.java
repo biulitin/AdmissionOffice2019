@@ -56,7 +56,7 @@ public class MainWindowController {
 
 	private DefaultTableAdapter dta;
 
-	public void fillInPatterns() throws Exception {
+	public void fillInPatterns(FXMLLoader tabController) throws Exception {
 		ModelDBConnection.setDefaultConnectionParameters();
 		//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
@@ -90,7 +90,7 @@ public class MainWindowController {
 		}
 
         fillMainInfo(countFields);
-        addButtons();
+        addButtons(tabController);
         
         setEditable(false);
     }
@@ -98,7 +98,7 @@ public class MainWindowController {
 	FXMLLoader loader;
 	Pane newPane;
 
-    public void addButtons() throws Exception {
+    public void addButtons(FXMLLoader tabController) throws Exception {
         FXMLLoader buttonsLoader = new FXMLLoader();
 
         buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
@@ -108,7 +108,7 @@ public class MainWindowController {
         buttonsPane.getChildren().add(newButtonsPane);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
-        addEditDeleteButtonsController.setParameters("АРМ по приему в ВУЗ", fields, fieldsTypes, fieldsControllers);
+        addEditDeleteButtonsController.setParameters("АРМ по приему в ВУЗ", tabController, fields, fieldsTypes, fieldsControllers);
         addEditDeleteButtonsController.setWidthHideButtons(320.0, 35.0, 3);
     }
 

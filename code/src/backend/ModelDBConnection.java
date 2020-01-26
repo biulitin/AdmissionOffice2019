@@ -300,4 +300,367 @@ public class ModelDBConnection {
 		}
 	}
 
+	//Общие функции
+	public static String getQueryByTabName(String tabName) {
+		switch(tabName) {
+		case "SampleTab":
+			return "SELECT * "
+					+ "FROM Abiturient";
+		case "Паспорт и ИНН":
+			return "SELECT AbiturientPassport.id_typePassport, "
+					+ "AbiturientPassport.series_document, "
+					+ "AbiturientPassport.number_document, "
+					+ "AbiturientPassport.dateOf_issue, "
+					+ "AbiturientPassport.issued_by, "
+					+ "Abiturient.Birthplace, "
+					+ "Abiturient.inn "
+					+ "FROM AbiturientPassport JOIN Abiturient ON (Abiturient.aid=AbiturientPassport.id_abiturient)";
+		case "Образование":
+			return "SELECT AbiturientEducation.id_levelEducation, "
+					+ "AbiturientEducation.id_typeEducation, "
+					+ "AbiturientEducation.name_eduInstitution, "
+					+ "AbiturientEducation.dateOf_issue, "
+					+ "AbiturientEducation.series_document, "
+					+ "AbiturientEducation.number_document, "
+					+ "AbiturientEducation.yearOf_graduation "
+					+ "FROM AbiturientEducation JOIN Abiturient ON (Abiturient.aid = AbiturientEducation.id_abiturient)";
+		case "Вступительные испытания":
+			return "SELECT AbiturientEntranceExam.id_entranceExam, "
+					+ "AbiturientEntranceExam.id_formOfExam, "
+					+ "AbiturientEntranceExam.id_languageOfExam, "
+					+ "AbiturientEntranceExam.groupExam, "
+					+ "AbiturientEntranceExam.dateOf_exam, "
+					+ "AbiturientEntranceExam.score, "
+					+ "AbiturientEntranceExam.has_100, "
+					+ "Abiturient.needSpecConditions "
+					+ "FROM AbiturientEntranceExam JOIN Abiturient ON (Abiturient.aid = AbiturientEntranceExam.id_abiturient)";
+		default:
+			return "";
+		}
+	}
+
+	public static void updateElementInTableByExpression(String table, String idValue, String[] fieldsNames, String[] data, int countOfExprParams)
+			throws SQLException {
+		String id = "id";
+		switch (table) {
+		case "Abiturient":
+			id = "aid";
+			break;
+		case "AbiturientPassport":
+		case "AbiturientAdress":
+		case "AbiturientEntranceExam":
+		case "AbiturientDocumentsFor100balls":
+		case "AbiturientEducation":
+		case "AbiturientIndividAchievement":
+		case "AbiturientCompetitiveGroup":
+		case "AbiturientBVI":
+		case "AbiturientDocumentsBVI":
+		case "AbiturientQuota":
+		case "AbiturientDocumentQuota":
+		case "AbiturientPreferredRight":
+		case "AbiturientDocumentsPreferredRight":
+		case "AbiturientExtraInfo":
+			id = "id_abiturient";
+			break;
+		default:
+			id = "id";
+		}
+
+		String query = "select * from " + table + " where " + id + " = " + idValue + (countOfExprParams > 0 ? " and " : ";");
+		for (int i = 0; i < countOfExprParams; i++)
+			if (i == countOfExprParams - 1)
+				query = query + fieldsNames[i] + (!data[i].equals("'null'") ? " = " + data[i] : " is null;");
+			else
+				query = query + fieldsNames[i] + (!data[i].equals("'null'") ? " = " + data[i] : " is null") + " and ";
+		System.out.println(query);
+
+		cstmt = con.prepareCall(query, 1004, 1007);
+
+		rset = cstmt.executeQuery();
+		
+		int countStrings = rset.last() ? rset.getRow() : 0;
+		rset.beforeFirst();
+		
+		if (countStrings > 0) {
+			query = "update " + table + " set ";
+			for (int i = 0; i < fieldsNames.length; i++) {
+				if (i == fieldsNames.length - 1)
+					query = query + fieldsNames[i] + " = " + data[i];
+				else
+					query = query + fieldsNames[i] + " = " + data[i] + ", ";
+			}
+			query = query + " where " + id + " = " + idValue + (countOfExprParams > 0 ? " and " : ";");
+			for (int i = 0; i < countOfExprParams; i++)
+				if (i == countOfExprParams - 1)
+					query = query + fieldsNames[i] + (!data[i].equals("'null'") ? " = " + data[i] : " is null;");
+				else
+					query = query + fieldsNames[i] + (!data[i].equals("'null'") ? " = " + data[i] : " is null") + " and ";
+		} else {
+			query = "insert into " + table + "(" + id + ", ";
+			for (int i = 0; i < fieldsNames.length; i++) {
+				if (i == fieldsNames.length - 1)
+					query = query + fieldsNames[i] + ") ";
+				else
+					query = query + fieldsNames[i] + ", ";
+			}
+			
+			query = query + " values (" + idValue + ", ";
+			for (int i = 0; i < data.length; i++) {
+				if (i == data.length - 1)
+					query = query + data[i] + ") ";
+				else
+					query = query + data[i] + ", ";
+			}
+		}
+		cstmt.close();
+		query = query.replaceAll("'null'", "null");
+		System.out.println(query);
+
+		stmt = con.createStatement();
+		stmt.executeUpdate(query);
+
+		stmt.close();
+		rset.close();
+	}
+
+	//Вкладка PassportTab
+	public static String[] getAbiturientPassportByID(String aid) throws SQLException {
+		try {
+			String query = ModelDBConnection.getQueryByTabName("Паспорт и ИНН")
+							+ " WHERE Abiturient.aid = " + aid + ";";
+
+			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
+
+			cstmt.setString(1, aid);*/
+			
+			cstmt = con.prepareCall(query, 1004, 1007);
+
+			rset = cstmt.executeQuery();
+			
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
+			
+			//Случай, если данных по абитуриенту еще нет
+			if (countStrings == 0) return null;
+
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+
+			String[] result = new String[numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+				result[i] = "";
+
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[i] = format.format(docDate);
+						} else
+							result[i] = rset.getObject(i + 1).toString();
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static void updateAbiturientPassportByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+    	String[] passportData = new String[fieldsData.length - 2],
+   			 abiturientData = new String[2],
+   			 passportFieldsNames = new String[fieldsData.length - 2],
+   	    	 abiturientFieldsNames = new String[2];
+   	
+    	abiturientData[0] = fieldsData[fieldsData.length - 1];
+    	abiturientData[1] = fieldsData[fieldsData.length - 2];
+   	
+    	abiturientFieldsNames[0] = fieldsNames[fieldsNames.length - 1];
+    	abiturientFieldsNames[1] = fieldsNames[fieldsNames.length - 2];
+   	
+	   	for (int i = 0; i < passportData.length; i++) {
+	   		passportData[i] = fieldsData[i];
+	   		passportFieldsNames[i] = fieldsNames[i];
+	   	}
+
+	   	ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientData, 0);
+	   	ModelDBConnection.updateElementInTableByExpression("AbiturientPassport", aid, passportFieldsNames, passportData, 0);
+	}
+
+	//Вкладка EducationTab
+	public static String[] getAbiturientEducationByID(String aid) throws SQLException {
+		try {
+			String query = ModelDBConnection.getQueryByTabName("Образование")
+							+ " WHERE Abiturient.aid = " + aid + ";";
+			
+			System.out.println(query);
+
+			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
+
+			cstmt.setString(1, aid);*/
+			
+			cstmt = con.prepareCall(query, 1004, 1007);
+
+			rset = cstmt.executeQuery();
+			
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
+			
+			//Случай, если данных по абитуриенту еще нет
+			if (countStrings == 0) return null;
+
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+
+			String[] result = new String[numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+				result[i] = "";
+
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[i] = format.format(docDate);
+						} else
+							result[i] = rset.getObject(i + 1).toString();
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static void updateAbiturientEducationByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		ModelDBConnection.updateElementInTableByExpression("AbiturientEducation", aid, fieldsNames, fieldsData, 0);
+	}
+
+	//Вкладка EntranceExamTab
+	//Доделать - возвращаться будет двумерный массив, так как абитуриент может сдавать больше 1 ВИ
+	public static String[] getAbiturientEntrancexamsByID(String aid) throws SQLException {
+		try {
+			String query = ModelDBConnection.getQueryByTabName("Вступительные испытания")
+							+ " WHERE Abiturient.aid = " + aid + ";";
+			
+			System.out.println(query);
+
+			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
+
+			cstmt.setString(1, aid);*/
+			
+			cstmt = con.prepareCall(query, 1004, 1007);
+
+			rset = cstmt.executeQuery();
+			
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
+			
+			//Случай, если данных по абитуриенту еще нет
+			if (countStrings == 0) return null;
+
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+
+			String[] result = new String[numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+				result[i] = "";
+
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[i] = format.format(docDate);
+						} else
+							result[i] = rset.getObject(i + 1).toString();
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	//Доделать - на вход будут приходить двумерные массивы, так как абитуриент может сдавать больше 1 ВИ
+	public static void updateAbiturientEntranceExamsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		
+	}
+	
+	//InsertForm
+	public static String[] getAbiturientGeneralInfoByID(String aid) throws SQLException {
+		try {
+			String query = ModelDBConnection.getQueryByTabName("SampleTab")
+							+ " WHERE Abiturient.aid = " + aid + ";";
+			
+			System.out.println(query);
+
+			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
+
+			cstmt.setString(1, aid);*/
+			
+			cstmt = con.prepareCall(query, 1004, 1007);
+
+			rset = cstmt.executeQuery();
+			
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
+			
+			//Случай, если данных по абитуриенту еще нет
+			if (countStrings == 0) return null;
+
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+
+			String[] result = new String[numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+				result[i] = "";
+
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[i] = format.format(docDate);
+						} else
+							result[i] = rset.getObject(i + 1).toString();
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static void updateAbiturientGeneralInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		String[] abiturientFieldsNames = new String[fieldsNames.length - 1],
+				 abiturientFieldsData = new String[fieldsData.length - 1];
+		for (int i = 0; i < abiturientFieldsNames.length; i++) {
+			abiturientFieldsNames[i] = fieldsNames[i + 1];
+			abiturientFieldsData[i] = fieldsData[i + 1];
+		}
+		
+		ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientFieldsData, 0);
+	}
 }

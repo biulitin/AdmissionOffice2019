@@ -14,17 +14,17 @@ public class BoolInputPatternController {
     @FXML
     private CheckBox fieldData;
 
-    public Boolean getFieldData() {
+    public String getFieldData() {
         if (checkData() != 0)
-            return false;
+            return "0";
         else {
-            System.out.println(fieldData.isSelected());
-            return fieldData.isSelected();
+            //System.out.println(fieldData.isSelected());
+            return (fieldData.isSelected() ? "1" : "0");
         }
     }
     
     public void setFieldData(String data) {
-    	fieldData.setSelected(data.equals("0") ? false : true);
+    	fieldData.setSelected((data.equals("0") || data.equals("") )? false : true);
     }
 
     public void setParameters(String originalNameOfField, String nameOfField) {

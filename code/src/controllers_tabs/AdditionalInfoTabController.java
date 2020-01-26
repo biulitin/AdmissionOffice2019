@@ -41,12 +41,12 @@ public class AdditionalInfoTabController {
         }
     }
 
-    public void fillTab() throws Exception {
+    public void fillTab(FXMLLoader tabController) throws Exception {
         prepareData();
-        addButtons(buttonsPane);
+        addButtons(buttonsPane, tabController);
     }
 
-    public void addButtons(Pane pane) throws IOException {
+    public void addButtons(Pane pane, FXMLLoader tabController) throws IOException {
         FXMLLoader buttonsLoader = new FXMLLoader();
         buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
 
@@ -56,7 +56,7 @@ public class AdditionalInfoTabController {
         pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
-        addEditDeleteButtonsController.setParameters("Допсведения", fields, fieldsTypes, fieldsControllers);
+        addEditDeleteButtonsController.setParameters("Допсведения", tabController, fields, fieldsTypes, fieldsControllers);
         addEditDeleteButtonsController.setEditable(false);
     }
 }

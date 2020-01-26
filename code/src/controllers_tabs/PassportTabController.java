@@ -8,10 +8,10 @@ import javafx.scene.layout.Pane;
 import java.sql.*;
 import java.util.regex.Pattern;
 
-import backend.ModelDBConnection;
 import javafx.fxml.FXMLLoader;
 
 import controllers_simple.*;
+import backend.*;
 
 
 public class PassportTabController {
@@ -23,12 +23,9 @@ public class PassportTabController {
     String[] fields, fieldsTypes, fieldsOriginalNames;
     FXMLLoader[] fieldsControllers;
 
-    String url, query;
-    Connection conn;
-    CallableStatement cstmt;
-    ResultSet rset;
+    String aid;
 
-    public void fillTab() throws Exception {
+    public void fillTab(FXMLLoader tabController) throws Exception {
         parentGridPane.autosize();
         childGridPane.autosize();
 
@@ -36,20 +33,18 @@ public class PassportTabController {
         //ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
-        query = "SELECT AbiturientPassport.id_typePassport, AbiturientPassport.series_document,AbiturientPassport.number_document,AbiturientPassport.dateOf_issue,AbiturientPassport.issued_by,Abiturient.Birthplace,Abiturient.inn \n" +
-                "FROM AbiturientPassport JOIN Abiturient ON\n" +
-                "(Abiturient.aid=AbiturientPassport.id_abiturient);";
-        
-		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(query);
+		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(ModelDBConnection.getQueryByTabName("Паспорт и ИНН"));
 		countFields = rsmd.getColumnCount();
 
         fields = new String[countFields];
         fieldsTypes = new String[countFields];
+        fieldsOriginalNames = new String[countFields];
         fieldsControllers = new FXMLLoader[countFields];
 
         for (int i = 0; i < countFields; i++) {
             fields[i] = rsmd.getColumnLabel (i + 1);
             fieldsTypes[i] = rsmd.getColumnTypeName (i + 1);
+            fieldsOriginalNames[i] = rsmd.getColumnLabel(i + 1);
         }
 
         FXMLLoader loader;
@@ -162,9 +157,10 @@ public class PassportTabController {
         buttonsPane.getChildren().add(newPane);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
-        addEditDeleteButtonsController.setParameters("Паспорт и ИНН", fields, fieldsTypes, fieldsControllers);
+        addEditDeleteButtonsController.setParameters("Паспорт и ИНН", tabController, fields, fieldsTypes, fieldsControllers);
 
         setEditable(false);
+        setFieldsData("0");
     }
 
     public void setEditable(Boolean value) {
@@ -214,54 +210,112 @@ public class PassportTabController {
 		}
     }
 
-    public void setFieldsData(String aid) throws SQLException {
-        query = "SELECT AbiturientPassport.id_typePassport, AbiturientPassport.series_document,AbiturientPassport.number_document,AbiturientPassport.dateOf_issue,AbiturientPassport.issued_by,Abiturient.Birthplace,Abiturient.inn \n" +
-                "FROM AbiturientPassport JOIN Abiturient ON \n" +
-                "(Abiturient.aid=AbiturientPassport.id_abiturient)  WHERE Abiturient.aid = "+aid+";";
-        Statement statement = ModelDBConnection.getConnection().createStatement();
-        rset= statement.executeQuery(query);
-        if (rset.next()){
-        for (int i = 0; i < fieldsControllers.length; i++) {
-            switch (fieldsTypes[i]) {
-                case "date":
-                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
-                    dateInputPatternController.setFieldData(rset.getString(4));
-                    break;
-                case "int":
-                    if (Pattern.compile("(id_t).*").matcher(fields[i]).matches()) {
-                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                        choiceInputPatternController.setFieldData(rset.getString(1));
+    public void setFieldsData(String aid) throws Exception {
+    	this.aid = aid;
+    	String[] passportData = ModelDBConnection.getAbiturientPassportByID(aid);
+
+    	if(passportData != null) {
+            for (int i = 0; i < passportData.length; i++) {
+                switch (fieldsTypes[i]) {
+                    case "date":
+                        DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                        dateInputPatternController.setFieldData(passportData[i]);
                         break;
-                    }
-                case "varchar":
-                    if (Pattern.compile("(series).*").matcher(fields[i]).matches()) {
-                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(rset.getString(2));
-                        break;
-                    }
-                    if (Pattern.compile("(number).*").matcher(fields[i]).matches()) {
-                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(rset.getString(3));
-                        break;
-                    }
-                    if (Pattern.compile("(issued).*").matcher(fields[i]).matches()) {
-                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(rset.getString(5));
-                        break;
-                    }
-                    if (Pattern.compile("(Birthp).*").matcher(fields[i]).matches()) {
-                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(rset.getString(6));
-                        break;
-                    }
-                    if (Pattern.compile("(inn)").matcher(fields[i]).matches()) {
-                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(rset.getString(7));
-                        break;
-                    }
-                    break;
+                    case "int":
+                        if (Pattern.compile("(id_t).*").matcher(fields[i]).matches()) {
+                            ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                            choiceInputPatternController.setFieldData(passportData[i]);
+                            break;
+                        }
+                    case "varchar":
+                        if (Pattern.compile("(series).*").matcher(fields[i]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(passportData[i]);
+                            break;
+                        }
+                        if (Pattern.compile("(number).*").matcher(fields[i]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(passportData[i]);
+                            break;
+                        }
+                        if (Pattern.compile("(issued).*").matcher(fields[i]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(passportData[i]);
+                            break;
+                        }
+                        if (Pattern.compile("(Birthp).*").matcher(fields[i]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(passportData[i]);
+                            break;
+                        }
+                        if (Pattern.compile("(inn)").matcher(fields[i]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(passportData[i]);
+                            break;
+                        }
+                        //break;
+                }
             }
-        }
+    	}
     }
-}
+
+    public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
+    	ModelDBConnection.updateAbiturientPassportByID(aid, fieldsOriginalNames, fieldsData);
+    }
+
+    public int checkData() {
+    	int errorCount = 0, currentErrorCode = 0;
+
+		for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
+			switch (fieldsTypes[i]) {
+				case "date":
+					DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+					currentErrorCode = dateInputPatternController.checkData();
+					break;
+				case "double":
+					DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
+					currentErrorCode = doubleInputPatternController.checkData();
+					break;
+				case "int":
+					if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+						currentErrorCode = choiceInputPatternController.checkData();
+						if (currentErrorCode > 0) {
+							MessageProcessing.displayErrorMessage(15);
+							return currentErrorCode;
+						}
+						break;
+					}
+					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
+						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+						currentErrorCode = boolInputPatternController.checkData();
+						break;
+					} else{
+						IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+						currentErrorCode = intInputPatternController.checkData();
+						break;
+					}
+				case "varchar":
+					if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+						PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
+						currentErrorCode = phoneMaskInputPatternController.checkData();
+						break;
+					}
+					if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+						PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
+						currentErrorCode = passwordInputPatternController.checkData();
+						break;
+					}
+					else {
+						TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+						currentErrorCode = textInputPatternController.checkData();
+						break;
+					}
+			}
+			//errorCount += currentErrorCode;
+			//System.out.println(currentErrorCode);
+		}
+
+		return errorCount;
+    }
 }

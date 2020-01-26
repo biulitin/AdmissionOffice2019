@@ -26,8 +26,9 @@ public class ChoiceInputPatternController {
         if (checkData() != 0)
             return "";
         else {
-            System.out.println(fieldData.getSelectionModel().getSelectedItem());
-            return fieldData.getSelectionModel().getSelectedItem().toString();
+            //System.out.println(fieldData.getSelectionModel().getSelectedItem() + fieldData.getSelectionModel().getSelectedIndex());
+            return String.valueOf(fieldData.getSelectionModel().getSelectedIndex());
+            //return fieldData.getSelectionModel().getSelectedItem().toString();
         }
     }
     
@@ -61,7 +62,10 @@ public class ChoiceInputPatternController {
 
     	this.fieldData.getItems().clear();
     	this.fieldData.getItems().addAll(ModelDBConnection.getNamesFromTableOrderedById(tableName));
-    	this.fieldData.setValue("");
+    	if(data.equals(""))
+    		this.fieldData.setValue("");
+    	else
+    		this.fieldData.getSelectionModel().select(Integer.valueOf(data));
     }
 
     public void setParameters(String originalNameOfField, String nameOfField) {
