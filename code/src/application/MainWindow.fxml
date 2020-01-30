@@ -162,6 +162,11 @@
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: darkgray;" />
                         </content>
                       </Tab>
+                        <Tab fx:id="tabIndividualAchievements" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Инд-ые достижения">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />
+                            </content>
+                        </Tab>
                         <Tab fx:id="tabPrivileges" style="-fx-background-color: gainsboro; -fx-border-color: darkgray;" text="Привилегии">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: darkgray; -fx-background-color: white;" />

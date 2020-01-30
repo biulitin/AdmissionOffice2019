@@ -211,6 +211,10 @@ public class AddEditDeleteButtonsController {
 		//this.buttonsBox.getChildren().remove(numberOfButton);
 	}
 
+	public void hideButton2(int numberOfButton) {
+		this.buttonsBox.getChildren().remove(numberOfButton);
+	}
+
     public void setEditable(Boolean value) {
     	this.addButton.setDisable(!value);
     	this.deleteButton.setDisable(!value);

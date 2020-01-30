@@ -22,19 +22,14 @@ public class IndividualAchievementsTabController {
     @FXML
     public FlowPane buttonsPane;
 
-    String[] fields, fieldsTypes, fieldsOriginalNames;
+    String[] fields, fieldsTypes;
     FXMLLoader[] fieldsControllers;
     int countFields;
 
-    String url, query;
-    Connection conn;
+    String query;
     CallableStatement cstmt;
     ResultSet rset;
-    Properties props;
-    Statement st;
-    ResultSet rs;
 
-    FXMLLoader loader;
     Pane newPane;
 
     public void fillTab(FXMLLoader tabController) throws IOException, SQLException, ClassNotFoundException {
@@ -53,28 +48,26 @@ public class IndividualAchievementsTabController {
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
         if (numberOfVisibleButtons == 2) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 2);
+            addEditDeleteButtonsController.hideButton2(0);
+            addEditDeleteButtonsController.setWidthHideButtons(250.0, 35.0, 2);
         }
         else if (numberOfVisibleButtons == 1) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.hideButton(1);
-            addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 1);
+            addEditDeleteButtonsController.hideButton2(0);
+            addEditDeleteButtonsController.hideButton2(1);
+            addEditDeleteButtonsController.setWidthHideButtons(200.0, 35.0, 1);
         }
+        addEditDeleteButtonsController.setEditable(false);
     }
 
-    public void prepareData() throws ClassNotFoundException, SQLException {
-        url = "jdbc:sqlserver://" + "localhost" + ":1433;databaseName=" + "Abiturient" + ";user="
-                + "igor_sa" + ";password=" + "200352" + ";";
-
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        conn = DriverManager.getConnection(url);
+    public void prepareData() throws SQLException {
+        ModelDBConnection.setDefaultConnectionParameters();
+        ModelDBConnection.initConnection();
 
         query = "SELECT AbiturientExtraInfo.nameOfDocument, AbiturientExtraInfo.series_document," +
                 "AbiturientExtraInfo.number_document, AbiturientExtraInfo.dateOf_issue," +
                 "AbiturientExtraInfo.issued_by\n" +
                 "FROM AbiturientExtraInfo";
-        cstmt = conn.prepareCall(query, 1004, 1007);
+        cstmt = ModelDBConnection.getConnection().prepareCall(query, 1004, 1007);
         rset = cstmt.executeQuery();
 
         rset.beforeFirst();
@@ -124,16 +117,16 @@ public class IndividualAchievementsTabController {
 
                         TextInputPatternController textInputPatternController = loader.getController();
                         switch (fields[i]) {
-                            case "name_of_document":
+                            case "nameOfDocument":
                                 textInputPatternController.setWidthHeight(450.0, 35.0, 120.0);
                                 break;
                             case "issued_by":
                                 textInputPatternController.setWidthHeight(450.0, 85.0, 120.0);
                                 break;
-                            case "series_of_document":
+                            case "series_document":
                                 textInputPatternController.setWidthHeight(230.0, 35.0, 120.0);
                                 break;
-                            case "number_of_document":
+                            case "number_document":
                                 textInputPatternController.setWidthHeight(220.0, 35.0, 80.0);
                                 break;
                         }

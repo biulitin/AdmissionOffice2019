@@ -6,14 +6,12 @@ import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 import backend.ModelDBConnection;
@@ -22,6 +20,7 @@ import controllers_simple.*;
 public class CompetitiveGroupsTabController {
     @FXML
     public FlowPane buttonsPane;
+
     @FXML
     private Button addCompetitiveGroupButton;
 
@@ -29,16 +28,9 @@ public class CompetitiveGroupsTabController {
     FXMLLoader[] fieldsControllers;
     int countFields;
 
-    String url, query;
-    Connection conn;
-    CallableStatement cstmt;
-    ResultSet rset;
-    Properties props;
-    Statement st;
-    ResultSet rs;
-
-    FXMLLoader loader;
+    String query;
     Pane newPane;
+    FXMLLoader loader;
 
     public void fillTab(FXMLLoader tabController) throws Exception {
         prepareData();
@@ -56,12 +48,12 @@ public class CompetitiveGroupsTabController {
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
         if (numberOfVisibleButtons == 2) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 2);
+            addEditDeleteButtonsController.hideButton2(0);
+            addEditDeleteButtonsController.setWidthHideButtons(250.0, 35.0, 2);
         }
         else if (numberOfVisibleButtons == 1) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.hideButton(1);
+            addEditDeleteButtonsController.hideButton2(0);
+            addEditDeleteButtonsController.hideButton2(1);
             addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 1);
         }
         addEditDeleteButtonsController.setEditable(false);
@@ -69,7 +61,6 @@ public class CompetitiveGroupsTabController {
 
     public void prepareData() throws Exception {
     	ModelDBConnection.setDefaultConnectionParameters();
-    	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
         query = "SELECT AbiturientCompetitiveGroup.id_speciality, AbiturientCompetitiveGroup.id_competitiveGroup, " +
@@ -92,7 +83,6 @@ public class CompetitiveGroupsTabController {
 
     public void openModalWindow() throws IOException {
         Stage modalStage = new Stage();
-        FXMLLoader loader = new FXMLLoader();
         FlowPane flowPane = new FlowPane();
         flowPane.setAlignment(Pos.CENTER_LEFT);
 

@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
         	FXMLLoader loader = new FXMLLoader();
-        	//loader.setLocation(getClass().getResource("MainWindow.fxml"));
+        	loader.setLocation(getClass().getResource("MainWindow.fxml"));
         	//loader.setLocation(getClass().getResource("InsertForm.fxml"));
             //loader.setLocation(getClass().getResource("../patterns_tabs/IndividualAchievementsTab.fxml"));
             //loader.setLocation(getClass().getResource("../patterns_tabs/CompetitiveGroupsTab.fxml"));
@@ -23,13 +23,14 @@ public class Main extends Application {
         	//loader.setLocation(getClass().getResource("../patterns_tabs/PassportTab.fxml"));
         	//loader.setLocation(getClass().getResource("../patterns_tabs/AdditionalInfoTab.fxml"));
         	//loader.setLocation(getClass().getResource("../patterns_tabs/OlympiadsTab.fxml"));
-        	loader.setLocation(getClass().getResource("../patterns_tabs/EntranceExamTab.fxml"));
+        	//loader.setLocation(getClass().getResource("../patterns_tabs/EntranceExamTab.fxml"));
 
             AnchorPane root;
             root = (AnchorPane) loader.load();
 
-            /*MainWindowController mainWindowController = loader.getController();
-            mainWindowController.fillInPatterns(loader);*/
+            MainWindowController mainWindowController = loader.getController();
+            mainWindowController.fillInPatterns(loader);
+            mainWindowController.fillTabsContent();
 
             /*InsertFormController insertFormController = loader.getController();
             insertFormController.createForm(loader);*/
@@ -52,8 +53,8 @@ public class Main extends Application {
             /*OlympiadsTabController olympiadsTabController = loader.getController();
             olympiadsTabController.fillTab(loader);*/
             
-            EntranceExamTabController entranceExamTabController = loader.getController();
-            entranceExamTabController.fillTab(loader);
+            /*EntranceExamTabController entranceExamTabController = loader.getController();
+            entranceExamTabController.fillTab(loader);*/
 
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

@@ -2,6 +2,10 @@ package application;
 
 import backend.ModelDBConnection;
 import controllers_simple.*;
+import controllers_tabs.CompetitiveGroupsTabController;
+import controllers_tabs.EducationTabController;
+import controllers_tabs.IndividualAchievementsTabController;
+import controllers_tabs.PassportTabController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import org.grios.tableadapter.DefaultTableAdapter;
@@ -25,9 +30,9 @@ public class MainWindowController {
     @FXML
     public FlowPane returnInformationField;
     public FlowPane mainField;
-    
+
     @FXML
-    private Tab tabCompetitiveGroups, tabEntranceExams, tabPrivileges, tabBasisFor100balls, tabEducation, tabAddressAndContacts, tabPassportAndINN, tabExtraInfo;
+    private Tab tabCompetitiveGroups, tabEntranceExams, tabIndividualAchievements, tabPrivileges, tabBasisFor100balls, tabEducation, tabAddressAndContacts, tabPassportAndINN, tabExtraInfo;
     
     @FXML
     private TabPane tabsPane;
@@ -125,7 +130,7 @@ public class MainWindowController {
                     DateInputPatternController dateInputPatternController = loader.getController();
 					if (fields[i].equals("returnDate")) {
 						returnInformationField.getChildren().add(newPane);
-                        dateInputPatternController.setWidthHeight(330.0, 35.0, 100.0);
+                        dateInputPatternController.setWidthHeight(330.0, 35.0, 180.0);
 					} else {
 						mainField.getChildren().add(newPane);
                         dateInputPatternController.setWidthHeight(350.0, 35.0, 150.0);
@@ -144,7 +149,7 @@ public class MainWindowController {
 
 						if (fields[i].equals("id_returnReason")) {
 							returnInformationField.getChildren().add(newPane);
-							choiceInputPatternController.setWidthHeight(900.0,35.0, 100.0);
+							choiceInputPatternController.setWidthHeight(900.0,35.0, 180.0);
 						} else {
 							mainField.getChildren().add(newPane);
 							choiceInputPatternController.setWidthHeight(285.0,35.0, 150.0);
@@ -196,25 +201,51 @@ public class MainWindowController {
     }
 
     public void fillTabsContent() throws Exception {
-    	//Фрагмент отрисовки содержимого всех вкладок
-    	
-    	/*FXMLLoader loader = new FXMLLoader();
-    	
-    	loader.setLocation(getClass().getResource("../patterns_simple/CompetitiveGroupsTab.fxml"));
-    	CompetitiveGroupsTabController competitiveGroupsTabController = loader.getController();
-        competitiveGroupsTabController.fillTab();
-        AnchorPane root;
-        root = (AnchorPane) loader.load();
-    	
-        FXMLLoader buttonsLoader = new FXMLLoader();
-        buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
-        Pane newButtonsPane = (Pane) buttonsLoader.load();
-    	
-        //loader.setLocation(getClass().getResource("../patterns_simple/IndividualAchievementsPattern.fxml"));
-    	//loader.setLocation(getClass().getResource("../patterns_simple/Education.fxml"));
-    	//loader.setLocation(getClass().getResource("../patterns_simple/PassportTab.fxml"));
-        tabsPane.getTabs().get(3).setContent((Node) buttonsLoader.load());*/
+		addCompetitiveGroupsTab();
+		addIndividualAchievements();
+		//addEducationTab();
+		//addPassportTab();
     }
+
+    public void addCompetitiveGroupsTab() throws Exception {
+    	FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/CompetitiveGroupsTab.fxml"));
+
+		tabCompetitiveGroups.setContent((Node) tabLoader.load());
+		CompetitiveGroupsTabController competitiveGroupsTabController = tabLoader.getController();
+		competitiveGroupsTabController.fillTab(loader);
+	}
+
+	public void addIndividualAchievements() throws Exception {
+		FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/IndividualAchievementsTab.fxml"));
+
+        tabIndividualAchievements.setContent((Node) tabLoader.load());
+		IndividualAchievementsTabController individualAchievementsTabController = tabLoader.getController();
+        individualAchievementsTabController.fillTab(loader);
+	}
+
+	public void addEducationTab() throws Exception {
+		FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/EducationTab.fxml"));
+
+		tabEducation.setContent((Node) tabLoader.load());
+		EducationTabController educationTabController = tabLoader.getController();
+		educationTabController.fillTab(loader);
+	}
+
+	public void addPassportTab() throws Exception {
+		FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/PassportTab.fxml"));
+
+		tabPassportAndINN.setContent((Node) tabLoader.load());
+		PassportTabController passportTabController = tabLoader.getController();
+		passportTabController.fillTab(loader);
+	}
     
 /*
 	public void prepareTable() throws Exception {
