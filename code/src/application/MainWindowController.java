@@ -203,8 +203,8 @@ public class MainWindowController {
     public void fillTabsContent() throws Exception {
 		addCompetitiveGroupsTab();
 		addIndividualAchievements();
-		//addEducationTab();
-		//addPassportTab();
+		addEducationTab();
+		addPassportTab();
     }
 
     public void addCompetitiveGroupsTab() throws Exception {
