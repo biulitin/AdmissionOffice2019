@@ -1,5 +1,6 @@
 package controllers_simple;
 
+import application.MainWindowController;
 import controllers_tabs.*;
 
 import java.util.regex.Pattern;
@@ -60,6 +61,10 @@ public class AddEditDeleteButtonsController {
 
 						//Выбор нужной операции передачи данных в БД в зависимости от вкладки
 				    	switch (tabName) {
+							case "АРМ по приему в ВУЗ":
+								MainWindowController mainWindowController = tabController.getController();
+								mainWindowController.uploadFieldsDataToDataBase(fieldsData);
+								break;
 					    	case "SampleTab":
 					    		InsertFormController insertFormController = tabController.getController();
 					    		insertFormController.uploadFieldsDataToDataBase(fieldsData);
@@ -267,6 +272,9 @@ public class AddEditDeleteButtonsController {
     public int checkData() {
     	// Проверка в зависимости от вкладки
     	switch (tabName) {
+			case "АРМ по приему в ВУЗ":
+				MainWindowController mainWindowController = tabController.getController();
+				return mainWindowController.checkData();
 	    	case "SampleTab":
 	    		InsertFormController insertFormController = tabController.getController();
 	    		return insertFormController.checkData();

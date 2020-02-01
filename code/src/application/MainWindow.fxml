@@ -215,7 +215,7 @@
                         </Text>
                      </top>
                      <center>
-                        <BorderPane maxWidth="1000.0" style="-fx-border-color: darkgray; -fx-background-color: white;" BorderPane.alignment="CENTER">
+                        <BorderPane maxWidth="1000.0" style="-fx-border-color: darkgray; -fx-background-color: white;" BorderPane.alignment="TOP_LEFT">
                            <bottom>
                               <BorderPane BorderPane.alignment="CENTER">
                                  <top>

@@ -1,5 +1,6 @@
 package application;
 
+import backend.MessageProcessing;
 import backend.ModelDBConnection;
 import controllers_simple.*;
 import controllers_tabs.CompetitiveGroupsTabController;
@@ -42,7 +43,7 @@ public class MainWindowController {
 	String[][] data;
 	FXMLLoader[] columnsControllers;
 
-	String[] fields, fieldsTypes;
+    String[] fields, fieldsTypes, fieldsOriginalNames;
 	FXMLLoader[] fieldsControllers;
 
 	String url, query;
@@ -52,6 +53,8 @@ public class MainWindowController {
 	Properties props;
 	Statement st;
 	ResultSet rs;
+
+    String aid;
     
 	@FXML
 	private FlowPane paneForElems;
@@ -87,6 +90,7 @@ public class MainWindowController {
 
 		fields = new String[countFields];
 		fieldsTypes = new String[countFields];
+        fieldsOriginalNames = new String[countFields];
 		fieldsControllers = new FXMLLoader[countFields];
 
 		for (int i = 0; i < countFields; i++) {
@@ -479,12 +483,12 @@ public class MainWindowController {
 					doubleInputPatternController.setEditable(value);
 					break;
 				case "int":
-					if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+					if (Pattern.compile("(id_).*").matcher(fields[i]).matches() ) {
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						choiceInputPatternController.setEditable(value);
 						break;
 					}
-					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
+					if (Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()) {
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						boolInputPatternController.setEditable(value);
 						break;
@@ -494,12 +498,12 @@ public class MainWindowController {
 						break;
 					}
 				case "varchar":
-					if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+					if (Pattern.compile("(phone).*").matcher(fields[i]).matches()) {
 						PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
 						phoneMaskInputPatternController.setEditable(value);
 						break;
 					}
-					if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+					if (Pattern.compile("(passw).*").matcher(fields[i]).matches()) {
 						PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
 						passwordInputPatternController.setEditable(value);
 						break;
@@ -512,5 +516,65 @@ public class MainWindowController {
 
 			}
 		}
+    }
+
+    public int checkData() {
+        int errorCount = 0, currentErrorCode = 0;
+
+        for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = dateInputPatternController.checkData();
+                    break;
+                case "double":
+                    DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = doubleInputPatternController.checkData();
+                    break;
+                case "int":
+                    if (Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = choiceInputPatternController.checkData();
+                        if (currentErrorCode > 0) {
+                            MessageProcessing.displayErrorMessage(15);
+                            return currentErrorCode;
+                        }
+                        break;
+                    }
+                    if (Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
+                        BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = boolInputPatternController.checkData();
+                        break;
+                    } else {
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = intInputPatternController.checkData();
+                        break;
+                    }
+                case "varchar":
+                    if (Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+                        PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = phoneMaskInputPatternController.checkData();
+                        break;
+                    }
+                    if (Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+                        PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = passwordInputPatternController.checkData();
+                        break;
+                    }
+                    else {
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = textInputPatternController.checkData();
+                        break;
+                    }
+            }
+            errorCount += currentErrorCode;
+            System.out.println(currentErrorCode);
+        }
+
+        return errorCount;
+    }
+
+    public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
+        ModelDBConnection.updateAbiturientPassportByID(aid, fieldsOriginalNames, fieldsData);
     }
 }
