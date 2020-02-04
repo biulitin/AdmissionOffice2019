@@ -218,7 +218,7 @@ public class MainWindowController {
 
 		tabCompetitiveGroups.setContent((Node) tabLoader.load());
 		CompetitiveGroupsTabController competitiveGroupsTabController = tabLoader.getController();
-		competitiveGroupsTabController.fillTab(loader);
+		competitiveGroupsTabController.fillTab(tabLoader);
 	}
 
 	public void addIndividualAchievements() throws Exception {
@@ -228,7 +228,7 @@ public class MainWindowController {
 
         tabIndividualAchievements.setContent((Node) tabLoader.load());
 		IndividualAchievementsTabController individualAchievementsTabController = tabLoader.getController();
-        individualAchievementsTabController.fillTab(loader);
+        individualAchievementsTabController.fillTab(tabLoader);
 	}
 
 	public void addEducationTab() throws Exception {
@@ -238,7 +238,7 @@ public class MainWindowController {
 
 		tabEducation.setContent((Node) tabLoader.load());
 		EducationTabController educationTabController = tabLoader.getController();
-		educationTabController.fillTab(loader);
+		educationTabController.fillTab(tabLoader);
 	}
 
 	public void addPassportTab() throws Exception {
@@ -248,7 +248,7 @@ public class MainWindowController {
 
 		tabPassportAndINN.setContent((Node) tabLoader.load());
 		PassportTabController passportTabController = tabLoader.getController();
-		passportTabController.fillTab(loader);
+		passportTabController.fillTab(tabLoader);
 	}
     
 /*
