@@ -73,7 +73,7 @@ public class AdditionalInfoTabController {
         pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
-        addEditDeleteButtonsController.setParameters("Допсведения", tabController, fields, fieldsTypes, fieldsControllers);
+        addEditDeleteButtonsController.setParameters("Доп. сведения", tabController, fields, fieldsTypes, fieldsControllers);
         addEditDeleteButtonsController.setEditable(false);
     }
 

@@ -46,12 +46,12 @@ public class OlympiadsTabController {
 
     String aid;
 
-    public void fillTab() throws Exception {
+    public void fillTab(FXMLLoader tabController) throws Exception {
         prepareData();
-        addButtons(buttonsPane, 2);
+        addButtons(buttonsPane, 2, tabController);
     }
 
-    public void addButtons(Pane pane, int numberOfVisibleButtons) throws IOException {
+    public void addButtons(Pane pane, int numberOfVisibleButtons, FXMLLoader tabController) throws IOException {
         FXMLLoader buttonsLoader = new FXMLLoader();
         buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
 
@@ -61,6 +61,7 @@ public class OlympiadsTabController {
         pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
+        addEditDeleteButtonsController.setParameters("100б", tabController, fields, fieldsTypes, fieldsControllers);
         if (numberOfVisibleButtons == 2) {
             addEditDeleteButtonsController.hideButton(0);
             addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 2);
@@ -144,9 +145,9 @@ public class OlympiadsTabController {
         }
 
         FlowPane modalButtonsPane = new FlowPane();
-        addButtons(modalButtonsPane, 1);
-        modalButtonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-        modalButtonsPane.setPrefWidth(450.0);
+        //addButtons(modalButtonsPane, 1, tabs);
+       // modalButtonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        //modalButtonsPane.setPrefWidth(450.0);
         flowPane.getChildren().add(modalButtonsPane);
 
         Scene scene = new Scene(flowPane);

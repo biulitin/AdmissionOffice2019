@@ -287,6 +287,12 @@ public class AddEditDeleteButtonsController {
 	    	case "Вступительные испытания":
 	    		EntranceExamTabController entranceExamTabController = tabController.getController();
 	    		return entranceExamTabController.checkData();
+			case "Доп. сведения":
+				AdditionalInfoTabController additionalInfoTabController = tabController.getController();
+				return additionalInfoTabController.checkData();
+			case "100б":
+				OlympiadsTabController olympiadsTabController = tabController.getController();
+				return olympiadsTabController.checkData();
 	    	default:
 	    		return 0;
     	}
