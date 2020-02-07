@@ -124,4 +124,30 @@ public class AdditionalInfoTabController {
             }
         }
     }
+
+    public int checkData() {
+        int errorCount = 0, currentErrorCode = 0;
+
+        for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = dateInputPatternController.checkData();
+                    break;
+                case "int":
+                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = intInputPatternController.checkData();
+                    break;
+                case "varchar":
+                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = textInputPatternController.checkData();
+                    break;
+            }
+
+            //errorCount += currentErrorCode;
+            //System.out.println(currentErrorCode);
+        }
+
+        return errorCount;
+    }
 }

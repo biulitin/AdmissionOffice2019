@@ -4,6 +4,7 @@
 
 package controllers_tabs;
 
+import backend.MessageProcessing;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
@@ -154,20 +155,15 @@ public class OlympiadsTabController {
     }
 
     public void setEditable(Boolean value) {
-        // TODO: Fix cases
         for (int i = 0; i < fieldsControllers.length; i++) {
             switch (fieldsTypes[i]) {
                 case "date":
                     DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
                     dateInputPatternController.setEditable(value);
                     break;
-                case "double":
-                    DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
-                    doubleInputPatternController.setEditable(value);
-                    break;
                 case "int":
-                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                    choiceInputPatternController.setEditable(value);
+                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                    intInputPatternController.setEditable(value);
                     break;
                 case "varchar":
                     TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
@@ -179,28 +175,84 @@ public class OlympiadsTabController {
     }
 
     public void setFieldsData(String aid) throws SQLException {
-        // TODO: Insert a query for a table and fix cases
-        query = "";
+        query = "SELECT * FROM AbiturientDocumentsFor100balls WHERE id_abiturient = " + aid;
 
         Statement statement = ModelDBConnection.getConnection().createStatement();
         rset = statement.executeQuery(query);
+
+        int columnIndex = 1;
+
         if (rset.next()) {
             for (int i = 0; i < fieldsControllers.length; i++) {
                 switch (fieldsTypes[i]) {
                     case "date":
+                        columnIndex = 9;
+
                         DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
-                        dateInputPatternController.setFieldData(rset.getString(4));
+                        dateInputPatternController.setFieldData(rset.getString(columnIndex));
                         break;
                     case "int":
+
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                        choiceInputPatternController.setFieldData(rset.getString(1));
+
+                        if (Pattern.compile("(id_o).*").matcher(fields[i]).matches()) {
+                            columnIndex = 2;
+                        }
+
+                        choiceInputPatternController.setFieldData(rset.getString(columnIndex));
+
                         break;
                     case "varchar":
+
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(rset.getString(2));
+                        if (Pattern.compile("(nameOf).*").matcher(fields[i]).matches()) {
+                            columnIndex = 3;
+                        } else if (Pattern.compile("(diplomaD).*").matcher(fields[i]).matches()) {
+                            columnIndex = 4;
+                        } else if (Pattern.compile("(diplomaS).*").matcher(fields[i]).matches()) {
+                            columnIndex = 5;
+                        } else if (Pattern.compile("(olympLevel).*").matcher(fields[i]).matches()) {
+                            columnIndex = 6;
+                        } else if (Pattern.compile("(olympLevel).*").matcher(fields[i]).matches()) {
+                            columnIndex = 6;
+                        } else if (Pattern.compile("(series_).*").matcher(fields[i]).matches()) {
+                            columnIndex = 7;
+                        } else if (Pattern.compile("(number_).*").matcher(fields[i]).matches()) {
+                            columnIndex = 8;
+                        } else if (Pattern.compile("(issued_).*").matcher(fields[i]).matches()) {
+                            columnIndex = 10;
+                        }
+
+                        textInputPatternController.setFieldData(rset.getString(columnIndex));
                         break;
                 }
             }
         }
+    }
+
+    public int checkData() {
+        int errorCount = 0, currentErrorCode = 0;
+
+        for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = dateInputPatternController.checkData();
+                    break;
+                case "int":
+                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = intInputPatternController.checkData();
+                    break;
+                case "varchar":
+                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = textInputPatternController.checkData();
+                    break;
+            }
+
+            //errorCount += currentErrorCode;
+            //System.out.println(currentErrorCode);
+        }
+
+        return errorCount;
     }
 }
