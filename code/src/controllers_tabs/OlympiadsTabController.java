@@ -77,7 +77,7 @@ public class OlympiadsTabController {
 
                     DateInputPatternController dateInputPatternController = loader.getController();
                     dateInputPatternController.setWidthHeight(445.0, 35.0, 160.0);
-                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                     break;
                 case "int":
                     if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
@@ -89,7 +89,7 @@ public class OlympiadsTabController {
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
                         choiceInputPatternController.setWidthHeight(678.0, 35.0, 160.0);
-                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                         choiceInputPatternController.setFieldData("");
                         break;
                     } else {
@@ -101,7 +101,7 @@ public class OlympiadsTabController {
 
                         IntInputPatternController intInputPatternController = loader.getController();
                         intInputPatternController.setWidthHeight(210.0, 35.0, 80.8);
-                        intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                         break;
                     }
                 case "varchar":
@@ -113,7 +113,7 @@ public class OlympiadsTabController {
 
                     TextInputPatternController textInputPatternController = loader.getController();
                     textInputPatternController.setWidthHeight(210.0, 35.0, 70.8);
-                    textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                    textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                     break;
             }
         }
@@ -136,6 +136,29 @@ public class OlympiadsTabController {
         setFieldsData("0");
     }
 
+    public void addButtons(Pane pane, int numberOfVisibleButtons) throws IOException {
+        FXMLLoader buttonsLoader = new FXMLLoader();
+        buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
+
+        pane.getChildren().removeAll();
+        Pane newButtonsPane = (Pane) buttonsLoader.load();
+        pane.getChildren().add(newButtonsPane);
+        pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+
+        AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
+        if (numberOfVisibleButtons == 2) {
+            addEditDeleteButtonsController.hideButton2(0);
+            addEditDeleteButtonsController.setWidthHideButtons(250.0, 35.0, 2);
+        }
+        else if (numberOfVisibleButtons == 1) {
+            addEditDeleteButtonsController.hideButton2(0);
+            addEditDeleteButtonsController.hideButton2(1);
+            addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 1);
+        }
+        addEditDeleteButtonsController.setEditable(false);
+    }
+
+
     public void openModalWindow() throws IOException {
         Stage modalStage = new Stage();
         FXMLLoader loader = new FXMLLoader();
@@ -155,10 +178,10 @@ public class OlympiadsTabController {
 
                     DateInputPatternController dateInputPatternController = loader.getController();
                     dateInputPatternController.setWidthHeight(350.0, 35.0, 140.0);
-                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
+                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                 case "int":
                     loader = new FXMLLoader();
-                    if (Pattern.compile("(id_).*").matcher(fields[i]).matches()) {
+                    if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
                         loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
                         newPane = (Pane) loader.load();
@@ -167,13 +190,9 @@ public class OlympiadsTabController {
                         flowPane.getChildren().add(newPane);
 
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
-                        if (fields[i].equals("id_formOfEducation")) {
-                            choiceInputPatternController.setWidthHeight(450.0, 35.0, 250.0);
-                        } else {
-                            choiceInputPatternController.setWidthHeight(450.0, 35.0, 140.0);
-                        }
-                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
-                    } else if (fields[i].equals("is_enrolled")) {
+                        choiceInputPatternController.setWidthHeight(450.0, 35.0, 140.0);
+                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
+                    } else {
                         loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
 
                         newPane = (Pane) loader.load();
@@ -181,17 +200,30 @@ public class OlympiadsTabController {
 
                         flowPane.getChildren().add(newPane);
 
-                        BoolInputPatternController boolInputPatternController = loader.getController();
-                        boolInputPatternController.setWidthHeight(100.0, 35.0);
-                        //boolInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
+                        IntInputPatternController intInputPatternController = loader.getController();
+                        intInputPatternController.setWidthHeight(210.0, 35.0, 80.8);
+                        intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                     }
+                case "varchar":
+                    loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+
+                    newPane = (Pane) loader.load();
+                    fieldsControllers[i] = loader;
+
+                    flowPane.getChildren().add(newPane);
+
+                    TextInputPatternController textInputPatternController = loader.getController();
+                    textInputPatternController.setWidthHeight(450.0, 35.0, 140.0);
+                    textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
+                    break;
             }
         }
 
         FlowPane modalButtonsPane = new FlowPane();
-        //addButtons(modalButtonsPane, 1, tabs);
-       // modalButtonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-        //modalButtonsPane.setPrefWidth(450.0);
+        addButtons(modalButtonsPane, 1);
+        modalButtonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        modalButtonsPane.setPrefWidth(450.0);
         flowPane.getChildren().add(modalButtonsPane);
 
         Scene scene = new Scene(flowPane);

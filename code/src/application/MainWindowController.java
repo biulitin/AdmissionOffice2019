@@ -30,7 +30,7 @@ public class MainWindowController {
     public FlowPane mainField;
 
     @FXML
-    private Tab tabCompetitiveGroups, tabEntranceExams, tabIndividualAchievements, tabPrivileges, tabBasisFor100balls, tabEducation, tabAddressAndContacts, tabPassportAndINN, tabExtraInfo, tabOlympiads;
+    private Tab tabCompetitiveGroups, tabEntranceExams, tabIndividualAchievements, tabPrivileges, tabBasisFor100balls, tabEducation, tabAddressAndContacts, tabPassportAndINN, tabExtraInfo;
     
     @FXML
     private TabPane tabsPane;
@@ -255,9 +255,9 @@ public class MainWindowController {
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/OlympiadsTab.fxml"));
 
-		//tabOlympiads.setContent((Node) tabLoader.load());
-		//OlympiadsTabController olympiadsTabController = tabLoader.getController();
-		//olympiadsTabController.fillTab(tabLoader);
+		tabBasisFor100balls.setContent((Node) tabLoader.load());
+		OlympiadsTabController olympiadsTabController = tabLoader.getController();
+		olympiadsTabController.fillTab(tabLoader);
 	}
 
 	public void addExtraInfoTab() throws Exception {
