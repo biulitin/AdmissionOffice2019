@@ -1,3 +1,7 @@
+/*
+    Controller for tab: 100б.
+ */
+
 package controllers_tabs;
 
 import javafx.fxml.FXML;
@@ -6,7 +10,6 @@ import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -40,7 +43,7 @@ public class OlympiadsTabController {
     FXMLLoader loader;
     Pane newPane;
 
-    public void fillTab(FXMLLoader tabController) throws Exception {
+    public void fillTab() throws Exception {
         prepareData();
         addButtons(buttonsPane, 2);
     }
@@ -58,8 +61,7 @@ public class OlympiadsTabController {
         if (numberOfVisibleButtons == 2) {
             addEditDeleteButtonsController.hideButton(0);
             addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 2);
-        }
-        else if (numberOfVisibleButtons == 1) {
+        } else if (numberOfVisibleButtons == 1) {
             addEditDeleteButtonsController.hideButton(0);
             addEditDeleteButtonsController.hideButton(1);
             addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 1);
@@ -149,5 +151,56 @@ public class OlympiadsTabController {
         modalStage.setWidth(500.0);
         modalStage.setHeight(350.0);
         modalStage.show();
+    }
+
+    public void setEditable(Boolean value) {
+        // TODO: Fix cases
+        for (int i = 0; i < fieldsControllers.length; i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                    dateInputPatternController.setEditable(value);
+                    break;
+                case "double":
+                    DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
+                    doubleInputPatternController.setEditable(value);
+                    break;
+                case "int":
+                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                    choiceInputPatternController.setEditable(value);
+                    break;
+                case "varchar":
+                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                    textInputPatternController.setEditable(value);
+                    break;
+
+            }
+        }
+    }
+
+    public void setFieldsData(String aid) throws SQLException {
+        // TODO: Insert a query for a table and fix cases
+        query = "";
+
+        Statement statement = ModelDBConnection.getConnection().createStatement();
+        rset = statement.executeQuery(query);
+        if (rset.next()) {
+            for (int i = 0; i < fieldsControllers.length; i++) {
+                switch (fieldsTypes[i]) {
+                    case "date":
+                        DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                        dateInputPatternController.setFieldData(rset.getString(4));
+                        break;
+                    case "int":
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        choiceInputPatternController.setFieldData(rset.getString(1));
+                        break;
+                    case "varchar":
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        textInputPatternController.setFieldData(rset.getString(2));
+                        break;
+                }
+            }
+        }
     }
 }
