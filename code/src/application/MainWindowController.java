@@ -3,10 +3,7 @@ package application;
 import backend.MessageProcessing;
 import backend.ModelDBConnection;
 import controllers_simple.*;
-import controllers_tabs.CompetitiveGroupsTabController;
-import controllers_tabs.EducationTabController;
-import controllers_tabs.IndividualAchievementsTabController;
-import controllers_tabs.PassportTabController;
+import controllers_tabs.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -259,8 +256,8 @@ public class MainWindowController {
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/OlympiadsTab.fxml"));
 
 		tabOlympiads.setContent((Node) tabLoader.load());
-		PassportTabController extraIntoTabController = tabLoader.getController();
-		extraIntoTabController.fillTab(tabLoader);
+		OlympiadsTabController olympiadsTabController = tabLoader.getController();
+		olympiadsTabController.fillTab(tabLoader);
 	}
 
 	public void addExtraInfoTab() throws Exception {
@@ -269,8 +266,8 @@ public class MainWindowController {
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/AdditionalInfoTab.fxml"));
 
 		tabExtraInfo.setContent((Node) tabLoader.load());
-		PassportTabController extraIntoTabController = tabLoader.getController();
-		extraIntoTabController.fillTab(tabLoader);
+		AdditionalInfoTabController additionalInfoTabController = tabLoader.getController();
+		additionalInfoTabController.fillTab(tabLoader);
 	}
     
 /*
