@@ -33,7 +33,7 @@ public class MainWindowController {
     public FlowPane mainField;
 
     @FXML
-    private Tab tabCompetitiveGroups, tabEntranceExams, tabIndividualAchievements, tabPrivileges, tabBasisFor100balls, tabEducation, tabAddressAndContacts, tabPassportAndINN, tabExtraInfo;
+    private Tab tabCompetitiveGroups, tabEntranceExams, tabIndividualAchievements, tabPrivileges, tabBasisFor100balls, tabEducation, tabAddressAndContacts, tabPassportAndINN, tabExtraInfo, tabOlympiads;
     
     @FXML
     private TabPane tabsPane;
@@ -209,6 +209,8 @@ public class MainWindowController {
 		addIndividualAchievements();
 		addEducationTab();
 		addPassportTab();
+		addOlympiadsTab();
+		addExtraInfoTab();
     }
 
     public void addCompetitiveGroupsTab() throws Exception {
@@ -249,6 +251,26 @@ public class MainWindowController {
 		tabPassportAndINN.setContent((Node) tabLoader.load());
 		PassportTabController passportTabController = tabLoader.getController();
 		passportTabController.fillTab(tabLoader);
+	}
+
+	public void addOlympiadsTab() throws Exception {
+		FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/OlympiadsTab.fxml"));
+
+		tabOlympiads.setContent((Node) tabLoader.load());
+		PassportTabController extraIntoTabController = tabLoader.getController();
+		extraIntoTabController.fillTab(tabLoader);
+	}
+
+	public void addExtraInfoTab() throws Exception {
+		FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/AdditionalInfoTab.fxml"));
+
+		tabExtraInfo.setContent((Node) tabLoader.load());
+		PassportTabController extraIntoTabController = tabLoader.getController();
+		extraIntoTabController.fillTab(tabLoader);
 	}
     
 /*
