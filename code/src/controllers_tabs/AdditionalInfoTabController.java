@@ -4,6 +4,7 @@
 
 package controllers_tabs;
 
+import backend.MessageProcessing;
 import backend.ModelDBConnection;
 import controllers_simple.*;
 import javafx.fxml.FXML;
@@ -34,6 +35,8 @@ public class AdditionalInfoTabController {
     ResultSet rs;
 
     FXMLLoader loader;
+
+    String aid;
 
     public void prepareData() throws Exception {
     	ModelDBConnection.setDefaultConnectionParameters();
@@ -75,24 +78,27 @@ public class AdditionalInfoTabController {
     }
 
     public void setEditable(Boolean value) {
-        // TODO: Fix cases
         for (int i = 0; i < fieldsControllers.length; i++) {
             switch (fieldsTypes[i]) {
                 case "date":
                     DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
                     dateInputPatternController.setEditable(value);
-                    break;
-                case "double":
-                    DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
-                    doubleInputPatternController.setEditable(value);
+
                     break;
                 case "int":
-                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                    choiceInputPatternController.setEditable(value);
+                    if (Pattern.compile("(id_cat).*").matcher(fields[i]).matches()) {
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        choiceInputPatternController.setEditable(value);
+                    } else {
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                        intInputPatternController.setEditable(value);
+                    }
+
                     break;
                 case "varchar":
                     TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                     textInputPatternController.setEditable(value);
+
                     break;
 
             }
@@ -100,8 +106,14 @@ public class AdditionalInfoTabController {
     }
 
     public void setFieldsData(String aid) throws SQLException {
-        // TODO: Insert a query for a table and fix cases
-        query = "";
+        this.aid = aid;
+
+        query = "SELECT AbiturientExtraInfo.nameOfDocument, AbiturientExtraInfo.series_document," +
+                "AbiturientExtraInfo.number_document, AbiturientExtraInfo.dateOf_issue," +
+                "AbiturientExtraInfo.issued_by\n" +
+                "FROM AbiturientExtraInfo WHERE id_abiturient = " + aid;
+
+        int columnIndex = 1;
 
         Statement statement = ModelDBConnection.getConnection().createStatement();
         rset = statement.executeQuery(query);
@@ -109,16 +121,37 @@ public class AdditionalInfoTabController {
             for (int i = 0; i < fieldsControllers.length; i++) {
                 switch (fieldsTypes[i]) {
                     case "date":
+                        columnIndex = 7;
+
                         DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
-                        dateInputPatternController.setFieldData(rset.getString(4));
+                        dateInputPatternController.setFieldData(rset.getString(columnIndex));
+
                         break;
                     case "int":
-                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                        choiceInputPatternController.setFieldData(rset.getString(1));
+                        if (Pattern.compile("(id_cat).*").matcher(fields[i]).matches()) {
+                            columnIndex = 2;
+
+                            ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                            choiceInputPatternController.setFieldData(rset.getString(columnIndex));
+                        } else {
+                            IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                            intInputPatternController.setFieldData(rset.getString(columnIndex));
+                        }
+
                         break;
                     case "varchar":
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(rset.getString(2));
+
+                        if (Pattern.compile("(nameOf).*").matcher(fields[i]).matches()) {
+                            columnIndex = 3;
+                        } else if (Pattern.compile("(series_).*").matcher(fields[i]).matches()) {
+                            columnIndex = 4;
+                        } else if (Pattern.compile("(number_).*").matcher(fields[i]).matches()) {
+                            columnIndex = 5;
+                        }
+
+                        textInputPatternController.setFieldData(rset.getString(columnIndex));
+
                         break;
                 }
             }
@@ -133,14 +166,27 @@ public class AdditionalInfoTabController {
                 case "date":
                     DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
                     currentErrorCode = dateInputPatternController.checkData();
+
                     break;
                 case "int":
-                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = intInputPatternController.checkData();
+                    if (Pattern.compile("(id_cat).*").matcher(fields[i]).matches()) {
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = choiceInputPatternController.checkData();
+
+                        if (currentErrorCode > 0) {
+                            MessageProcessing.displayErrorMessage(30);
+                            return currentErrorCode;
+                        }
+                    } else {
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = intInputPatternController.checkData();
+                    }
+
                     break;
                 case "varchar":
                     TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                     currentErrorCode = textInputPatternController.checkData();
+
                     break;
             }
 

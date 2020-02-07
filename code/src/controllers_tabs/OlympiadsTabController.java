@@ -44,6 +44,8 @@ public class OlympiadsTabController {
     FXMLLoader loader;
     Pane newPane;
 
+    String aid;
+
     public void fillTab() throws Exception {
         prepareData();
         addButtons(buttonsPane, 2);
@@ -175,6 +177,8 @@ public class OlympiadsTabController {
     }
 
     public void setFieldsData(String aid) throws SQLException {
+        this.aid = aid;
+
         query = "SELECT * FROM AbiturientDocumentsFor100balls WHERE id_abiturient = " + aid;
 
         Statement statement = ModelDBConnection.getConnection().createStatement();
@@ -193,13 +197,13 @@ public class OlympiadsTabController {
                         break;
                     case "int":
 
-                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
 
                         if (Pattern.compile("(id_o).*").matcher(fields[i]).matches()) {
                             columnIndex = 2;
                         }
 
-                        choiceInputPatternController.setFieldData(rset.getString(columnIndex));
+                        intInputPatternController.setFieldData(rset.getString(columnIndex));
 
                         break;
                     case "varchar":
@@ -224,6 +228,7 @@ public class OlympiadsTabController {
                         }
 
                         textInputPatternController.setFieldData(rset.getString(columnIndex));
+
                         break;
                 }
             }
@@ -238,14 +243,17 @@ public class OlympiadsTabController {
                 case "date":
                     DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
                     currentErrorCode = dateInputPatternController.checkData();
+
                     break;
                 case "int":
                     IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
                     currentErrorCode = intInputPatternController.checkData();
+
                     break;
                 case "varchar":
                     TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                     currentErrorCode = textInputPatternController.checkData();
+
                     break;
             }
 
