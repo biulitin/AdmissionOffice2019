@@ -47,39 +47,11 @@ public class OlympiadsTabController {
     String aid;
 
     public void fillTab(FXMLLoader tabController) throws Exception {
-        prepareData();
-        addButtons(buttonsPane, 2, tabController);
-    }
-
-    public void addButtons(Pane pane, int numberOfVisibleButtons, FXMLLoader tabController) throws IOException {
-        FXMLLoader buttonsLoader = new FXMLLoader();
-        buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
-
-        pane.getChildren().removeAll();
-        Pane newButtonsPane = (Pane) buttonsLoader.load();
-        pane.getChildren().add(newButtonsPane);
-        pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-
-        AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
-        addEditDeleteButtonsController.setParameters("100б", tabController, fields, fieldsTypes, fieldsControllers);
-        if (numberOfVisibleButtons == 2) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 2);
-        } else if (numberOfVisibleButtons == 1) {
-            addEditDeleteButtonsController.hideButton(0);
-            addEditDeleteButtonsController.hideButton(1);
-            addEditDeleteButtonsController.setWidthHideButtons(200.0, 50.0, 1);
-        }
-        addEditDeleteButtonsController.setEditable(false);
-    }
-
-    public void prepareData() throws Exception {
         ModelDBConnection.setDefaultConnectionParameters();
+        //ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
         ModelDBConnection.initConnection();
 
-        query = "";
-
-        ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(query);
+        ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(ModelDBConnection.getQueryByTabName("100б"));
         countFields = rsmd.getColumnCount();
 
         fields = new String[countFields];
@@ -90,6 +62,78 @@ public class OlympiadsTabController {
             fields[i] = rsmd.getColumnLabel(i + 1);
             fieldsTypes[i] = rsmd.getColumnTypeName(i + 1);
         }
+
+        FXMLLoader loader;
+        Pane newPane;
+
+        for (int i = 0; i < countFields; i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
+
+                    newPane = (Pane) loader.load();
+                    fieldsControllers[i] = loader;
+
+                    DateInputPatternController dateInputPatternController = loader.getController();
+                    dateInputPatternController.setWidthHeight(445.0, 35.0, 160.0);
+                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                    break;
+                case "int":
+                    if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        choiceInputPatternController.setWidthHeight(678.0, 35.0, 160.0);
+                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        choiceInputPatternController.setFieldData("");
+                        break;
+                    } else {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        IntInputPatternController intInputPatternController = loader.getController();
+                        intInputPatternController.setWidthHeight(210.0, 35.0, 80.8);
+                        intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        break;
+                    }
+                case "varchar":
+                    loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+
+                    newPane = (Pane) loader.load();
+                    fieldsControllers[i] = loader;
+
+                    TextInputPatternController textInputPatternController = loader.getController();
+                    textInputPatternController.setWidthHeight(210.0, 35.0, 70.8);
+                    textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                    break;
+            }
+        }
+
+        loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
+
+        buttonsPane.getChildren().removeAll();
+        newPane = (Pane) loader.load();
+        buttonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        buttonsPane.getChildren().add(newPane);
+
+        AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
+        addEditDeleteButtonsController.setParameters("100б", tabController, fields, fieldsTypes, fieldsControllers);
+
+        addEditDeleteButtonsController.hideButton(0);
+        addEditDeleteButtonsController.setWidthHideButtons(250.0, 50.0, 2);
+
+        setEditable(false);
+        setFieldsData("0");
     }
 
     public void openModalWindow() throws IOException {
@@ -139,7 +183,7 @@ public class OlympiadsTabController {
 
                         BoolInputPatternController boolInputPatternController = loader.getController();
                         boolInputPatternController.setWidthHeight(100.0, 35.0);
-                        boolInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
+                        //boolInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientCompetitiveGroup"));
                     }
             }
         }
@@ -165,8 +209,14 @@ public class OlympiadsTabController {
                     dateInputPatternController.setEditable(value);
                     break;
                 case "int":
-                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                    intInputPatternController.setEditable(value);
+                    if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        choiceInputPatternController.setEditable(value);
+                    } else {
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                        intInputPatternController.setEditable(value);
+                    }
+
                     break;
                 case "varchar":
                     TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
@@ -180,7 +230,7 @@ public class OlympiadsTabController {
     public void setFieldsData(String aid) throws SQLException {
         this.aid = aid;
 
-        query = "SELECT * FROM AbiturientDocumentsFor100balls WHERE id_abiturient = " + aid;
+        query = ModelDBConnection.getQueryByTabName("100б");
 
         Statement statement = ModelDBConnection.getConnection().createStatement();
         rset = statement.executeQuery(query);
@@ -197,14 +247,15 @@ public class OlympiadsTabController {
                         dateInputPatternController.setFieldData(rset.getString(columnIndex));
                         break;
                     case "int":
-
-                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-
-                        if (Pattern.compile("(id_o).*").matcher(fields[i]).matches()) {
+                        if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
                             columnIndex = 2;
-                        }
 
-                        intInputPatternController.setFieldData(rset.getString(columnIndex));
+                            ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                            choiceInputPatternController.setFieldData(rset.getString(columnIndex));
+                        } else {
+                            IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                            intInputPatternController.setFieldData(rset.getString(columnIndex));
+                        }
 
                         break;
                     case "varchar":
@@ -247,8 +298,18 @@ public class OlympiadsTabController {
 
                     break;
                 case "int":
-                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = intInputPatternController.checkData();
+                    if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = choiceInputPatternController.checkData();
+
+                        if (currentErrorCode > 0) {
+                            MessageProcessing.displayErrorMessage(30);
+                            return currentErrorCode;
+                        }
+                    } else {
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = intInputPatternController.checkData();
+                    }
 
                     break;
                 case "varchar":

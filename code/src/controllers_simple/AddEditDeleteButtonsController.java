@@ -168,7 +168,7 @@ public class AddEditDeleteButtonsController {
         this.fieldsTypes = fieldsTypes.clone();
         this.fieldsControllers = fieldsControllers.clone();
 
-        setEditable(false);
+       // setEditable(false);
 
         //Here will be switch/case according to the tabName (on some AddButton/DeleteButton have to be hidden)
     }

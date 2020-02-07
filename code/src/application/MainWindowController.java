@@ -255,9 +255,9 @@ public class MainWindowController {
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/OlympiadsTab.fxml"));
 
-		tabOlympiads.setContent((Node) tabLoader.load());
-		OlympiadsTabController olympiadsTabController = tabLoader.getController();
-		olympiadsTabController.fillTab(tabLoader);
+		//tabOlympiads.setContent((Node) tabLoader.load());
+		//OlympiadsTabController olympiadsTabController = tabLoader.getController();
+		//olympiadsTabController.fillTab(tabLoader);
 	}
 
 	public void addExtraInfoTab() throws Exception {

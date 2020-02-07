@@ -30,22 +30,15 @@ public class AdditionalInfoTabController {
     Connection conn;
     CallableStatement cstmt;
     ResultSet rset;
-    Properties props;
-    Statement st;
-    ResultSet rs;
-
-    FXMLLoader loader;
 
     String aid;
 
-    public void prepareData() throws Exception {
-    	ModelDBConnection.setDefaultConnectionParameters();
-    	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
+    public void fillTab(FXMLLoader tabController) throws Exception {
+        ModelDBConnection.setDefaultConnectionParameters();
+        //ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
         ModelDBConnection.initConnection();
 
-        query = "SELECT * FROM AbiturientExtraInfo";
-
-        ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(query);
+        ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(ModelDBConnection.getQueryByTabName("Доп. сведения"));
         countFields = rsmd.getColumnCount();
 
         fields = new String[countFields];
@@ -56,25 +49,77 @@ public class AdditionalInfoTabController {
             fields[i] = rsmd.getColumnLabel(i + 1);
             fieldsTypes[i] = rsmd.getColumnTypeName(i + 1);
         }
-    }
 
-    public void fillTab(FXMLLoader tabController) throws Exception {
-        prepareData();
-        addButtons(buttonsPane, tabController);
-    }
+        FXMLLoader loader;
+        Pane newPane;
 
-    public void addButtons(Pane pane, FXMLLoader tabController) throws IOException {
-        FXMLLoader buttonsLoader = new FXMLLoader();
-        buttonsLoader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
+        for (int i = 0; i < countFields; i++) {
+            switch (fieldsTypes[i]) {
+                case "date":
+                    loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
 
-        pane.getChildren().removeAll();
-        Pane newButtonsPane = (Pane) buttonsLoader.load();
-        pane.getChildren().add(newButtonsPane);
-        pane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                    newPane = (Pane) loader.load();
+                    fieldsControllers[i] = loader;
 
-        AddEditDeleteButtonsController addEditDeleteButtonsController = buttonsLoader.getController();
+                    DateInputPatternController dateInputPatternController = loader.getController();
+                    dateInputPatternController.setWidthHeight(445.0, 35.0, 160.0);
+                    dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                    break;
+                case "int":
+                    if (Pattern.compile("(id_cat).*").matcher(fields[i]).matches()) {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        choiceInputPatternController.setWidthHeight(678.0, 35.0, 160.0);
+                        choiceInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        choiceInputPatternController.setFieldData("");
+                        break;
+                    } else {
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+
+                        IntInputPatternController intInputPatternController = loader.getController();
+                        // intInputPatternController.setWidthHeight(340.0, 35.0, 80.8);
+                        intInputPatternController.setWidthHeight(210.0, 35.0, 80.8);
+                        intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                        break;
+                    }
+                case "varchar":
+                    loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
+
+                    newPane = (Pane) loader.load();
+                    fieldsControllers[i] = loader;
+
+                    TextInputPatternController textInputPatternController = loader.getController();
+                    textInputPatternController.setWidthHeight(210.0, 35.0, 70.8);
+                    // textInputPatternController.setWidthHeight(285.0, 35.0, 45.74);
+                    textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
+                    break;
+            }
+        }
+
+        loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../patterns_simple/AddEditDeleteButtons.fxml"));
+
+        buttonsPane.getChildren().removeAll();
+        newPane = (Pane) loader.load();
+        buttonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        buttonsPane.getChildren().add(newPane);
+
+        AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
         addEditDeleteButtonsController.setParameters("Доп. сведения", tabController, fields, fieldsTypes, fieldsControllers);
-        addEditDeleteButtonsController.setEditable(false);
+
+        setEditable(false);
+        setFieldsData("0");
     }
 
     public void setEditable(Boolean value) {
@@ -105,13 +150,10 @@ public class AdditionalInfoTabController {
         }
     }
 
-    public void setFieldsData(String aid) throws SQLException {
+    public void setFieldsData(String aid) throws Exception {
         this.aid = aid;
 
-        query = "SELECT AbiturientExtraInfo.nameOfDocument, AbiturientExtraInfo.series_document," +
-                "AbiturientExtraInfo.number_document, AbiturientExtraInfo.dateOf_issue," +
-                "AbiturientExtraInfo.issued_by\n" +
-                "FROM AbiturientExtraInfo WHERE id_abiturient = " + aid;
+        query = ModelDBConnection.getQueryByTabName("Доп. сведения");
 
         int columnIndex = 1;
 

@@ -303,39 +303,60 @@ public class ModelDBConnection {
 	//Общие функции
 	public static String getQueryByTabName(String tabName) {
 		switch(tabName) {
-		case "SampleTab":
-			return "SELECT * "
-					+ "FROM Abiturient";
-		case "Паспорт и ИНН":
-			return "SELECT AbiturientPassport.id_typePassport, "
-					+ "AbiturientPassport.series_document, "
-					+ "AbiturientPassport.number_document, "
-					+ "AbiturientPassport.dateOf_issue, "
-					+ "AbiturientPassport.issued_by, "
-					+ "Abiturient.Birthplace, "
-					+ "Abiturient.inn "
-					+ "FROM AbiturientPassport JOIN Abiturient ON (Abiturient.aid=AbiturientPassport.id_abiturient)";
-		case "Образование":
-			return "SELECT AbiturientEducation.id_levelEducation, "
-					+ "AbiturientEducation.id_typeEducation, "
-					+ "AbiturientEducation.name_eduInstitution, "
-					+ "AbiturientEducation.dateOf_issue, "
-					+ "AbiturientEducation.series_document, "
-					+ "AbiturientEducation.number_document, "
-					+ "AbiturientEducation.yearOf_graduation "
-					+ "FROM AbiturientEducation JOIN Abiturient ON (Abiturient.aid = AbiturientEducation.id_abiturient)";
-		case "Вступительные испытания":
-			return "SELECT AbiturientEntranceExam.id_entranceExam, "
-					+ "AbiturientEntranceExam.id_formOfExam, "
-					+ "AbiturientEntranceExam.id_languageOfExam, "
-					+ "AbiturientEntranceExam.groupExam, "
-					+ "AbiturientEntranceExam.dateOf_exam, "
-					+ "AbiturientEntranceExam.score, "
-					+ "AbiturientEntranceExam.has_100, "
-					+ "Abiturient.needSpecConditions "
-					+ "FROM AbiturientEntranceExam JOIN Abiturient ON (Abiturient.aid = AbiturientEntranceExam.id_abiturient)";
-		default:
-			return "";
+			case "SampleTab":
+				return "SELECT * "
+						+ "FROM Abiturient";
+			case "Паспорт и ИНН":
+				return "SELECT AbiturientPassport.id_typePassport, "
+						+ "AbiturientPassport.series_document, "
+						+ "AbiturientPassport.number_document, "
+						+ "AbiturientPassport.dateOf_issue, "
+						+ "AbiturientPassport.issued_by, "
+						+ "Abiturient.Birthplace, "
+						+ "Abiturient.inn "
+						+ "FROM AbiturientPassport JOIN Abiturient ON (Abiturient.aid=AbiturientPassport.id_abiturient)";
+			case "Образование":
+				return "SELECT AbiturientEducation.id_levelEducation, "
+						+ "AbiturientEducation.id_typeEducation, "
+						+ "AbiturientEducation.name_eduInstitution, "
+						+ "AbiturientEducation.dateOf_issue, "
+						+ "AbiturientEducation.series_document, "
+						+ "AbiturientEducation.number_document, "
+						+ "AbiturientEducation.yearOf_graduation "
+						+ "FROM AbiturientEducation JOIN Abiturient ON (Abiturient.aid = AbiturientEducation.id_abiturient)";
+			case "Вступительные испытания":
+				return "SELECT AbiturientEntranceExam.id_entranceExam, "
+						+ "AbiturientEntranceExam.id_formOfExam, "
+						+ "AbiturientEntranceExam.id_languageOfExam, "
+						+ "AbiturientEntranceExam.groupExam, "
+						+ "AbiturientEntranceExam.dateOf_exam, "
+						+ "AbiturientEntranceExam.score, "
+						+ "AbiturientEntranceExam.has_100, "
+						+ "Abiturient.needSpecConditions "
+						+ "FROM AbiturientEntranceExam JOIN Abiturient ON (Abiturient.aid = AbiturientEntranceExam.id_abiturient)";
+			case "Доп. сведения":
+				return "SELECT AbiturientExtraInfo.id_abiturient, "
+						+ "AbiturientExtraInfo.id_categoryOfExtraInfo, "
+						+ "AbiturientExtraInfo.nameOfDocument, "
+						+ "AbiturientExtraInfo.series_document, "
+						+ "AbiturientExtraInfo.number_document, "
+						+ "AbiturientExtraInfo.issued_by, "
+						+ "AbiturientExtraInfo.dateOf_issue "
+						+ "FROM AbiturientExtraInfo JOIN Abiturient ON (Abiturient.aid = AbiturientExtraInfo.id_abiturient)";
+			case "100б":
+				return "SELECT AbiturientDocumentsFor100balls.id_abiturient, "
+						+ "AbiturientDocumentsFor100balls.id_olympiad, "
+						+ "AbiturientDocumentsFor100balls.nameOfDocument, "
+						+ "AbiturientDocumentsFor100balls.diplomaDegree, "
+						+ "AbiturientDocumentsFor100balls.diplomaSubject, "
+						+ "AbiturientDocumentsFor100balls.olympLevel, "
+						+ "AbiturientDocumentsFor100balls.series_document, "
+						+ "AbiturientDocumentsFor100balls.number_document, "
+						+ "AbiturientDocumentsFor100balls.dateOf_issue, "
+						+ "AbiturientDocumentsFor100balls.issued_by "
+						+ "FROM AbiturientDocumentsFor100balls JOIN Abiturient ON (Abiturient.aid = AbiturientDocumentsFor100balls.id_abiturient)";
+			default:
+				return "";
 		}
 	}
 
