@@ -208,6 +208,7 @@ public class MainWindowController {
 		addPassportTab();
 		addOlympiadsTab();
 		addExtraInfoTab();
+        addEntranceExamTab();
     }
 
     public void addCompetitiveGroupsTab() throws Exception {
@@ -268,6 +269,16 @@ public class MainWindowController {
 		tabExtraInfo.setContent((Node) tabLoader.load());
 		AdditionalInfoTabController additionalInfoTabController = tabLoader.getController();
 		additionalInfoTabController.fillTab(tabLoader);
+	}
+
+	public void addEntranceExamTab() throws Exception {
+		FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/EntranceExamTab.fxml"));
+
+        tabEntranceExams.setContent((Node) tabLoader.load());
+		EntranceExamTabController entranceExamTabController = tabLoader.getController();
+		entranceExamTabController.fillTab(tabLoader);
 	}
     
 /*
