@@ -3,6 +3,7 @@ package controllers_simple;
 import application.MainWindowController;
 import controllers_tabs.*;
 
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import application.InsertFormController;
@@ -31,8 +32,13 @@ public class AddEditDeleteButtonsController {
     public Button deleteButton;
 
     @FXML
-    void addButtonAction(ActionEvent event) {
-
+    void addButtonAction(ActionEvent event) throws IOException {
+        switch (tabName){
+            case "Вступительные испытания":
+                EntranceExamTabController entranceExamTabController = tabController.getController();
+                fieldsControllers = entranceExamTabController.addRow();
+                break;
+        }
     }
 
     @FXML
@@ -98,8 +104,10 @@ public class AddEditDeleteButtonsController {
 
     	String[] fieldsData = new String[fieldsControllers.length];
 
-    	for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
-			switch (fieldsTypes[i]) {
+    	for (int i = 0,j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++,j++) {
+			if(j==fieldsTypes.length)
+				j=0;
+			switch (fieldsTypes[j]) {
 				case "date":
 					DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
 					fieldsData[i] = dateInputPatternController.getFieldData();
@@ -111,13 +119,13 @@ public class AddEditDeleteButtonsController {
 					if (fieldsData[i].equals("")) fieldsData[i] = "null";
 					break;
 				case "int":
-					if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+					if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						fieldsData[i] = choiceInputPatternController.getFieldData();
 						if (fieldsData[i].equals("0")) fieldsData[i] = "null";
 						break;
 					}
-					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches()  || Pattern.compile("(is).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(need).*").matcher(fields[j]).matches() || Pattern.compile("(ha).*").matcher(fields[j]).matches()  || Pattern.compile("(is).*").matcher(fields[j]).matches()){
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						fieldsData[i] = boolInputPatternController.getFieldData();
 						break;
@@ -132,20 +140,20 @@ public class AddEditDeleteButtonsController {
 						break;
 					}
 				case "varchar":
-					if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(phone).*").matcher(fields[j]).matches()){
 						PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
 						fieldsData[i] = phoneMaskInputPatternController.getFieldData();
 						if (fieldsData[i].equals("")) fieldsData[i] = "null";
 						break;
 					}
-					if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(passw).*").matcher(fields[j]).matches()){
 						PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
 						fieldsData[i] = passwordInputPatternController.getFieldData();
 						if (fieldsData[i].equals("")) fieldsData[i] = "null";
 						break;
 					}
 					else {
-						TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+						TextInputPatternController textInputPatternController = fieldsControllers[j].getController();
 						fieldsData[i] = textInputPatternController.getFieldData();
 						if (fieldsData[i].equals("")) fieldsData[i] = "null";
 						break;
@@ -157,8 +165,13 @@ public class AddEditDeleteButtonsController {
     }
 
     @FXML
-    void deleteButtonAction(ActionEvent event) {
-
+    void deleteButtonAction(ActionEvent event){
+        switch (tabName){
+            case "Вступительные испытания":
+                EntranceExamTabController entranceExamTabController = tabController.getController();
+                fieldsControllers = entranceExamTabController.deleteRow();
+                break;
+        }
     }
 
     public void setParameters(String tabName, FXMLLoader tabController, String[] fields, String[] fieldsTypes, FXMLLoader[] fieldsControllers) {
@@ -224,8 +237,10 @@ public class AddEditDeleteButtonsController {
     	this.addButton.setDisable(!value);
     	this.deleteButton.setDisable(!value);
 
-		for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
-			switch (fieldsTypes[i]) {
+		for (int i = 0,j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++,j++) {
+            if(j==fieldsTypes.length)
+                j=0;
+			switch (fieldsTypes[j]) {
 				case "date":
 					DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
 					dateInputPatternController.setEditable(value);
@@ -235,12 +250,12 @@ public class AddEditDeleteButtonsController {
 					doubleInputPatternController.setEditable(value);
 					break;
 				case "int":
-					if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+					if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						choiceInputPatternController.setEditable(value);
 						break;
 					}
-					if(Pattern.compile("(need).*").matcher(fields[i]).matches() || Pattern.compile("(ha).*").matcher(fields[i]).matches() || Pattern.compile("(is).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(need).*").matcher(fields[j]).matches() || Pattern.compile("(ha).*").matcher(fields[j]).matches() || Pattern.compile("(is).*").matcher(fields[j]).matches()){
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						boolInputPatternController.setEditable(value);
 						break;
@@ -250,12 +265,12 @@ public class AddEditDeleteButtonsController {
 						break;
 					}
 				case "varchar":
-					if(Pattern.compile("(phone).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(phone).*").matcher(fields[j]).matches()){
 						PhoneMaskInputPatternController phoneMaskInputPatternController = fieldsControllers[i].getController();
 						phoneMaskInputPatternController.setEditable(value);
 						break;
 					}
-					if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
+					if(Pattern.compile("(passw).*").matcher(fields[j]).matches()){
 						PasswordPatternController passwordInputPatternController = fieldsControllers[i].getController();
 						passwordInputPatternController.setEditable(value);
 						break;
