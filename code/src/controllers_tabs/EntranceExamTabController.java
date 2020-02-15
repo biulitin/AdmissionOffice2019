@@ -32,7 +32,7 @@ public class EntranceExamTabController {
 
     ObservableList<ObservableList> list = FXCollections.observableArrayList();
 
-    public void fillTab(FXMLLoader tabController) throws SQLException, IOException {
+    public void fillTab(FXMLLoader tabController) throws Exception {
         mainGridPane.autosize();
         ModelDBConnection.setDefaultConnectionParameters();
     	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
@@ -218,12 +218,15 @@ public class EntranceExamTabController {
         newPane = (Pane) loader.load();
         buttonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         buttonsPane.getChildren().add(newPane);
+        
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
+
+        setFieldsData("0");
+
         addEditDeleteButtonsController.setParameters("Вступительные испытания", tabController, fields, fieldsTypes, fieldsControllers);
 
         setEditable(false);
-        setFieldsData("0");
     }
 
     public void setEditable(Boolean value) {
@@ -274,46 +277,52 @@ public class EntranceExamTabController {
         }
     }
 
-	//Доделать - учитывая, что абитуриент может сдавать больше 1 ВИ
-    public void setFieldsData(String aid) throws SQLException {
+
+    public void setFieldsData(String aid) throws Exception {
     	this.aid = aid;
-    	String[] entranceExamsData = ModelDBConnection.getAbiturientEducationByID(aid);
+    	String[] entranceExamsData = ModelDBConnection.getAbiturientEntrancexamsByID(aid);
 
     	if(entranceExamsData != null) {
-            for (int i = 0; i < entranceExamsData.length; i++) {
-                switch (fieldsTypes[i]) {
+        	for(int i = 1; i < entranceExamsData.length / fields.length; i++)
+        		addRow();
+
+            for (int i = 0, j = 0; i < entranceExamsData.length; i++, j++) {
+                if(j == countFields)
+                    j=0;
+
+                switch (fieldsTypes[j]) {
                     case "date":
                         DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
                         dateInputPatternController.setFieldData(entranceExamsData[i]);
                         break;
                     case "int":
-                        if (Pattern.compile("(id_ent).*").matcher(fields[i]).matches()) {
+                        if (Pattern.compile("(id_ent).*").matcher(fields[j]).matches()) {
                             ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                             choiceInputPatternController.setFieldData(entranceExamsData[i]);
                         }
-                        if(Pattern.compile("(id_la).*").matcher(fields[i]).matches() ){
+                        if(Pattern.compile("(id_la).*").matcher(fields[j]).matches() ){
                             ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                             choiceInputPatternController.setFieldData(entranceExamsData[i]);
                         }
-                        if(Pattern.compile("(id_form).*").matcher(fields[i]).matches() ){
+                        if(Pattern.compile("(id_form).*").matcher(fields[j]).matches() ){
                             ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                             choiceInputPatternController.setFieldData(entranceExamsData[i]);
                         }
-                        if(Pattern.compile("(score)").matcher(fields[i]).matches() ){
+                        if(Pattern.compile("(score)").matcher(fields[j]).matches() ){
                             IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
                             intInputPatternController.setFieldData(entranceExamsData[i]);
                         }
-                        if(Pattern.compile("(has_).*").matcher(fields[i]).matches() ){
+                        if(Pattern.compile("(has_).*").matcher(fields[j]).matches() ){
                             BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
                             boolInputPatternController.setFieldData(entranceExamsData[i]);
                         }
-                        if(Pattern.compile("(need).*").matcher(fields[i]).matches() ) {
+                        if(Pattern.compile("(need).*").matcher(fields[j]).matches() ) {
                             BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
                             boolInputPatternController.setFieldData(entranceExamsData[i]);
                         }
                         break;
                     case "varchar":
-                        if (Pattern.compile("(grou).*").matcher(fields[i]).matches()) {
+                        if (Pattern.compile("(grou).*").matcher(fields[j]).matches()) {
                             TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                             textInputPatternController.setFieldData(entranceExamsData[i]);
                         }
@@ -323,55 +332,69 @@ public class EntranceExamTabController {
         }
     }
 
-    //Доделать - учитывая, что абитуриент может сдавать больше 1 ВИ
+
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
-    	ModelDBConnection.updateAbiturientEntranceExamsByID(aid, fieldsOriginalNames, fieldsData);
+    	//Выгружаем данные только если в таблицу была добавлена хотя бы 1 строка
+    	if (!isEmpty())
+    		ModelDBConnection.updateAbiturientEntranceExamsByID(aid, fieldsOriginalNames, fieldsData);
     }
 
 
     public int checkData() {
     	int errorCount = 0, currentErrorCode = 0;
 
+    	//Если в таблицу ничего не добавляли, то никаких проверок не осуществляем
+    	if (isEmpty()) return 0;
+
 		for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
             if(j == countFields)
                 j=0;
+
             switch (fieldsTypes[j]) {
-            case "date":
-                DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
-                currentErrorCode = dateInputPatternController.checkData();
-                break;
-            case "int":
-                if (Pattern.compile("(id_ent).*").matcher(fields[j]).matches()) {
-                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = choiceInputPatternController.checkData();
-                }
-                if(Pattern.compile("(id_la).*").matcher(fields[j]).matches() ){
-                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = choiceInputPatternController.checkData();
-                }
-                if(Pattern.compile("(id_form).*").matcher(fields[j]).matches() ){
-                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = choiceInputPatternController.checkData();
-                }
-                if(Pattern.compile("(score)").matcher(fields[j]).matches() ){
-                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = intInputPatternController.checkData();
-                }
-                if(Pattern.compile("(has_).*").matcher(fields[j]).matches() ){
-                    BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = boolInputPatternController.checkData();
-                }
-                if(Pattern.compile("(need).*").matcher(fields[j]).matches() ) {
-                    BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = boolInputPatternController.checkData();
-                }
-                break;
-            case "varchar":
-                if (Pattern.compile("(grou).*").matcher(fields[j]).matches()) {
-                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = textInputPatternController.checkData();
-                }
-                break;
+	            case "date":
+	                DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+	                currentErrorCode = dateInputPatternController.checkData();
+	                break;
+	            case "int":
+	                if (Pattern.compile("(id_ent).*").matcher(fields[j]).matches()) {
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+						if (currentErrorCode > 0) {
+							MessageProcessing.displayErrorMessage(10);
+							return currentErrorCode;
+						}
+	                }
+	                if(Pattern.compile("(id_la).*").matcher(fields[j]).matches() ){
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+	                }
+	                if(Pattern.compile("(id_form).*").matcher(fields[j]).matches() ){
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+						if (currentErrorCode > 0) {
+							MessageProcessing.displayErrorMessage(10);
+							return currentErrorCode;
+						}
+	                }
+	                if(Pattern.compile("(score)").matcher(fields[j]).matches() ){
+	                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = intInputPatternController.checkData();
+	                }
+	                if(Pattern.compile("(has_).*").matcher(fields[j]).matches() ){
+	                    BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = boolInputPatternController.checkData();
+	                }
+	                if(Pattern.compile("(need).*").matcher(fields[j]).matches() ) {
+	                    BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = boolInputPatternController.checkData();
+	                }
+	                break;
+	            case "varchar":
+	                if (Pattern.compile("(grou).*").matcher(fields[j]).matches()) {
+	                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = textInputPatternController.checkData();
+	                }
+	                break;
             }
 			//errorCount += currentErrorCode;
 			//System.out.println(currentErrorCode);
@@ -496,16 +519,80 @@ public class EntranceExamTabController {
         fieldsTable.getItems().setAll(list);
         return fieldsControllers;
     }
+    
+    public boolean isEmpty() {
+    	if (fieldsControllers == null)
+    		return true;
+    	
+    	if (fieldsControllers.length == 0)
+    		return true;
+    	
+    	int errorCount = 0, currentErrorCode = 0, countBooleanFields = 0;;
 
-    public  FXMLLoader[] deleteRow(){
+		for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
+            if(j == countFields)
+                j=0;
+
+            switch (fieldsTypes[j]) {
+	            case "date":
+	                DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+	                currentErrorCode = dateInputPatternController.checkData();
+	                break;
+	            case "int":
+	                if (Pattern.compile("(id_ent).*").matcher(fields[j]).matches()) {
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+	                }
+	                if(Pattern.compile("(id_la).*").matcher(fields[j]).matches() ){
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+	                }
+	                if(Pattern.compile("(id_form).*").matcher(fields[j]).matches() ){
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+	                }
+	                if(Pattern.compile("(score)").matcher(fields[j]).matches() ){
+	                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = intInputPatternController.checkData();
+	                }
+	                if(Pattern.compile("(has_).*").matcher(fields[j]).matches() ){
+	                    BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = boolInputPatternController.checkData();
+	                    countBooleanFields++;
+	                }
+	                if(Pattern.compile("(need).*").matcher(fields[j]).matches() ) {
+	                    BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = boolInputPatternController.checkData();
+	                    countBooleanFields++;
+	                }
+	                break;
+	            case "varchar":
+	                if (Pattern.compile("(grou).*").matcher(fields[j]).matches()) {
+	                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = textInputPatternController.checkData();
+	                }
+	                break;
+            }
+			errorCount += currentErrorCode;
+		}
+
+		return (errorCount == fields.length - countBooleanFields ? true : false);
+    }
+
+    public FXMLLoader[] deleteRow() throws Exception {
         int row = fieldsTable.getSelectionModel().getSelectedIndex();
 
         for(int i = row * countFields, j = (row + 1) * countFields; j < fieldsControllers.length; i++, j++) {
             fieldsControllers[i] = fieldsControllers[j];
         }
+
         fieldsControllers = Arrays.copyOfRange(fieldsControllers,0,fieldsControllers.length - countFields);
         fieldsTable.getItems().remove(row);
         list.remove(row);
+
+        if (fieldsControllers.length == 0)
+        	addRow();
+
         return fieldsControllers;
     }
 

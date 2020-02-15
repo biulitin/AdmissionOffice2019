@@ -23,7 +23,7 @@ public class ChoiceInputPatternController {
     private Text nameOfField;
 
     public String getFieldData() {
-        if (checkData() != 0)
+        if (checkData() > 1)
             return "";
         else {
             //System.out.println(fieldData.getSelectionModel().getSelectedItem() + fieldData.getSelectionModel().getSelectedIndex());
@@ -31,7 +31,7 @@ public class ChoiceInputPatternController {
             //return fieldData.getSelectionModel().getSelectedItem().toString();
         }
     }
-    
+
     public void setFieldData(String data) {
     	String tableName = "";
 
@@ -87,7 +87,7 @@ public class ChoiceInputPatternController {
     }
 
     public int checkData(){
-        if(fieldData.getSelectionModel().isEmpty())
+        if(fieldData.getSelectionModel().isEmpty() || fieldData.getSelectionModel().getSelectedIndex() == 0)
             return 1;
         else return 0;
     }

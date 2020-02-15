@@ -32,7 +32,7 @@ public class AddEditDeleteButtonsController {
     public Button deleteButton;
 
     @FXML
-    void addButtonAction(ActionEvent event) throws IOException {
+    void addButtonAction(ActionEvent event) throws Exception {
         switch (tabName){
             case "Вступительные испытания":
                 EntranceExamTabController entranceExamTabController = tabController.getController();
@@ -153,7 +153,7 @@ public class AddEditDeleteButtonsController {
 						break;
 					}
 					else {
-						TextInputPatternController textInputPatternController = fieldsControllers[j].getController();
+						TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
 						fieldsData[i] = textInputPatternController.getFieldData();
 						if (fieldsData[i].equals("")) fieldsData[i] = "null";
 						break;
@@ -165,7 +165,7 @@ public class AddEditDeleteButtonsController {
     }
 
     @FXML
-    void deleteButtonAction(ActionEvent event){
+    void deleteButtonAction(ActionEvent event) throws Exception {
         switch (tabName){
             case "Вступительные испытания":
                 EntranceExamTabController entranceExamTabController = tabController.getController();

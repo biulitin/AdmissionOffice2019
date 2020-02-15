@@ -28,7 +28,7 @@ public class DateInputPatternController {
         if (checkData() != 0)
             return "";
         else {
-            System.out.println(fieldData.getValue());
+            //System.out.println(fieldData.getValue());
             return fieldData.getValue().toString();
         }
     }

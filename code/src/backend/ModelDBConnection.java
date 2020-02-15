@@ -219,7 +219,7 @@ public class ModelDBConnection {
 			//Таблица Abiturient
 			case "aid": return "№ Личного дела";
 			case "SName": return "Фамилия";
-			case "Fname": return "Имя";
+			case "FName": return "Имя";
 			case "MName": return "Отчество";
 			case "Birthday": return "Дата рождения";
 			case "Birthplace": return "Место рождения";
@@ -229,7 +229,7 @@ public class ModelDBConnection {
 			case "phoneNumbers": return "Контактный телефон";
 			case "inn": return "ИНН";
 			case "needHostel": return "Нуждается в общежитии";
-			case "registrationDate": return "Дата подачи заявления";
+			case "registrationdate": return "Дата подачи заявления";
 			case "returnDate": return "Дата возврата документов";
 			case "id_returnReason": return "Причина возврата документов";
 			case "needSpecConditions": return "Нуждается в спеицальных условиях на ВИ";
@@ -444,6 +444,48 @@ public class ModelDBConnection {
 		rset.close();
 	}
 
+	public static void deleteElementInTableByExpression(String table, String idValue, String[] fieldsNames, String[] data, int countOfExprParams)
+			throws SQLException {
+		String id = "id";
+		switch (table) {
+		case "Abiturient":
+			id = "aid";
+			break;
+		case "AbiturientPassport":
+		case "AbiturientAdress":
+		case "AbiturientEntranceExam":
+		case "AbiturientDocumentsFor100balls":
+		case "AbiturientEducation":
+		case "AbiturientIndividAchievement":
+		case "AbiturientCompetitiveGroup":
+		case "AbiturientBVI":
+		case "AbiturientDocumentsBVI":
+		case "AbiturientQuota":
+		case "AbiturientDocumentQuota":
+		case "AbiturientPreferredRight":
+		case "AbiturientDocumentsPreferredRight":
+		case "AbiturientExtraInfo":
+			id = "id_abiturient";
+			break;
+		default:
+			id = "id";
+		}
+
+		String query = "delete from " + table + " where " + id + " = " + idValue + (countOfExprParams > 0 ? " and " : ";");
+		for (int i = 0; i < countOfExprParams; i++)
+			if (i == countOfExprParams - 1)
+				query = query + fieldsNames[i] + (!data[i].equals("'null'") ? " = " + data[i] : " is null;");
+			else
+				query = query + fieldsNames[i] + (!data[i].equals("'null'") ? " = " + data[i] : " is null") + " and ";
+		System.out.println(query);
+
+		cstmt = con.prepareCall(query, 1004, 1007);
+
+		cstmt.executeUpdate();
+
+		cstmt.close();
+	}
+
 	//Вкладка PassportTab
 	public static String[] getAbiturientPassportByID(String aid) throws SQLException {
 		try {
@@ -568,7 +610,6 @@ public class ModelDBConnection {
 	}
 
 	//Вкладка EntranceExamTab
-	//Доделать - возвращаться будет двумерный массив, так как абитуриент может сдавать больше 1 ВИ
 	public static String[] getAbiturientEntrancexamsByID(String aid) throws SQLException {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("Вступительные испытания")
@@ -593,9 +634,11 @@ public class ModelDBConnection {
 			ResultSetMetaData rsmd = rset.getMetaData();
 			int numberOfColumns = rsmd.getColumnCount();
 
-			String[] result = new String[numberOfColumns];
+			String[] result = new String[countStrings * numberOfColumns];
 			for (int i = 0; i < result.length; i++)
-				result[i] = "";
+					result[i] = "";
+			
+			int curPos = 0;
 
 			while (rset.next()) {
 				for (int i = 0; i < numberOfColumns; i++) {
@@ -605,9 +648,11 @@ public class ModelDBConnection {
 							format.applyPattern("yyyy-MM-dd");
 							Date docDate = format.parse(rset.getObject(i + 1).toString());
 							//format.applyPattern("dd.MM.yyyy");
-							result[i] = format.format(docDate);
+							result[curPos] = format.format(docDate);
 						} else
-							result[i] = rset.getObject(i + 1).toString();
+							result[curPos] = rset.getObject(i + 1).toString();
+
+					curPos++;
 				}
 			}
 			cstmt.close();
@@ -618,12 +663,36 @@ public class ModelDBConnection {
 		}
 	}
 
-	//Доделать - на вход будут приходить двумерные массивы, так как абитуриент может сдавать больше 1 ВИ
 	public static void updateAbiturientEntranceExamsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
 		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
-		
+		ModelDBConnection.deleteElementInTableByExpression("AbiturientEntranceExam", aid, fieldsNames, fieldsData, 0);
+
+		if(fieldsData.length == 0) return;
+
+    	String[] entranceExamData = new String[fieldsNames.length - 1],
+      			 abiturientSpecialConditionsData = new String[1],
+      			 entranceExamNames = new String[fieldsNames.length - 1],
+      			 abiturientSpecialConditionsNames = new String[1];
+
+    	abiturientSpecialConditionsData[0] = fieldsData[fieldsData.length - 1];
+       	abiturientSpecialConditionsNames[0] = fieldsNames[fieldsNames.length - 1];
+
+       	ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientSpecialConditionsNames, abiturientSpecialConditionsData, 0);
+
+
+       	for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
+       		entranceExamData[j] = fieldsData[i];
+       		entranceExamNames[j] = fieldsNames[j];
+
+       		if(i % fieldsNames.length == fieldsNames.length - 2) {
+       			i++;
+       			j = -1;
+       			
+       			ModelDBConnection.updateElementInTableByExpression("AbiturientEntranceExam", aid, entranceExamNames, entranceExamData, 1);
+       		}
+       	}
 	}
-	
+
 	//InsertForm
 	public static String[] getAbiturientGeneralInfoByID(String aid) throws SQLException {
 		try {
