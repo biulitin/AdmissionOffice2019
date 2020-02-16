@@ -280,7 +280,7 @@ public class EntranceExamTabController {
 
     public void setFieldsData(String aid) throws Exception {
     	this.aid = aid;
-    	String[] entranceExamsData = ModelDBConnection.getAbiturientEntrancexamsByID(aid);
+    	String[] entranceExamsData = ModelDBConnection.getAbiturientEntranceExamsByID(aid);
 
     	if(entranceExamsData != null) {
         	for(int i = 1; i < entranceExamsData.length / fields.length; i++)
@@ -337,6 +337,8 @@ public class EntranceExamTabController {
     	//Выгружаем данные только если в таблицу была добавлена хотя бы 1 строка
     	if (!isEmpty())
     		ModelDBConnection.updateAbiturientEntranceExamsByID(aid, fieldsOriginalNames, fieldsData);
+    	else
+    		ModelDBConnection.deleteAbiturientEntranceExamsByID(aid, fieldsOriginalNames, fieldsData);
     }
 
 
@@ -428,6 +430,7 @@ public class EntranceExamTabController {
                         dateInputPatternController.setParameters(fields[j],"");
                         paneObservableList1.add(newPane);
                     }
+                    break;
                 case "int":
                     if(Pattern.compile("(id_ent).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
@@ -500,6 +503,7 @@ public class EntranceExamTabController {
                         boolInputPatternController.setWidthHeight(350.0, 35.0);
                         boolInputPatternController.setParameters(fields[j], ModelDBConnection.getTranslationOfField(fields[j], "AbiturientEntranceExam"));
                     }
+                    break;
                 case "varchar":
                     if(Pattern.compile("(grou).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();

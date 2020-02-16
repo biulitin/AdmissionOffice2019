@@ -335,8 +335,7 @@ public class ModelDBConnection {
 						+ "Abiturient.needSpecConditions "
 						+ "FROM AbiturientEntranceExam JOIN Abiturient ON (Abiturient.aid = AbiturientEntranceExam.id_abiturient)";
 			case "Доп. сведения":
-				return "SELECT AbiturientExtraInfo.id_abiturient, "
-						+ "AbiturientExtraInfo.id_categoryOfExtraInfo, "
+				return "SELECT AbiturientExtraInfo.id_categoryOfExtraInfo, "
 						+ "AbiturientExtraInfo.nameOfDocument, "
 						+ "AbiturientExtraInfo.series_document, "
 						+ "AbiturientExtraInfo.number_document, "
@@ -610,7 +609,7 @@ public class ModelDBConnection {
 	}
 
 	//Вкладка EntranceExamTab
-	public static String[] getAbiturientEntrancexamsByID(String aid) throws SQLException {
+	public static String[] getAbiturientEntranceExamsByID(String aid) throws SQLException {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("Вступительные испытания")
 							+ " WHERE Abiturient.aid = " + aid + ";";
@@ -691,6 +690,89 @@ public class ModelDBConnection {
        			ModelDBConnection.updateElementInTableByExpression("AbiturientEntranceExam", aid, entranceExamNames, entranceExamData, 1);
        		}
        	}
+	}
+	
+	public static void deleteAbiturientEntranceExamsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		ModelDBConnection.deleteElementInTableByExpression("AbiturientEntranceExam", aid, fieldsNames, fieldsData, 0);
+	}
+	
+	//Вкладка AdditionalInfoTab
+	public static String[] getAbiturientExtraInfoByID(String aid) throws SQLException {
+		try {
+			String query = ModelDBConnection.getQueryByTabName("Доп. сведения")
+							+ " WHERE Abiturient.aid = " + aid + ";";
+			
+			System.out.println(query);
+
+			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
+
+			cstmt.setString(1, aid);*/
+			
+			cstmt = con.prepareCall(query, 1004, 1007);
+
+			rset = cstmt.executeQuery();
+			
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
+			
+			//Случай, если данных по абитуриенту еще нет
+			if (countStrings == 0) return null;
+
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+
+			String[] result = new String[countStrings * numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+					result[i] = "";
+			
+			int curPos = 0;
+
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[curPos] = format.format(docDate);
+						} else
+							result[curPos] = rset.getObject(i + 1).toString();
+
+					curPos++;
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static void updateAbiturientExtraInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		ModelDBConnection.deleteElementInTableByExpression("AbiturientExtraInfo", aid, fieldsNames, fieldsData, 0);
+
+		if(fieldsData.length == 0) return;
+
+    	String[] entranceExtraInfoData = new String[fieldsNames.length];
+
+       	for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
+       		entranceExtraInfoData[j] = fieldsData[i];
+
+       		if(j == fieldsNames.length - 1) {
+       			j = -1;
+
+       			ModelDBConnection.updateElementInTableByExpression("AbiturientExtraInfo", aid, fieldsNames, entranceExtraInfoData, 1);
+       		}
+       	}
+	}
+
+	public static void deleteAbiturientExtraInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		ModelDBConnection.deleteElementInTableByExpression("AbiturientExtraInfo", aid, fieldsNames, fieldsData, 0);
 	}
 
 	//InsertForm

@@ -38,6 +38,10 @@ public class AddEditDeleteButtonsController {
                 EntranceExamTabController entranceExamTabController = tabController.getController();
                 fieldsControllers = entranceExamTabController.addRow();
                 break;
+            case "Доп. сведения":
+            	AdditionalInfoTabController additionalInfoTabController = tabController.getController();
+                fieldsControllers = additionalInfoTabController.addRow();
+                break;
         }
     }
 
@@ -86,6 +90,10 @@ public class AddEditDeleteButtonsController {
 					    	case "Вступительные испытания":
 					    		EntranceExamTabController entranceExamTabController = tabController.getController();
 					    		entranceExamTabController.uploadFieldsDataToDataBase(fieldsData);
+					    		break;
+					    	case "Доп. сведения":
+					    		AdditionalInfoTabController additionalInfoTabController = tabController.getController();
+					    		additionalInfoTabController.uploadFieldsDataToDataBase(fieldsData);
 					    		break;
 				    	}
 	
@@ -170,6 +178,10 @@ public class AddEditDeleteButtonsController {
             case "Вступительные испытания":
                 EntranceExamTabController entranceExamTabController = tabController.getController();
                 fieldsControllers = entranceExamTabController.deleteRow();
+                break;
+            case "Доп. сведения":
+            	AdditionalInfoTabController additionalInfoTabController = tabController.getController();
+                fieldsControllers = additionalInfoTabController.deleteRow();
                 break;
         }
     }
