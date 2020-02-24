@@ -42,6 +42,10 @@ public class AddEditDeleteButtonsController {
             	AdditionalInfoTabController additionalInfoTabController = tabController.getController();
                 fieldsControllers = additionalInfoTabController.addRow();
                 break;
+			case "100б":
+				OlympiadsTabController olympiadsTabController = tabController.getController();
+				fieldsControllers = olympiadsTabController.addRow();
+				break;
         }
     }
 
@@ -95,6 +99,10 @@ public class AddEditDeleteButtonsController {
 					    		AdditionalInfoTabController additionalInfoTabController = tabController.getController();
 					    		additionalInfoTabController.uploadFieldsDataToDataBase(fieldsData);
 					    		break;
+							case "100б":
+								OlympiadsTabController olympiadsTabController = tabController.getController();
+								olympiadsTabController.uploadFieldsDataToDataBase(fieldsData);
+								break;
 				    	}
 	
 		    			this.setEditable(activate);
@@ -180,9 +188,13 @@ public class AddEditDeleteButtonsController {
                 fieldsControllers = entranceExamTabController.deleteRow();
                 break;
             case "Доп. сведения":
-            	AdditionalInfoTabController additionalInfoTabController = tabController.getController();
-                fieldsControllers = additionalInfoTabController.deleteRow();
-                break;
+				AdditionalInfoTabController additionalInfoTabController = tabController.getController();
+				fieldsControllers = additionalInfoTabController.deleteRow();
+				break;
+			case "100б":
+				OlympiadsTabController olympiadsTabController = tabController.getController();
+				fieldsControllers = olympiadsTabController.deleteRow();
+				break;
         }
     }
 
