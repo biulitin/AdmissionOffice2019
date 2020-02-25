@@ -343,8 +343,7 @@ public class ModelDBConnection {
 						+ "AbiturientExtraInfo.dateOf_issue "
 						+ "FROM AbiturientExtraInfo JOIN Abiturient ON (Abiturient.aid = AbiturientExtraInfo.id_abiturient)";
 			case "100б":
-				return "SELECT AbiturientDocumentsFor100balls.id_abiturient, "
-						+ "AbiturientDocumentsFor100balls.id_olympiad, "
+				return "SELECT AbiturientDocumentsFor100balls.id_olympiad, "
 						+ "AbiturientDocumentsFor100balls.nameOfDocument, "
 						+ "AbiturientDocumentsFor100balls.diplomaDegree, "
 						+ "AbiturientDocumentsFor100balls.diplomaSubject, "

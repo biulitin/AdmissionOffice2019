@@ -99,7 +99,7 @@ public class OlympiadsTabController {
 
                     break;
                 case "int":
-                    if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
+                    if (Pattern.compile("(id_).*").matcher(fields[i]).matches()) {
                         TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
@@ -232,7 +232,7 @@ public class OlympiadsTabController {
                         dateInputPatternController.setFieldData(olympiadsData[i]);
                         break;
                     case "int":
-                        if (Pattern.compile("(id_oly).*").matcher(fields[j]).matches()) {
+                        if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
                             ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                             choiceInputPatternController.setFieldData(olympiadsData[i]);
                         } else {
@@ -274,7 +274,7 @@ public class OlympiadsTabController {
 
                     break;
                 case "int":
-                    if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
+                    if (Pattern.compile("(id_).*").matcher(fields[i]).matches()) {
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = choiceInputPatternController.checkData();
 
@@ -328,7 +328,7 @@ public class OlympiadsTabController {
                         paneObservableList1.add(newPane);
                     }
                 case "int":
-                    if (Pattern.compile("(id_oly).*").matcher(fields[j]).matches()) {
+                    if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
@@ -389,7 +389,7 @@ public class OlympiadsTabController {
                     currentErrorCode = dateInputPatternController.checkData();
                     break;
                 case "int":
-                    if (Pattern.compile("(id_oly).*").matcher(fields[j]).matches()) {
+                    if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = choiceInputPatternController.checkData();
                     } else {
@@ -469,7 +469,7 @@ public class OlympiadsTabController {
                     dateInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientDocumentsFor100balls"));
                 case "int":
                     loader = new FXMLLoader();
-                    if (Pattern.compile("(id_oly).*").matcher(fields[i]).matches()) {
+                    if (Pattern.compile("(id_).*").matcher(fields[i]).matches()) {
                         loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
                         newPane = (Pane) loader.load();
