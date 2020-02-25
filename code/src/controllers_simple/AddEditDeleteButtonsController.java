@@ -4,6 +4,7 @@ import application.MainWindowController;
 import controllers_tabs.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import application.InsertFormController;
@@ -38,13 +39,28 @@ public class AddEditDeleteButtonsController {
                 EntranceExamTabController entranceExamTabController = tabController.getController();
                 fieldsControllers = entranceExamTabController.addRow();
                 break;
+			case "Конкурсные группы":
+				CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
+				competitiveGroupsTabController.openModalWindow();
+				break;
+            case "Индивидуальные достижения":
+                IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
+                individualAchievementsTabController.addRow();
+                break;
         }
     }
 
+
     @FXML
-    void editButtonAction(ActionEvent event) {
+    void editButtonAction(ActionEvent event) throws IOException, SQLException {
     	String saveQuery = "";
     	Boolean activate;
+
+    	if (tabName.equals("Конкурсные группы")) {
+            CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
+            competitiveGroupsTabController.openModalWindow();
+            return;
+        }
 
     	switch(editButton.getText()) {
 			case "Редактировать":
@@ -125,7 +141,10 @@ public class AddEditDeleteButtonsController {
 						if (fieldsData[i].equals("0")) fieldsData[i] = "null";
 						break;
 					}
-					if(Pattern.compile("(need).*").matcher(fields[j]).matches() || Pattern.compile("(ha).*").matcher(fields[j]).matches()  || Pattern.compile("(is).*").matcher(fields[j]).matches()){
+					if(Pattern.compile("(need).*").matcher(fields[j]).matches()
+							|| Pattern.compile("(ha).*").matcher(fields[j]).matches()
+							|| Pattern.compile("(is).*").matcher(fields[j]).matches()
+							|| Pattern.compile("(priority)").matcher(fields[j]).matches()){
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						fieldsData[i] = boolInputPatternController.getFieldData();
 						break;
@@ -250,12 +269,15 @@ public class AddEditDeleteButtonsController {
 					doubleInputPatternController.setEditable(value);
 					break;
 				case "int":
-					if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
+					if (Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						choiceInputPatternController.setEditable(value);
 						break;
 					}
-					if(Pattern.compile("(need).*").matcher(fields[j]).matches() || Pattern.compile("(ha).*").matcher(fields[j]).matches() || Pattern.compile("(is).*").matcher(fields[j]).matches()){
+					if (Pattern.compile("(need).*").matcher(fields[j]).matches()
+							|| Pattern.compile("(ha).*").matcher(fields[j]).matches()
+							|| Pattern.compile("(is).*").matcher(fields[j]).matches()
+							|| Pattern.compile("(priority)").matcher(fields[j]).matches()) {
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						boolInputPatternController.setEditable(value);
 						break;

@@ -4,16 +4,22 @@ import backend.MessageProcessing;
 import backend.ModelDBConnection;
 import controllers_simple.*;
 import controllers_tabs.*;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Callback;
 import org.grios.tableadapter.DefaultTableAdapter;
 
 import java.sql.*;
@@ -57,42 +63,46 @@ public class MainWindowController {
 	private FlowPane paneForElems;
 
 	@FXML
-	private TableView tableView;
+	private TableView fieldsTable;
 
 	private DefaultTableAdapter dta;
 
-	public void fillInPatterns(FXMLLoader tabController) throws Exception {
+	public void fillTab(FXMLLoader tabController) throws Exception {
 		ModelDBConnection.setDefaultConnectionParameters();
-		//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
-		query = "SELECT Abiturient.aid, Abiturient.registrationdate, " +
-				"Abiturient.SName, Abiturient.id_gender, Abiturient.id_nationality," +
-				"Abiturient.FName, Abiturient.Birthday, Abiturient.needHostel," +
-				"Abiturient.MName, Abiturient.id_returnReason," +
-				"Abiturient.returnDate, Abiturient.is_enrolled\n" +
-				"FROM Abiturient JOIN ReturnReasons ON\n" +
-				"(ReturnReasons.id=Abiturient.id_returnReason)\n" +
-				"JOIN Nationality ON\n" +
-				"(Nationality.id=Abiturient.id_nationality)\n" +
-				"JOIN Gender ON\n" +
-				"Gender.id=Abiturient.id_gender;";
-		cstmt = ModelDBConnection.getConnection().prepareCall(query, 1004, 1007);
-		rset = cstmt.executeQuery();
-
-		rset.beforeFirst();
-
-		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(query);
+		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ"));
 		countFields = rsmd.getColumnCount();
 
 		fields = new String[countFields];
 		fieldsTypes = new String[countFields];
-        fieldsOriginalNames = new String[countFields];
+		fieldsOriginalNames = new String[countFields];
 		fieldsControllers = new FXMLLoader[countFields];
 
 		for (int i = 0; i < countFields; i++) {
 			fields[i] = rsmd.getColumnLabel(i + 1);
 			fieldsTypes[i] = rsmd.getColumnTypeName(i + 1);
+			fieldsOriginalNames[i] = rsmd.getColumnLabel(i + 1);
+		}
+
+		ObservableList<Pane> paneObservableList = FXCollections.observableArrayList();
+
+		FXMLLoader loader;
+		Pane newPane;
+
+		for (int i = 0; i < countFields; i++) {
+			switch (fieldsTypes[i]) {
+				case "int":
+					if (Pattern.compile("(aid)").matcher(fields[i]).matches()) {
+						TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i], "Abiturient"));
+						fieldsTable.getColumns().add(fieldData);
+					}
+				case "varchar":
+					if (Pattern.compile(".*(Name)").matcher(fields[i]).matches()) {
+						TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i], "Abiturient"));
+						fieldsTable.getColumns().add(fieldData);
+					}
+			}
 		}
 
         fillMainInfo(countFields);
@@ -495,7 +505,7 @@ public class MainWindowController {
 		}
 		System.out.println(Arrays.deepToString(data));
 
-		dta = new DefaultTableAdapter(tableView, data, columns);
+		dta = new DefaultTableAdapter(fieldsTable, data, columns);
 
 		rs.close();
 		st.close();
@@ -598,7 +608,6 @@ public class MainWindowController {
                     }
             }
             errorCount += currentErrorCode;
-            System.out.println(currentErrorCode);
         }
 
         return errorCount;

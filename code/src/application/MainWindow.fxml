@@ -118,14 +118,7 @@
                 <RowConstraints maxHeight="153.0" minHeight="7.66668701171875" percentHeight="15.0" prefHeight="10.333343505859375" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView fx:id="tableView" prefHeight="299.0" prefWidth="320.0" style="-fx-border-color: darkgray;">
-                    <columns>
-                      <TableColumn prefWidth="55.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="№Л/д" />
-                      <TableColumn prefWidth="105.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="Фамилия" />
-                        <TableColumn prefWidth="60.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="Имя" />
-                        <TableColumn prefWidth="95.0" style="-fx-background-color: gainsboro; -fx-border-color: gainsboro;" text="Отчество" />
-                    </columns>
-                  </TableView>
+                   <TableView fx:id="fieldsTable" prefHeight="299.0" prefWidth="320.0" style="-fx-border-color: darkgray;" />
                   <FlowPane fx:id="buttonsPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
                </children>
                <opaqueInsets>

@@ -29,7 +29,7 @@ public class Main extends Application {
             root = (AnchorPane) loader.load();
 
             MainWindowController mainWindowController = loader.getController();
-            mainWindowController.fillInPatterns(loader);
+            mainWindowController.fillTab(loader);
             mainWindowController.fillTabsContent();
 
             /*InsertFormController insertFormController = loader.getController();

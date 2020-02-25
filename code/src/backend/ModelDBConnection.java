@@ -217,7 +217,7 @@ public class ModelDBConnection {
 			case "password": return "Пароль";
 			case "fio": return "ФИО оператора";
 			//Таблица Abiturient
-			case "aid": return "№ Личного дела";
+			case "aid": return "№ л/д";
 			case "SName": return "Фамилия";
 			case "FName": return "Имя";
 			case "MName": return "Отчество";
@@ -306,6 +306,13 @@ public class ModelDBConnection {
 			case "SampleTab":
 				return "SELECT * "
 						+ "FROM Abiturient";
+            case "АРМ по приему в ВУЗ":
+                return "SELECT Abiturient.aid, Abiturient.registrationdate, " +
+                        "Abiturient.SName, Abiturient.id_gender, Abiturient.id_nationality," +
+                        "Abiturient.FName, Abiturient.Birthday, Abiturient.needHostel," +
+                        "Abiturient.MName, Abiturient.id_returnReason," +
+                        "Abiturient.returnDate, Abiturient.is_enrolled " +
+                        "FROM AbiturientPassport JOIN Abiturient ON (Abiturient.aid=AbiturientPassport.id_abiturient);";
 			case "Паспорт и ИНН":
 				return "SELECT AbiturientPassport.id_typePassport, "
 						+ "AbiturientPassport.series_document, "
@@ -355,6 +362,28 @@ public class ModelDBConnection {
 						+ "AbiturientDocumentsFor100balls.dateOf_issue, "
 						+ "AbiturientDocumentsFor100balls.issued_by "
 						+ "FROM AbiturientDocumentsFor100balls JOIN Abiturient ON (Abiturient.aid = AbiturientDocumentsFor100balls.id_abiturient)";
+			case "Индивидуальные достижения":
+				return  "SELECT AbiturientIndividAchievement.id_individualAchievements, "
+						+ "AbiturientIndividAchievement.score, "
+						+ "AbiturientIndividAchievement.nameOfDocument, "
+						+ "AbiturientIndividAchievement.series_document,"
+						+ "AbiturientIndividAchievement.number_document, "
+						+ "AbiturientIndividAchievement.dateOf_issue,"
+						+ "AbiturientIndividAchievement.issued_by "
+						+ "FROM AbiturientIndividAchievement JOIN Abiturient ON (Abiturient.aid = AbiturientIndividAchievement.id_abiturient);";
+			case "Конкурсные группы":
+				return "SELECT AbiturientCompetitiveGroup.id_speciality,"
+						+ "AbiturientCompetitiveGroup.id_competitiveGroup, "
+						+ "AbiturientCompetitiveGroup.id_targetOrganization, "
+						+ "AbiturientCompetitiveGroup.id_formOfEducation, "
+						+ "AbiturientCompetitiveGroup.haveBasisForBVI, "
+						+ "AbiturientCompetitiveGroup.haveBasisForQuota, "
+						+ "AbiturientCompetitiveGroup.havePreferredRight, "
+						+ "AbiturientCompetitiveGroup.competitiveScore, "
+						+ "AbiturientCompetitiveGroup.scoresIndAchievements, "
+                        + "AbiturientCompetitiveGroup.originalsReceivedDate, "
+                        + "AbiturientCompetitiveGroup.priority "
+						+ "FROM AbiturientCompetitiveGroup JOIN Abiturient ON (Abiturient.aid = AbiturientCompetitiveGroup.id_abiturient)";
 			default:
 				return "";
 		}
@@ -753,4 +782,83 @@ public class ModelDBConnection {
 		
 		ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientFieldsData, 0);
 	}
+
+    // Competitive Groups Tab
+    public static String[] getAbiturientCompetitiveGroupsByID(String aid) throws SQLException {
+        try {
+            String query = ModelDBConnection.getQueryByTabName("Конкурсные группы")
+                    + " WHERE Abiturient.aid = " + aid + ";";
+
+            System.out.println(query);
+
+            cstmt = con.prepareCall(query, 1004, 1007);
+
+            rset = cstmt.executeQuery();
+
+            int countStrings = rset.last() ? rset.getRow() : 0;
+            rset.beforeFirst();
+
+            if (countStrings == 0) return null;
+
+            ResultSetMetaData rsmd = rset.getMetaData();
+            int numberOfColumns = rsmd.getColumnCount();
+
+            String[] result = new String[countStrings * numberOfColumns];
+            for (int i = 0; i < result.length; i++)
+                result[i] = "";
+
+            int curPos = 0;
+
+            while (rset.next()) {
+                for (int i = 0; i < numberOfColumns; i++) {
+                    if (rset.getObject(i + 1) != null)
+                        if (rset.getObject(i + 1) instanceof Date) {
+                            SimpleDateFormat format = new SimpleDateFormat();
+                            format.applyPattern("yyyy-MM-dd");
+                            Date docDate = format.parse(rset.getObject(i + 1).toString());
+                            //format.applyPattern("dd.MM.yyyy");
+                            result[curPos] = format.format(docDate);
+                        } else
+                            result[curPos] = rset.getObject(i + 1).toString();
+
+                    curPos++;
+                }
+            }
+            cstmt.close();
+            rset.close();
+            return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    public static void updateAbiturientCompetitiveGroupsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientCompetitiveGroup", aid, fieldsNames, fieldsData, 0);
+
+        if(fieldsData.length == 0) return;
+
+        String[] entranceExamData = new String[fieldsNames.length - 1],
+                abiturientSpecialConditionsData = new String[1],
+                entranceExamNames = new String[fieldsNames.length - 1],
+                abiturientSpecialConditionsNames = new String[1];
+
+        abiturientSpecialConditionsData[0] = fieldsData[fieldsData.length - 1];
+        abiturientSpecialConditionsNames[0] = fieldsNames[fieldsNames.length - 1];
+
+        ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientSpecialConditionsNames, abiturientSpecialConditionsData, 0);
+
+
+        for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
+            entranceExamData[j] = fieldsData[i];
+            entranceExamNames[j] = fieldsNames[j];
+
+            if(i % fieldsNames.length == fieldsNames.length - 2) {
+                i++;
+                j = -1;
+
+                ModelDBConnection.updateElementInTableByExpression("AbiturientCompetitiveGroup", aid, entranceExamNames, entranceExamData, 1);
+            }
+        }
+    }
 }
