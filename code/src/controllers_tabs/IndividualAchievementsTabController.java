@@ -83,7 +83,7 @@ public class IndividualAchievementsTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         DateInputPatternController dateInputPatternController = loader.getController();
-                        dateInputPatternController.setWidthHeight(150.0, 35.0, 0.0);
+                        dateInputPatternController.setWidthHeight(160.0, 35.0, 0.0);
                         dateInputPatternController.setParameters(fields[i], "");
                         fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                             public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
@@ -143,7 +143,7 @@ public class IndividualAchievementsTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(100.0, 35.0, 0.0);
+                        textInputPatternController.setWidthHeight(150.0,35.0, 0.0);
                         textInputPatternController.setParameters(fields[i], "");
                         fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                             public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
@@ -161,7 +161,7 @@ public class IndividualAchievementsTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(100.0, 35.0, 0.0);
+                        textInputPatternController.setWidthHeight(150.0,35.0, 0.0);
                         textInputPatternController.setParameters(fields[i], "");
                         fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                             public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
@@ -179,7 +179,7 @@ public class IndividualAchievementsTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(100.0, 35.0, 0.0);
+                        textInputPatternController.setWidthHeight(150.0,35.0, 0.0);
                         textInputPatternController.setParameters(fields[i], "");
                         fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                             public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
@@ -197,7 +197,7 @@ public class IndividualAchievementsTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(100.0, 35.0, 0.0);
+                        textInputPatternController.setWidthHeight(150.0,35.0, 0.0);
                         textInputPatternController.setParameters(fields[i], "");
                         fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                             public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
@@ -225,7 +225,7 @@ public class IndividualAchievementsTabController {
 
         setFieldsData("0");
 
-        addEditDeleteButtonsController.setParameters("Конкурсные группы", tabController, fields, fieldsTypes, fieldsControllers);
+        addEditDeleteButtonsController.setParameters("Индивидуальные достижения", tabController, fields, fieldsTypes, fieldsControllers);
 
         setEditable(false);
     }
@@ -236,25 +236,25 @@ public class IndividualAchievementsTabController {
                 j = 0;
             switch (fieldsTypes[j]) {
                 case "date":
-                    DateInputPatternController dateInputPatternController = fieldsControllers[j].getController();
+                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
                     dateInputPatternController.setEditable(value);
                     break;
                 case "double":
-                    DoubleInputPatternController doubleInputPatternController = fieldsControllers[j].getController();
+                    DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
                     doubleInputPatternController.setEditable(value);
                     break;
                 case "int":
-                    if (Pattern.compile("(id_individualAchievements)").matcher(fields[j]).matches()) {
-                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[j].getController();
+                    if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         choiceInputPatternController.setEditable(value);
                         break;
                     } else if (Pattern.compile("(score)").matcher(fields[j]).matches()) {
-                        IntInputPatternController intInputPatternController = fieldsControllers[j].getController();
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
                         intInputPatternController.setEditable(value);
                     }
                     break;
                 case "varchar":
-                    TextInputPatternController textInputPatternController = fieldsControllers[j].getController();
+                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                     textInputPatternController.setEditable(value);
                     break;
             }
@@ -263,8 +263,8 @@ public class IndividualAchievementsTabController {
 
     public void setFieldsData(String aid) throws Exception {
         this.aid = aid;
-        String[] competitiveGroupsData = ModelDBConnection.getAbiturientCompetitiveGroupsByID(aid);
-
+        String[] competitiveGroupsData = ModelDBConnection.getAbiturientIndividualAchievementsByID(aid);
+        
         if (competitiveGroupsData != null) {
             for (int i = 1; i < competitiveGroupsData.length / fields.length; i++)
                 addRow();
@@ -300,8 +300,11 @@ public class IndividualAchievementsTabController {
     }
 
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
-        if (!isEmpty())
-            ModelDBConnection.updateAbiturientCompetitiveGroupsByID(aid, fieldsOriginalNames, fieldsData);
+    	System.out.println("!!!!");
+    	if (!isEmpty())
+    		ModelDBConnection.updateAbiturientIndividualAchievementsByID(aid, fieldsOriginalNames, fieldsData);
+    	else
+    		ModelDBConnection.deleteAbiturientIndividualAchievementsByID(aid, fieldsOriginalNames, fieldsData);
     }
 
     public int checkData() {
@@ -335,97 +338,76 @@ public class IndividualAchievementsTabController {
                     currentErrorCode = textInputPatternController.checkData();
                     break;
             }
-            errorCount += currentErrorCode;
+            //errorCount += currentErrorCode;
             //System.out.println(currentErrorCode);
         }
 
         return errorCount;
     }
 
-    public FXMLLoader[] addRow() throws IOException {
+    public  FXMLLoader[] addRow() throws IOException {
         FXMLLoader loader;
         Pane newPane;
         ObservableList<Pane> paneObservableList1 = FXCollections.observableArrayList();
 
         int oldSize = fieldsControllers.length;
 
-        fieldsControllers = Arrays.copyOf(fieldsControllers, oldSize + countFields);
+        fieldsControllers = Arrays.copyOf(fieldsControllers,oldSize + countFields);
 
-        for (int i = oldSize, j = 0; i < fieldsControllers.length; i++, j++) {
-            if (j == countFields)
-                j = 0;
-            switch (fieldsTypes[j]) {
+        for (int i = oldSize, j=0; i < fieldsControllers.length; i++, j++) {
+            if(j == countFields)
+                j=0;
+            switch (fieldsTypes[j]){
                 case "date":
-                    if (Pattern.compile("(originalsReceivedDate)").matcher(fields[j]).matches()) {
+                    if(Pattern.compile("(date).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
 
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         DateInputPatternController dateInputPatternController = loader.getController();
-                        dateInputPatternController.setWidthHeight(150.0, 35.0, 0.0);
-                        dateInputPatternController.setParameters(fields[j], "");
-                        dateInputPatternController.setFieldData("");
+                        dateInputPatternController.setWidthHeight(160.0, 35.0, 0.0);
+                        dateInputPatternController.setParameters(fields[j],"");
                         paneObservableList1.add(newPane);
                     }
+                    break;
                 case "int":
-                    if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
+                    if(Pattern.compile("(id_ind).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         ChoiceInputPatternController choiceInputPatternController = loader.getController();
-                        choiceInputPatternController.setWidthHeight(150.0, 35.0, 0.0);
+                        choiceInputPatternController.setWidthHeight(150.0,35.0, 0.0);
                         choiceInputPatternController.setParameters(fields[j], "");
                         choiceInputPatternController.setFieldData("");
                         paneObservableList1.add(newPane);
 
                     }
-                    if (Pattern.compile("(have).*").matcher(fields[j]).matches()) {
-                        loader = new FXMLLoader();
-                        loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
-
-                        newPane = (Pane) loader.load();
-                        fieldsControllers[i] = loader;
-                        BoolInputPatternController boolInputPatternController = loader.getController();
-                        boolInputPatternController.setWidthHeight(35.0, 35.0);
-                        boolInputPatternController.setParameters(fields[j], "");
-                        paneObservableList1.add(newPane);
-                    }
-                    if (Pattern.compile("(competitiveScore)").matcher(fields[j]).matches()) {
+                    if(Pattern.compile("(score)").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
 
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         IntInputPatternController intInputPatternController = loader.getController();
-                        intInputPatternController.setWidthHeight(100.0, 35.0, 0.0);
+                        intInputPatternController.setWidthHeight(100.0,35.0, 0.0);
                         intInputPatternController.setParameters(fields[j], "");
                         paneObservableList1.add(newPane);
                     }
-                    if (Pattern.compile("(scoresIndAchievements)").matcher(fields[j]).matches()) {
-                        loader = new FXMLLoader();
-                        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+                    break;
+                case "varchar":
+                    loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
-                        newPane = (Pane) loader.load();
-                        fieldsControllers[i] = loader;
-                        IntInputPatternController intInputPatternController = loader.getController();
-                        intInputPatternController.setWidthHeight(100.0, 35.0, 0.0);
-                        intInputPatternController.setParameters(fields[j], "");
-                        paneObservableList1.add(newPane);
-                    }
-                    if (Pattern.compile("(priority)").matcher(fields[j]).matches()) {
-                        loader = new FXMLLoader();
-                        loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
-
-                        newPane = (Pane) loader.load();
-                        fieldsControllers[i] = loader;
-                        BoolInputPatternController boolInputPatternController = loader.getController();
-                        boolInputPatternController.setWidthHeight(35.0, 35.0);
-                        boolInputPatternController.setParameters(fields[j], "");
-                        paneObservableList1.add(newPane);
-                    }
+                    newPane = (Pane) loader.load();
+                    fieldsControllers[i] = loader;
+                    TextInputPatternController textInputPatternController = loader.getController();
+                    textInputPatternController.setWidthHeight(150.0,35.0, 0.0);
+                    textInputPatternController.setParameters(fields[j], "");
+                    paneObservableList1.add(newPane);
+                    break;
             }
         }
         list.add(paneObservableList1);

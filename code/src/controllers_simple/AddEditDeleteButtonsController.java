@@ -45,7 +45,7 @@ public class AddEditDeleteButtonsController {
 				break;
             case "Индивидуальные достижения":
                 IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
-                individualAchievementsTabController.addRow();
+                fieldsControllers = individualAchievementsTabController.addRow();
                 break;
             case "Доп. сведения":
             	AdditionalInfoTabController additionalInfoTabController = tabController.getController();
@@ -86,8 +86,8 @@ public class AddEditDeleteButtonsController {
 	
 						String[] fieldsData = getFieldsData();
 						
-						/*for(String curFieldsData : fieldsData)
-							System.out.println(curFieldsData);*/
+						for(String curFieldsData : fieldsData)
+							System.out.println(curFieldsData);
 
 						//Выбор нужной операции передачи данных в БД в зависимости от вкладки
 				    	switch (tabName) {
@@ -119,6 +119,10 @@ public class AddEditDeleteButtonsController {
 								OlympiadsTabController olympiadsTabController = tabController.getController();
 								olympiadsTabController.uploadFieldsDataToDataBase(fieldsData);
 								break;
+					    	case "Индивидуальные достижения":
+					    		IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
+					    		individualAchievementsTabController.uploadFieldsDataToDataBase(fieldsData);
+					    		break;
 				    	}
 	
 		    			this.setEditable(activate);
@@ -213,6 +217,10 @@ public class AddEditDeleteButtonsController {
 			case "100б":
 				OlympiadsTabController olympiadsTabController = tabController.getController();
 				fieldsControllers = olympiadsTabController.deleteRow();
+				break;
+			case "Индивидуальные достижения":
+				IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
+				fieldsControllers = individualAchievementsTabController.deleteRow();
 				break;
         }
     }
@@ -354,6 +362,9 @@ public class AddEditDeleteButtonsController {
 			case "100б":
 				OlympiadsTabController olympiadsTabController = tabController.getController();
 				return olympiadsTabController.checkData();
+			case "Индивидуальные достижения":
+				IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
+				return individualAchievementsTabController.checkData();
 	    	default:
 	    		return 0;
     	}
