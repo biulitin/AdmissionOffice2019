@@ -34,6 +34,7 @@ public class AddEditDeleteButtonsController {
 
     @FXML
     void addButtonAction(ActionEvent event) throws Exception {
+
         switch (tabName){
             case "Вступительные испытания":
                 EntranceExamTabController entranceExamTabController = tabController.getController();
@@ -53,7 +54,7 @@ public class AddEditDeleteButtonsController {
                 break;
 			case "100б":
 				OlympiadsTabController olympiadsTabController = tabController.getController();
-				fieldsControllers = olympiadsTabController.addRow();
+				olympiadsTabController.openModalWindow();
 				break;
         }
     }
@@ -69,6 +70,12 @@ public class AddEditDeleteButtonsController {
             competitiveGroupsTabController.openModalWindow();
             return;
         }
+
+		if (tabName.equals("100б")) {
+			OlympiadsTabController olympiadsTabController = tabController.getController();
+			olympiadsTabController.openModalWindow();
+			return;
+		}
 
     	switch(editButton.getText()) {
 			case "Редактировать":

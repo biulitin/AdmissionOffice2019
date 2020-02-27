@@ -33,7 +33,7 @@ import javafx.util.Callback;
 
 public class OlympiadsTabController {
     @FXML
-    public FlowPane buttonsPane;
+    public Pane buttonsPane;
     @FXML
     private Button addOlympiadsButton;
 
@@ -125,7 +125,7 @@ public class OlympiadsTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         IntInputPatternController intInputPatternController = loader.getController();
-                        intInputPatternController.setWidthHeight(100.0, 35.0, 0.0);
+                        intInputPatternController.setWidthHeight(150.0, 35.0, 0.0);
                         intInputPatternController.setParameters(fields[i], "");
                         fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                             public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
@@ -279,7 +279,7 @@ public class OlympiadsTabController {
                         currentErrorCode = choiceInputPatternController.checkData();
 
                         if (currentErrorCode > 0) {
-                            MessageProcessing.displayErrorMessage(30);
+                            MessageProcessing.displayErrorMessage(10);
                             return currentErrorCode;
                         }
                     } else {
