@@ -10,24 +10,20 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="334.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers_tabs.OlympiadsTabController">
-    <children>
-        <GridPane fx:id="mainGridPane" layoutX="179.0" layoutY="135.0" prefHeight="333.0" prefWidth="600.0"
-                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                  AnchorPane.topAnchor="0.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints maxHeight="355.0" minHeight="10.0" prefHeight="269.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="196.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <children>
-                <Pane fx:id="buttonsPane" prefHeight="67.0" prefWidth="600.0" GridPane.rowIndex="1"/>
-                <TableView fx:id="fieldsTable" editable="true" prefHeight="319.0" prefWidth="600.0"/>
-            </children>
-        </GridPane>
-    </children>
+<AnchorPane prefHeight="334.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers_tabs.OlympiadsTabController">
+   <children>
+      <GridPane fx:id="mainGridPane" layoutX="179.0" layoutY="135.0" prefHeight="333.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="355.0" minHeight="10.0" prefHeight="269.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="196.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Pane fx:id="buttonsPane" prefHeight="67.0" prefWidth="600.0" GridPane.rowIndex="1" />
+            <TableView fx:id="fieldsTable" editable="true" prefHeight="319.0" prefWidth="600.0" />
+         </children>
+      </GridPane>
+   </children>
 </AnchorPane>
-

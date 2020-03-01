@@ -34,7 +34,6 @@ public class AddEditDeleteButtonsController {
 
     @FXML
     void addButtonAction(ActionEvent event) throws Exception {
-
         switch (tabName){
             case "Вступительные испытания":
                 EntranceExamTabController entranceExamTabController = tabController.getController();
@@ -42,7 +41,7 @@ public class AddEditDeleteButtonsController {
                 break;
 			case "Конкурсные группы":
 				CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
-				competitiveGroupsTabController.openModalWindow();
+				fieldsControllers = competitiveGroupsTabController.addRow();
 				break;
             case "Индивидуальные достижения":
                 IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
@@ -54,7 +53,7 @@ public class AddEditDeleteButtonsController {
                 break;
 			case "100б":
 				OlympiadsTabController olympiadsTabController = tabController.getController();
-				olympiadsTabController.openModalWindow();
+				fieldsControllers = olympiadsTabController.addRow();
 				break;
         }
     }
@@ -62,20 +61,13 @@ public class AddEditDeleteButtonsController {
 
     @FXML
     void editButtonAction(ActionEvent event) throws IOException, SQLException {
-    	String saveQuery = "";
     	Boolean activate;
 
-    	if (tabName.equals("Конкурсные группы")) {
+    	/*if (tabName.equals("Конкурсные группы")) {
             CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
             competitiveGroupsTabController.openModalWindow();
             return;
-        }
-
-		if (tabName.equals("100б")) {
-			OlympiadsTabController olympiadsTabController = tabController.getController();
-			olympiadsTabController.openModalWindow();
-			return;
-		}
+        }*/
 
     	switch(editButton.getText()) {
 			case "Редактировать":
@@ -90,11 +82,11 @@ public class AddEditDeleteButtonsController {
 						//each element have to be activated to non-editable mode
 						editButton.setText("Редактировать");
 						activate = false;
-	
+
 						String[] fieldsData = getFieldsData();
-						
-						for(String curFieldsData : fieldsData)
-							System.out.println(curFieldsData);
+
+						/*for(String curFieldsData : fieldsData)
+							System.out.println(curFieldsData);*/
 
 						//Выбор нужной операции передачи данных в БД в зависимости от вкладки
 				    	switch (tabName) {
@@ -130,8 +122,12 @@ public class AddEditDeleteButtonsController {
 					    		IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
 					    		individualAchievementsTabController.uploadFieldsDataToDataBase(fieldsData);
 					    		break;
+					    	case "Конкурсные группы":
+					    		CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
+					    		competitiveGroupsTabController.uploadFieldsDataToDataBase(fieldsData);
+					    		break;
 				    	}
-	
+
 		    			this.setEditable(activate);
 					}
 	    			break;
@@ -141,6 +137,7 @@ public class AddEditDeleteButtonsController {
 				}
     	}
     }
+
 
     public String[] getFieldsData() {
     	if (fieldsControllers == null) return null;
@@ -170,8 +167,7 @@ public class AddEditDeleteButtonsController {
 					}
 					if(Pattern.compile("(need).*").matcher(fields[j]).matches()
 							|| Pattern.compile("(ha).*").matcher(fields[j]).matches()
-							|| Pattern.compile("(is).*").matcher(fields[j]).matches()
-							|| Pattern.compile("(priority)").matcher(fields[j]).matches()){
+							|| Pattern.compile("(is).*").matcher(fields[j]).matches()){
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						fieldsData[i] = boolInputPatternController.getFieldData();
 						break;
@@ -210,6 +206,7 @@ public class AddEditDeleteButtonsController {
     	return fieldsData;
     }
 
+
     @FXML
     void deleteButtonAction(ActionEvent event) throws Exception {
         switch (tabName){
@@ -229,8 +226,13 @@ public class AddEditDeleteButtonsController {
 				IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
 				fieldsControllers = individualAchievementsTabController.deleteRow();
 				break;
+	    	case "Конкурсные группы":
+	    		CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
+	    		fieldsControllers = competitiveGroupsTabController.deleteRow();
+	    		break;
         }
     }
+
 
     public void setParameters(String tabName, FXMLLoader tabController, String[] fields, String[] fieldsTypes, FXMLLoader[] fieldsControllers) {
         this.tabName = tabName;
@@ -244,6 +246,7 @@ public class AddEditDeleteButtonsController {
         //Here will be switch/case according to the tabName (on some AddButton/DeleteButton have to be hidden)
     }
 
+
     public void setWidthHeight(Double width, Double height) {
         buttonsBox.setPrefWidth(width);
         buttonsBox.setPrefHeight(height);
@@ -255,6 +258,7 @@ public class AddEditDeleteButtonsController {
 		this.deleteButton.setPrefWidth(width*0.3);
 		this.deleteButton.setPrefHeight(height*0.35);
     }
+
 
 	public void setWidthHideButtons(Double width, Double height, Integer visibleButtons) {
 		buttonsBox.setPrefWidth(width);
@@ -279,6 +283,7 @@ public class AddEditDeleteButtonsController {
 		}
 	}
 
+
     public void hideButton(int numberOfButton) {
     	this.addButton.setVisible(numberOfButton == 0 ? false : true);
     	this.editButton.setVisible(numberOfButton == 1 ? false : true);
@@ -287,9 +292,11 @@ public class AddEditDeleteButtonsController {
 		//this.buttonsBox.getChildren().remove(numberOfButton);
 	}
 
+
 	public void hideButton2(int numberOfButton) {
 		this.buttonsBox.getChildren().remove(numberOfButton);
 	}
+
 
     public void setEditable(Boolean value) {
     	this.addButton.setDisable(!value);
@@ -315,8 +322,7 @@ public class AddEditDeleteButtonsController {
 					}
 					if (Pattern.compile("(need).*").matcher(fields[j]).matches()
 							|| Pattern.compile("(ha).*").matcher(fields[j]).matches()
-							|| Pattern.compile("(is).*").matcher(fields[j]).matches()
-							|| Pattern.compile("(priority)").matcher(fields[j]).matches()) {
+							|| Pattern.compile("(is).*").matcher(fields[j]).matches()) {
 						BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
 						boolInputPatternController.setEditable(value);
 						break;
@@ -345,6 +351,7 @@ public class AddEditDeleteButtonsController {
 		}
     }
 
+
     public int checkData() {
     	// Проверка в зависимости от вкладки
     	switch (tabName) {
@@ -372,6 +379,9 @@ public class AddEditDeleteButtonsController {
 			case "Индивидуальные достижения":
 				IndividualAchievementsTabController individualAchievementsTabController = tabController.getController();
 				return individualAchievementsTabController.checkData();
+			case "Конкурсные группы":
+				CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
+				return competitiveGroupsTabController.checkData();
 	    	default:
 	    		return 0;
     	}

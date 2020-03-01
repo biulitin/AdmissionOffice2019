@@ -32,8 +32,6 @@ public class ModelDBConnection {
 	static ResultSet rset = null;
 	static Statement stmt = null;
 
-	static boolean DEBUG = false;
-
 	public static void setDefaultConnectionParameters() {
 		try {
 			Properties property = new Properties();
@@ -180,7 +178,7 @@ public class ModelDBConnection {
 			return null;
 		}
 	}
-	
+
 	public static String getTranslationOfField(String field, String tableName) {
 		switch(field) {
 			// Вспомогательные таблицы
@@ -295,7 +293,7 @@ public class ModelDBConnection {
 			//Таблица AbiturientDocumentQuota
 			//Таблица AbiturientPreferredRight
 			case "id_preferredRight": return "ПП";
-		
+
 			default: return "";
 		}
 	}
@@ -374,12 +372,11 @@ public class ModelDBConnection {
 						+ "AbiturientCompetitiveGroup.id_competitiveGroup, "
 						+ "AbiturientCompetitiveGroup.id_targetOrganization, "
 						+ "AbiturientCompetitiveGroup.id_formOfEducation, "
-						+ "AbiturientCompetitiveGroup.haveBasisForBVI, "
-						+ "AbiturientCompetitiveGroup.haveBasisForQuota, "
 						+ "AbiturientCompetitiveGroup.havePreferredRight, "
 						+ "AbiturientCompetitiveGroup.competitiveScore, "
 						+ "AbiturientCompetitiveGroup.scoresIndAchievements, "
                         + "AbiturientCompetitiveGroup.originalsReceivedDate, "
+                        + "AbiturientCompetitiveGroup.agreementReceivedDate, "
                         + "AbiturientCompetitiveGroup.priority "
 						+ "FROM AbiturientCompetitiveGroup JOIN Abiturient ON (Abiturient.aid = AbiturientCompetitiveGroup.id_abiturient)";
 			default:
@@ -425,10 +422,10 @@ public class ModelDBConnection {
 		cstmt = con.prepareCall(query, 1004, 1007);
 
 		rset = cstmt.executeQuery();
-		
+
 		int countStrings = rset.last() ? rset.getRow() : 0;
 		rset.beforeFirst();
-		
+
 		if (countStrings > 0) {
 			query = "update " + table + " set ";
 			for (int i = 0; i < fieldsNames.length; i++) {
@@ -451,7 +448,7 @@ public class ModelDBConnection {
 				else
 					query = query + fieldsNames[i] + ", ";
 			}
-			
+
 			query = query + " values (" + idValue + ", ";
 			for (int i = 0; i < data.length; i++) {
 				if (i == data.length - 1)
@@ -513,6 +510,7 @@ public class ModelDBConnection {
 		cstmt.close();
 	}
 
+
 	//Вкладка PassportTab
 	public static String[] getAbiturientPassportByID(String aid) throws SQLException {
 		try {
@@ -522,14 +520,14 @@ public class ModelDBConnection {
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
 			cstmt.setString(1, aid);*/
-			
+
 			cstmt = con.prepareCall(query, 1004, 1007);
 
 			rset = cstmt.executeQuery();
-			
+
 			int countStrings = rset.last() ? rset.getRow() : 0;
 			rset.beforeFirst();
-			
+
 			//Случай, если данных по абитуриенту еще нет
 			if (countStrings == 0) return null;
 
@@ -566,13 +564,13 @@ public class ModelDBConnection {
    			 abiturientData = new String[2],
    			 passportFieldsNames = new String[fieldsData.length - 2],
    	    	 abiturientFieldsNames = new String[2];
-   	
+
     	abiturientData[0] = fieldsData[fieldsData.length - 1];
     	abiturientData[1] = fieldsData[fieldsData.length - 2];
-   	
+
     	abiturientFieldsNames[0] = fieldsNames[fieldsNames.length - 1];
     	abiturientFieldsNames[1] = fieldsNames[fieldsNames.length - 2];
-   	
+
 	   	for (int i = 0; i < passportData.length; i++) {
 	   		passportData[i] = fieldsData[i];
 	   		passportFieldsNames[i] = fieldsNames[i];
@@ -582,25 +580,24 @@ public class ModelDBConnection {
 	   	ModelDBConnection.updateElementInTableByExpression("AbiturientPassport", aid, passportFieldsNames, passportData, 0);
 	}
 
+
 	//Вкладка EducationTab
 	public static String[] getAbiturientEducationByID(String aid) throws SQLException {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("Образование")
 							+ " WHERE Abiturient.aid = " + aid + ";";
-			
-			System.out.println(query);
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
 			cstmt.setString(1, aid);*/
-			
+
 			cstmt = con.prepareCall(query, 1004, 1007);
 
 			rset = cstmt.executeQuery();
-			
+
 			int countStrings = rset.last() ? rset.getRow() : 0;
 			rset.beforeFirst();
-			
+
 			//Случай, если данных по абитуриенту еще нет
 			if (countStrings == 0) return null;
 
@@ -636,25 +633,24 @@ public class ModelDBConnection {
 		ModelDBConnection.updateElementInTableByExpression("AbiturientEducation", aid, fieldsNames, fieldsData, 0);
 	}
 
+
 	//Вкладка EntranceExamTab
 	public static String[] getAbiturientEntranceExamsByID(String aid) throws SQLException {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("Вступительные испытания")
 							+ " WHERE Abiturient.aid = " + aid + ";";
-			
-			System.out.println(query);
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
 			cstmt.setString(1, aid);*/
-			
+
 			cstmt = con.prepareCall(query, 1004, 1007);
 
 			rset = cstmt.executeQuery();
-			
+
 			int countStrings = rset.last() ? rset.getRow() : 0;
 			rset.beforeFirst();
-			
+
 			//Случай, если данных по абитуриенту еще нет
 			if (countStrings == 0) return null;
 
@@ -664,7 +660,7 @@ public class ModelDBConnection {
 			String[] result = new String[countStrings * numberOfColumns];
 			for (int i = 0; i < result.length; i++)
 					result[i] = "";
-			
+
 			int curPos = 0;
 
 			while (rset.next()) {
@@ -714,36 +710,35 @@ public class ModelDBConnection {
        		if(i % fieldsNames.length == fieldsNames.length - 2) {
        			i++;
        			j = -1;
-       			
+
        			ModelDBConnection.updateElementInTableByExpression("AbiturientEntranceExam", aid, entranceExamNames, entranceExamData, 1);
        		}
        	}
 	}
-	
+
 	public static void deleteAbiturientEntranceExamsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		//Удалить все вступительные испытания по aid абитуриента
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientEntranceExam", aid, fieldsNames, fieldsData, 0);
 	}
-	
+
+
 	//Вкладка 100б
 	public static String[] getAbiturientOlympiadsInfoByID(String aid) throws SQLException {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("100б")
 							+ " WHERE Abiturient.aid = " + aid + ";";
-			
-			System.out.println(query);
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
 			cstmt.setString(1, aid);*/
-			
+
 			cstmt = con.prepareCall(query, 1004, 1007);
 
 			rset = cstmt.executeQuery();
-			
+
 			int countStrings = rset.last() ? rset.getRow() : 0;
 			rset.beforeFirst();
-			
+
 			//Случай, если данных по абитуриенту еще нет
 			if (countStrings == 0) return null;
 
@@ -753,7 +748,7 @@ public class ModelDBConnection {
 			String[] result = new String[countStrings * numberOfColumns];
 			for (int i = 0; i < result.length; i++)
 					result[i] = "";
-			
+
 			int curPos = 0;
 
 			while (rset.next()) {
@@ -780,36 +775,35 @@ public class ModelDBConnection {
 	}
 
 	public static void updateAbiturientOlympiadsInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки оснований на 100 баллов
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsFor100balls", aid, fieldsNames, fieldsData, 0);
 
 		if(fieldsData.length == 0) return;
 
-    	String[] entranceExtraInfoData = new String[fieldsNames.length];
+    	String[] olympiadsData = new String[fieldsNames.length];
 
        	for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
-       		entranceExtraInfoData[j] = fieldsData[i];
+       		olympiadsData[j] = fieldsData[i];
 
        		if(j == fieldsNames.length - 1) {
        			j = -1;
 
-       			ModelDBConnection.updateElementInTableByExpression("AbiturientDocumentsFor100balls", aid, fieldsNames, entranceExtraInfoData, 1);
+       			ModelDBConnection.updateElementInTableByExpression("AbiturientDocumentsFor100balls", aid, fieldsNames, olympiadsData, 1);
        		}
        	}
 	}
 
-	public static void deleteAbiturientOlympiadInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+	public static void deleteAbiturientOlympiadsInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		//Удалить все основания на 100 баллов по aid абитуриента
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsFor100balls", aid, fieldsNames, fieldsData, 0);
 	}
+
 
 	//Вкладка AdditionalInfoTab
 	public static String[] getAbiturientExtraInfoByID(String aid) throws SQLException {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("Доп. сведения")
 					+ " WHERE Abiturient.aid = " + aid + ";";
-
-			System.out.println(query);
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
@@ -858,26 +852,26 @@ public class ModelDBConnection {
 	}
 
 	public static void updateAbiturientExtraInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки допсведений
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientExtraInfo", aid, fieldsNames, fieldsData, 0);
 
 		if(fieldsData.length == 0) return;
 
-		String[] entranceExtraInfoData = new String[fieldsNames.length];
+		String[] extraInfoData = new String[fieldsNames.length];
 
 		for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
-			entranceExtraInfoData[j] = fieldsData[i];
+			extraInfoData[j] = fieldsData[i];
 
 			if(j == fieldsNames.length - 1) {
 				j = -1;
 
-				ModelDBConnection.updateElementInTableByExpression("AbiturientExtraInfo", aid, fieldsNames, entranceExtraInfoData, 1);
+				ModelDBConnection.updateElementInTableByExpression("AbiturientExtraInfo", aid, fieldsNames, extraInfoData, 1);
 			}
 		}
 	}
 
 	public static void deleteAbiturientExtraInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		//Удалить все допсведения по aid абитуриента
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientExtraInfo", aid, fieldsNames, fieldsData, 0);
 	}
 
@@ -887,20 +881,18 @@ public class ModelDBConnection {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("SampleTab")
 							+ " WHERE Abiturient.aid = " + aid + ";";
-			
-			System.out.println(query);
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
 			cstmt.setString(1, aid);*/
-			
+
 			cstmt = con.prepareCall(query, 1004, 1007);
 
 			rset = cstmt.executeQuery();
-			
+
 			int countStrings = rset.last() ? rset.getRow() : 0;
 			rset.beforeFirst();
-			
+
 			//Случай, если данных по абитуриенту еще нет
 			if (countStrings == 0) return null;
 
@@ -935,11 +927,12 @@ public class ModelDBConnection {
 	public static void updateAbiturientGeneralInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
 		String[] abiturientFieldsNames = new String[fieldsNames.length - 1],
 				 abiturientFieldsData = new String[fieldsData.length - 1];
+
 		for (int i = 0; i < abiturientFieldsNames.length; i++) {
 			abiturientFieldsNames[i] = fieldsNames[i + 1];
 			abiturientFieldsData[i] = fieldsData[i + 1];
 		}
-		
+
 		ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientFieldsData, 0);
 	}
 
@@ -948,8 +941,6 @@ public class ModelDBConnection {
         try {
             String query = ModelDBConnection.getQueryByTabName("Конкурсные группы")
                     + " WHERE Abiturient.aid = " + aid + ";";
-
-            System.out.println(query);
 
             cstmt = con.prepareCall(query, 1004, 1007);
 
@@ -992,43 +983,36 @@ public class ModelDBConnection {
         }
     }
 
-
     public static void updateAbiturientCompetitiveGroupsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-        ModelDBConnection.deleteElementInTableByExpression("AbiturientCompetitiveGroup", aid, fieldsNames, fieldsData, 0);
+    	//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки конкурсных групп
+    	ModelDBConnection.deleteElementInTableByExpression("AbiturientCompetitiveGroup", aid, fieldsNames, fieldsData, 0);
 
         if(fieldsData.length == 0) return;
 
-        String[] entranceExamData = new String[fieldsNames.length - 1],
-                abiturientSpecialConditionsData = new String[1],
-                entranceExamNames = new String[fieldsNames.length - 1],
-                abiturientSpecialConditionsNames = new String[1];
+		String[] competitiveGroupsData = new String[fieldsNames.length];
 
-        abiturientSpecialConditionsData[0] = fieldsData[fieldsData.length - 1];
-        abiturientSpecialConditionsNames[0] = fieldsNames[fieldsNames.length - 1];
+		for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
+			competitiveGroupsData[j] = fieldsData[i];
 
-        ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientSpecialConditionsNames, abiturientSpecialConditionsData, 0);
+			if(j == fieldsNames.length - 1) {
+				j = -1;
 
-
-        for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
-            entranceExamData[j] = fieldsData[i];
-            entranceExamNames[j] = fieldsNames[j];
-
-            if(i % fieldsNames.length == fieldsNames.length - 2) {
-                i++;
-                j = -1;
-
-                ModelDBConnection.updateElementInTableByExpression("AbiturientCompetitiveGroup", aid, entranceExamNames, entranceExamData, 1);
-            }
-        }
+				ModelDBConnection.updateElementInTableByExpression("AbiturientCompetitiveGroup", aid, fieldsNames, competitiveGroupsData, 3);
+			}
+		}
     }
+
+	public static void deleteAbiturientCompetitiveGroupsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		//Удалить все конкурсные группы по aid абитуриента
+		ModelDBConnection.deleteElementInTableByExpression("AbiturientCompetitiveGroup", aid, fieldsNames, fieldsData, 0);
+	}
+
 
 	//Вкладка IndividualAchievementsTab
 	public static String[] getAbiturientIndividualAchievementsByID(String aid) throws SQLException {
 		try {
 			String query = ModelDBConnection.getQueryByTabName("Индивидуальные достижения")
 					+ " WHERE Abiturient.aid = " + aid + ";";
-
-			System.out.println(query);
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
@@ -1077,26 +1061,26 @@ public class ModelDBConnection {
 	}
 
 	public static void updateAbiturientIndividualAchievementsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки индивидуальных достижений
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientIndividAchievement", aid, fieldsNames, fieldsData, 0);
 
 		if(fieldsData.length == 0) return;
 
-		String[] entranceExtraInfoData = new String[fieldsNames.length];
+		String[] individualAchievementsData = new String[fieldsNames.length];
 
 		for (int i = 0, j = 0; i < fieldsData.length; i++, j++) {
-			entranceExtraInfoData[j] = fieldsData[i];
+			individualAchievementsData[j] = fieldsData[i];
 
 			if(j == fieldsNames.length - 1) {
 				j = -1;
 
-				ModelDBConnection.updateElementInTableByExpression("AbiturientIndividAchievement", aid, fieldsNames, entranceExtraInfoData, 1);
+				ModelDBConnection.updateElementInTableByExpression("AbiturientIndividAchievement", aid, fieldsNames, individualAchievementsData, 1);
 			}
 		}
 	}
 
 	public static void deleteAbiturientIndividualAchievementsByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		//Удалить записи по текущему абитуриенту и добавить введенные строчки из вкладки вступительных испытаний
+		//Удалить все индивидуальные достижения по aid абитуриента
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientIndividAchievement", aid, fieldsNames, fieldsData, 0);
 	}
 }
