@@ -77,8 +77,9 @@ public class EntranceExamTabController {
                         fieldsTable.getColumns().add(fieldData);
                         paneObservableList.add(newPane);
                     }
+                    break;
                 case "int":
-                    if(Pattern.compile("(id_ent).*").matcher(fields[i]).matches() ){
+                	if(Pattern.compile("(id_ent).*").matcher(fields[i]).matches() ){
                         TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientEntranceExam"));
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
@@ -96,9 +97,8 @@ public class EntranceExamTabController {
                         fieldsTable.getColumns().add(fieldData);
                         choiceInputPatternController.setFieldData("");
                         paneObservableList.add(newPane);
-
                     }
-                   if(Pattern.compile("(id_la).*").matcher(fields[i]).matches() ){
+                	if(Pattern.compile("(id_la).*").matcher(fields[i]).matches() ){
                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientEntranceExam"));
                        loader = new FXMLLoader();
                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
@@ -116,8 +116,8 @@ public class EntranceExamTabController {
                        fieldsTable.getColumns().add(fieldData);
                        choiceInputPatternController.setFieldData("");
                        paneObservableList.add(newPane);
-                   }
-                   if(Pattern.compile("(id_form).*").matcher(fields[i]).matches() ){
+                   	}
+                	if(Pattern.compile("(id_form).*").matcher(fields[i]).matches() ){
                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientEntranceExam"));
                        loader = new FXMLLoader();
                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
@@ -135,8 +135,8 @@ public class EntranceExamTabController {
                        fieldsTable.getColumns().add(fieldData);
                        choiceInputPatternController.setFieldData("");
                        paneObservableList.add(newPane);
-                   }
-                    if(Pattern.compile("(score)").matcher(fields[i]).matches() ){
+                   	}
+                	if(Pattern.compile("(score)").matcher(fields[i]).matches() ){
                         TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientEntranceExam"));
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
@@ -154,7 +154,7 @@ public class EntranceExamTabController {
                         fieldsTable.getColumns().add(fieldData);
                         paneObservableList.add(newPane);
                     }
-                    if(Pattern.compile("(has_).*").matcher(fields[i]).matches() ){
+                	if(Pattern.compile("(has_).*").matcher(fields[i]).matches() ){
                         TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientEntranceExam"));
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
@@ -172,7 +172,7 @@ public class EntranceExamTabController {
                         fieldsTable.getColumns().add(fieldData);
                         paneObservableList.add(newPane);
                     }
-                    if(Pattern.compile("(need).*").matcher(fields[i]).matches() ) {
+                	if(Pattern.compile("(need).*").matcher(fields[i]).matches() ) {
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
 
@@ -218,7 +218,7 @@ public class EntranceExamTabController {
         newPane = (Pane) loader.load();
         buttonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         buttonsPane.getChildren().add(newPane);
-        
+
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
 
@@ -228,6 +228,7 @@ public class EntranceExamTabController {
 
         setEditable(false);
     }
+
 
     public void setEditable(Boolean value) {
         for (int i = 0, j = 0; i < fieldsControllers.length; i++, j++) {
@@ -362,7 +363,7 @@ public class EntranceExamTabController {
 	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 	                    currentErrorCode = choiceInputPatternController.checkData();
 						if (currentErrorCode > 0) {
-							MessageProcessing.displayErrorMessage(10);
+							MessageProcessing.displayErrorMessage(310);
 							return currentErrorCode;
 						}
 	                }
@@ -374,7 +375,7 @@ public class EntranceExamTabController {
 	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 	                    currentErrorCode = choiceInputPatternController.checkData();
 						if (currentErrorCode > 0) {
-							MessageProcessing.displayErrorMessage(10);
+							MessageProcessing.displayErrorMessage(311);
 							return currentErrorCode;
 						}
 	                }
@@ -405,7 +406,8 @@ public class EntranceExamTabController {
 		return errorCount;
     }
 
-    public  FXMLLoader[] addRow() throws IOException {
+
+    public FXMLLoader[] addRow() throws IOException {
         FXMLLoader loader;
         Pane newPane;
         ObservableList<Pane> paneObservableList1 = FXCollections.observableArrayList();
@@ -443,7 +445,6 @@ public class EntranceExamTabController {
                         choiceInputPatternController.setParameters(fields[j], "");
                         choiceInputPatternController.setFieldData("");
                         paneObservableList1.add(newPane);
-
                     }
                     if(Pattern.compile("(id_la).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
@@ -523,14 +524,15 @@ public class EntranceExamTabController {
         fieldsTable.getItems().setAll(list);
         return fieldsControllers;
     }
-    
+
+
     public boolean isEmpty() {
     	if (fieldsControllers == null)
     		return true;
-    	
+
     	if (fieldsControllers.length == 0)
     		return true;
-    	
+
     	int errorCount = 0, currentErrorCode = 0, countBooleanFields = 0;;
 
 		for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
@@ -580,8 +582,9 @@ public class EntranceExamTabController {
 			errorCount += currentErrorCode;
 		}
 
-		return (errorCount == fields.length - countBooleanFields ? true : false);
+		return (errorCount == fields.length - countBooleanFields);
     }
+
 
     public FXMLLoader[] deleteRow() throws Exception {
         int row = fieldsTable.getSelectionModel().getSelectedIndex();
@@ -599,5 +602,4 @@ public class EntranceExamTabController {
 
         return fieldsControllers;
     }
-
 }

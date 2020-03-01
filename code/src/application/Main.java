@@ -1,7 +1,7 @@
 package application;
 
-import controllers_simple.*;
-import controllers_tabs.*;
+//import controllers_simple.*;
+//import controllers_tabs.*;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -33,27 +32,27 @@ public class Main extends Application {
             mainWindowController.fillTabsContent();
 
             /*InsertFormController insertFormController = loader.getController();
-            insertFormController.createForm(loader);*/
+            insertFormController.createForm(loader);
 
-            /*IndividualAchievementsTabController individualAchievementsTabController = loader.getController();
-            individualAchievementsTabController.fillTab(loader);*/
+            IndividualAchievementsTabController individualAchievementsTabController = loader.getController();
+            individualAchievementsTabController.fillTab(loader);
 
-            /*CompetitiveGroupsTabController competitiveGroupsTabController = loader.getController();
-            competitiveGroupsTabController.fillTab(loader);*/
+            CompetitiveGroupsTabController competitiveGroupsTabController = loader.getController();
+            competitiveGroupsTabController.fillTab(loader);
 
-            /*EducationTabController educationTabController = loader.getController();
-            educationTabController.fillTab(loader);*/
+            EducationTabController educationTabController = loader.getController();
+            educationTabController.fillTab(loader);
 
-            /*PassportTabController passportTabController = loader.getController();
-            passportTabController.fillTab(loader);*/
+            PassportTabController passportTabController = loader.getController();
+            passportTabController.fillTab(loader);
 
-            /*AdditionalInfoTabController additionalInfoTabController = loader.getController();
-            additionalInfoTabController.fillTab(loader);*/
+            AdditionalInfoTabController additionalInfoTabController = loader.getController();
+            additionalInfoTabController.fillTab(loader);
 
-            /*OlympiadsTabController olympiadsTabController = loader.getController();
-            olympiadsTabController.fillTab(loader);*/
+            OlympiadsTabController olympiadsTabController = loader.getController();
+            olympiadsTabController.fillTab(loader);
             
-            /*EntranceExamTabController entranceExamTabController = loader.getController();
+            EntranceExamTabController entranceExamTabController = loader.getController();
             entranceExamTabController.fillTab(loader);*/
 
             Scene scene = new Scene(root);
@@ -64,6 +63,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+
 
     public static void main(String[] args) {
         launch(args);

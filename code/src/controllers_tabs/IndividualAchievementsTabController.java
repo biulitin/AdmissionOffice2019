@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import backend.MessageProcessing;
 import backend.ModelDBConnection;
 import controllers_simple.*;
 import javafx.util.Callback;
@@ -230,6 +231,7 @@ public class IndividualAchievementsTabController {
         setEditable(false);
     }
 
+
     public void setEditable(Boolean value) {
         for (int i = 0, j = 0; i < fieldsControllers.length; i++, j++) {
             if (j == countFields)
@@ -248,7 +250,8 @@ public class IndividualAchievementsTabController {
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         choiceInputPatternController.setEditable(value);
                         break;
-                    } else if (Pattern.compile("(score)").matcher(fields[j]).matches()) {
+                    }
+                    if (Pattern.compile("(score)").matcher(fields[j]).matches()) {
                         IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
                         intInputPatternController.setEditable(value);
                     }
@@ -261,15 +264,16 @@ public class IndividualAchievementsTabController {
         }
     }
 
+
     public void setFieldsData(String aid) throws Exception {
         this.aid = aid;
-        String[] competitiveGroupsData = ModelDBConnection.getAbiturientIndividualAchievementsByID(aid);
-        
-        if (competitiveGroupsData != null) {
-            for (int i = 1; i < competitiveGroupsData.length / fields.length; i++)
+        String[] individualAchievementsData = ModelDBConnection.getAbiturientIndividualAchievementsByID(aid);
+
+        if (individualAchievementsData != null) {
+            for (int i = 1; i < individualAchievementsData.length / fields.length; i++)
                 addRow();
 
-            for (int i = 0, j = 0; i < competitiveGroupsData.length; i++, j++) {
+            for (int i = 0, j = 0; i < individualAchievementsData.length; i++, j++) {
                 if (j == countFields)
                     j = 0;
 
@@ -277,40 +281,42 @@ public class IndividualAchievementsTabController {
                     case "date":
                         if (Pattern.compile("(dateOf_issue)").matcher(fields[j]).matches()) {
                             DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
-                            dateInputPatternController.setFieldData(competitiveGroupsData[i]);
+                            dateInputPatternController.setFieldData(individualAchievementsData[i]);
                         }
                         break;
                     case "int":
                         if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
                             ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                            choiceInputPatternController.setFieldData(competitiveGroupsData[i]);
+                            choiceInputPatternController.setFieldData(individualAchievementsData[i]);
                         }
                         if (Pattern.compile("(score)").matcher(fields[j]).matches()) {
                             IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                            intInputPatternController.setFieldData(competitiveGroupsData[i]);
+                            intInputPatternController.setFieldData(individualAchievementsData[i]);
                         }
                         break;
                     case "varchar":
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(competitiveGroupsData[i]);
+                        textInputPatternController.setFieldData(individualAchievementsData[i]);
                         break;
                 }
             }
         }
     }
 
+
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
-    	System.out.println("!!!!");
     	if (!isEmpty())
     		ModelDBConnection.updateAbiturientIndividualAchievementsByID(aid, fieldsOriginalNames, fieldsData);
     	else
     		ModelDBConnection.deleteAbiturientIndividualAchievementsByID(aid, fieldsOriginalNames, fieldsData);
     }
 
-    public int checkData() {
-        int errorCount = 0, currentErrorCode = 0;
 
-        if (isEmpty()) return 1;
+    public int checkData() {
+    	int errorCount = 0, currentErrorCode = 0;
+
+        //Если в таблицу ничего не добавляли, то никаких проверок не осуществляем
+        if (isEmpty()) return 0;
 
         for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
             if (j == countFields)
@@ -328,6 +334,10 @@ public class IndividualAchievementsTabController {
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = choiceInputPatternController.checkData();
                     }
+					if (currentErrorCode > 0) {
+						MessageProcessing.displayErrorMessage(410);
+						return currentErrorCode;
+					}
                     if (Pattern.compile("(score)").matcher(fields[j]).matches()) {
                         IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = intInputPatternController.checkData();
@@ -344,6 +354,7 @@ public class IndividualAchievementsTabController {
 
         return errorCount;
     }
+
 
     public  FXMLLoader[] addRow() throws IOException {
         FXMLLoader loader;
@@ -383,7 +394,6 @@ public class IndividualAchievementsTabController {
                         choiceInputPatternController.setParameters(fields[j], "");
                         choiceInputPatternController.setFieldData("");
                         paneObservableList1.add(newPane);
-
                     }
                     if(Pattern.compile("(score)").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
@@ -414,6 +424,7 @@ public class IndividualAchievementsTabController {
         fieldsTable.getItems().setAll(list);
         return fieldsControllers;
     }
+
 
     public boolean isEmpty() {
         if (fieldsControllers == null)
@@ -455,6 +466,7 @@ public class IndividualAchievementsTabController {
 
         return (errorCount == fields.length - countBooleanFields);
     }
+
 
     public FXMLLoader[] deleteRow() throws Exception {
         int row = fieldsTable.getSelectionModel().getSelectedIndex();

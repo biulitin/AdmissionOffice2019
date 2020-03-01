@@ -13,7 +13,6 @@ import controllers_simple.*;
 import backend.*;
 
 public class EducationTabController {
-
     @FXML
     public GridPane parentGridPane;
 
@@ -112,6 +111,7 @@ public class EducationTabController {
                         intInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
                     }
+                    break;
                 case "varchar":
                     if (Pattern.compile("(series).*").matcher(fields[i]).matches()) {
                         loader = new FXMLLoader();
@@ -158,6 +158,7 @@ public class EducationTabController {
                         textInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "AbiturientEducation"));
                         break;
                     }
+                    break;
             }
         }
 
@@ -172,7 +173,7 @@ public class EducationTabController {
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
         addEditDeleteButtonsController.setParameters("Образование", tabController, fields, fieldsTypes, fieldsControllers);
-        
+
         setEditable(false);
         setFieldsData("0");
     }
@@ -219,10 +220,10 @@ public class EducationTabController {
 						textInputPatternController.setEditable(value);
 						break;
 					}
-
 			}
 		}
     }
+
 
     public void setFieldsData(String aid) throws Exception {
     	this.aid = aid;
@@ -271,15 +272,17 @@ public class EducationTabController {
                             textInputPatternController.setFieldData(educationData[i]);
                             break;
                         }
-                        //break;
+                        break;
                 }
             }
     	}
     }
 
+
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
     	ModelDBConnection.updateAbiturientEducationByID(aid, fieldsOriginalNames, fieldsData);
     }
+
 
     public int checkData() {
     	int errorCount = 0, currentErrorCode = 0;
@@ -299,7 +302,7 @@ public class EducationTabController {
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						currentErrorCode = choiceInputPatternController.checkData();
 						if (currentErrorCode > 0) {
-							MessageProcessing.displayErrorMessage(29);
+							MessageProcessing.displayErrorMessage(911);
 							return currentErrorCode;
 						}
 						break;
@@ -308,7 +311,7 @@ public class EducationTabController {
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						currentErrorCode = choiceInputPatternController.checkData();
 						if (currentErrorCode > 0) {
-							MessageProcessing.displayErrorMessage(30);
+							MessageProcessing.displayErrorMessage(910);
 							return currentErrorCode;
 						}
 						break;

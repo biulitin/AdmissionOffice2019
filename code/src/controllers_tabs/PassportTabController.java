@@ -13,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import controllers_simple.*;
 import backend.*;
 
-
 public class PassportTabController {
     public GridPane parentGridPane;
     public GridPane childGridPane;
@@ -79,6 +78,7 @@ public class PassportTabController {
                         choiceInputPatternController.setFieldData("");
                         break;
                     }
+                    break;
                 case "varchar":
                     if(Pattern.compile("(series).*").matcher(fields[i]).matches() ){
                         loader = new FXMLLoader();
@@ -163,6 +163,7 @@ public class PassportTabController {
         setFieldsData("0");
     }
 
+
     public void setEditable(Boolean value) {
 		for (int i = 0; i < fieldsControllers.length; i++) {
 			switch (fieldsTypes[i]) {
@@ -205,10 +206,10 @@ public class PassportTabController {
 						textInputPatternController.setEditable(value);
 						break;
 					}
-
 			}
 		}
     }
+
 
     public void setFieldsData(String aid) throws Exception {
     	this.aid = aid;
@@ -227,6 +228,7 @@ public class PassportTabController {
                             choiceInputPatternController.setFieldData(passportData[i]);
                             break;
                         }
+                        break;
                     case "varchar":
                         if (Pattern.compile("(series).*").matcher(fields[i]).matches()) {
                             TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
@@ -253,15 +255,17 @@ public class PassportTabController {
                             textInputPatternController.setFieldData(passportData[i]);
                             break;
                         }
-                        //break;
+                        break;
                 }
             }
     	}
     }
 
+
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
     	ModelDBConnection.updateAbiturientPassportByID(aid, fieldsOriginalNames, fieldsData);
     }
+
 
     public int checkData() {
     	int errorCount = 0, currentErrorCode = 0;
@@ -281,7 +285,7 @@ public class PassportTabController {
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						currentErrorCode = choiceInputPatternController.checkData();
 						if (currentErrorCode > 0) {
-							MessageProcessing.displayErrorMessage(15);
+							MessageProcessing.displayErrorMessage(1110);
 							return currentErrorCode;
 						}
 						break;

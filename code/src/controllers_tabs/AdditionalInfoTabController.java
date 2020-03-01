@@ -77,6 +77,8 @@ public class AdditionalInfoTabController {
                         fieldsTable.getColumns().add(fieldData);
                         paneObservableList.add(newPane);
                     }
+                    break;
+
                 case "int":
                     if(Pattern.compile("(id_categ).*").matcher(fields[i]).matches() ){
                         TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientExtraInfo"));
@@ -98,7 +100,7 @@ public class AdditionalInfoTabController {
                         paneObservableList.add(newPane);
 
                     }
-                   break;
+                    break;
 
                 case "varchar":
                     if(Pattern.compile("(name).*").matcher(fields[i]).matches() ){
@@ -186,7 +188,7 @@ public class AdditionalInfoTabController {
         newPane = (Pane) loader.load();
         buttonsPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         buttonsPane.getChildren().add(newPane);
-        
+
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
 
@@ -196,6 +198,7 @@ public class AdditionalInfoTabController {
 
         setEditable(false);
     }
+
 
     public void setEditable(Boolean value) {
         for (int i = 0, j = 0; i < fieldsControllers.length; i++, j++) {
@@ -214,8 +217,8 @@ public class AdditionalInfoTabController {
                     if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         choiceInputPatternController.setEditable(value);
-                        break;
                     }
+                    break;
                 case "varchar":
                     TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                     textInputPatternController.setEditable(value);
@@ -227,30 +230,30 @@ public class AdditionalInfoTabController {
 
     public void setFieldsData(String aid) throws Exception {
     	this.aid = aid;
-    	String[] entranceExamsData = ModelDBConnection.getAbiturientExtraInfoByID(aid);
+    	String[] additionalInfoData = ModelDBConnection.getAbiturientExtraInfoByID(aid);
 
-    	if(entranceExamsData != null) {
-        	for(int i = 1; i < entranceExamsData.length / fields.length; i++)
+    	if(additionalInfoData != null) {
+        	for(int i = 1; i < additionalInfoData.length / fields.length; i++)
         		addRow();
 
-            for (int i = 0, j = 0; i < entranceExamsData.length; i++, j++) {
+            for (int i = 0, j = 0; i < additionalInfoData.length; i++, j++) {
                 if(j == countFields)
                     j=0;
 
                 switch (fieldsTypes[j]) {
                     case "date":
                         DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
-                        dateInputPatternController.setFieldData(entranceExamsData[i]);
+                        dateInputPatternController.setFieldData(additionalInfoData[i]);
                         break;
                     case "int":
                         if (Pattern.compile("(id_category).*").matcher(fields[j]).matches()) {
                             ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-                            choiceInputPatternController.setFieldData(entranceExamsData[i]);
+                            choiceInputPatternController.setFieldData(additionalInfoData[i]);
                         }
                         break;
                     case "varchar":
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-                        textInputPatternController.setFieldData(entranceExamsData[i]);
+                        textInputPatternController.setFieldData(additionalInfoData[i]);
                         break;
                 }
             }
@@ -287,7 +290,7 @@ public class AdditionalInfoTabController {
 	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 	                    currentErrorCode = choiceInputPatternController.checkData();
 						if (currentErrorCode > 0) {
-							MessageProcessing.displayErrorMessage(10);
+							MessageProcessing.displayErrorMessage(1210);
 							return currentErrorCode;
 						}
 	                }
@@ -329,6 +332,7 @@ public class AdditionalInfoTabController {
                         dateInputPatternController.setParameters(fields[j],"");
                         paneObservableList1.add(newPane);
                     }
+                    break;
                 case "int":
                     if(Pattern.compile("(id_category).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
@@ -341,7 +345,6 @@ public class AdditionalInfoTabController {
                         choiceInputPatternController.setParameters(fields[j], "");
                         choiceInputPatternController.setFieldData("");
                         paneObservableList1.add(newPane);
-
                     }
                     break;
                 case "varchar":
@@ -361,14 +364,15 @@ public class AdditionalInfoTabController {
         fieldsTable.getItems().setAll(list);
         return fieldsControllers;
     }
-    
+
+
     public boolean isEmpty() {
     	if (fieldsControllers == null)
     		return true;
-    	
+
     	if (fieldsControllers.length == 0)
     		return true;
-    	
+
     	int errorCount = 0, currentErrorCode = 0, countBooleanFields = 0;;
 
 		for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
@@ -397,6 +401,7 @@ public class AdditionalInfoTabController {
 		return (errorCount == fields.length - countBooleanFields ? true : false);
     }
 
+
     public FXMLLoader[] deleteRow() throws Exception {
         int row = fieldsTable.getSelectionModel().getSelectedIndex();
 
@@ -413,5 +418,4 @@ public class AdditionalInfoTabController {
 
         return fieldsControllers;
     }
-
 }
