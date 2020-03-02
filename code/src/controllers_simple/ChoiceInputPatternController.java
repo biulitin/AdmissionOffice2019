@@ -57,7 +57,7 @@ public class ChoiceInputPatternController {
 			case "id_typeOfBVI": tableName = "TypeOfBVI"; break;
 			case "id_categoryOfExtraInfo": tableName = "CategoryOfExtraInfo"; break;
 			case "id_quotaType": tableName = "TypeOfQuote"; break;
-			case "id_preemptitiveRight": tableName = "TypeOfPreferredRight"; break;
+			case "id_preferredRight": tableName = "TypeOfPreferredRight"; break;
     	}
 
     	this.fieldData.getItems().clear();

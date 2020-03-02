@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -379,6 +378,23 @@ public class ModelDBConnection {
                         + "AbiturientCompetitiveGroup.agreementReceivedDate, "
                         + "AbiturientCompetitiveGroup.priority "
 						+ "FROM AbiturientCompetitiveGroup JOIN Abiturient ON (Abiturient.aid = AbiturientCompetitiveGroup.id_abiturient)";
+			case "БВИ":
+				return "SELECT AbiturientBVI.id_typeOfBVI, AbiturientDocumentsBVI.nameOfDocument, AbiturientDocumentsBVI.series_document, " +
+						"AbiturientDocumentsBVI.number_document,AbiturientDocumentsBVI.issued_by, " +
+						"AbiturientDocumentsBVI.dateOf_issue FROM AbiturientBVI JOIN Abiturient ON (Abiturient.aid = AbiturientBVI.id_abiturient) " +
+						"JOIN AbiturientDocumentsBVI on (Abiturient.aid = AbiturientDocumentsBVI.id_abiturient)";
+			case "Квота":
+				return "SELECT AbiturientQuota.id_quotaType,AbiturientDocumentQuota.nameOfDocument, " +
+						"AbiturientDocumentQuota.series_document, AbiturientDocumentQuota.number_document, " +
+						"AbiturientDocumentQuota.issued_by, AbiturientDocumentQuota.dateOf_issue FROM " +
+						"AbiturientQuota JOIN Abiturient ON (Abiturient.aid = AbiturientQuota.id_abiturient) " +
+						"JOIN AbiturientDocumentQuota on (Abiturient.aid = AbiturientDocumentQuota.id_abiturient);";
+			case "Преимущественное право":
+				return "SELECT AbiturientPreferredRight.id_preferredRight, AbiturientDocumentsPreferredRight.nameOfDocument, " +
+						"AbiturientDocumentsPreferredRight.series_document, AbiturientDocumentsPreferredRight.number_document, " +
+						"AbiturientDocumentsPreferredRight.issued_by, AbiturientDocumentsPreferredRight.dateOf_issue FROM " +
+						"AbiturientPreferredRight JOIN Abiturient ON (Abiturient.aid = AbiturientPreferredRight.id_abiturient) " +
+						"JOIN AbiturientDocumentsPreferredRight on (Abiturient.aid = AbiturientDocumentsPreferredRight.id_abiturient);";
 			default:
 				return "";
 		}

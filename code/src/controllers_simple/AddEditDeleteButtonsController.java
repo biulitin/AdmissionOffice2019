@@ -55,7 +55,11 @@ public class AddEditDeleteButtonsController {
 				OlympiadsTabController olympiadsTabController = tabController.getController();
 				fieldsControllers = olympiadsTabController.addRow();
 				break;
-        }
+			case "Привилегии":
+				PrivilegeTabController privilegeTabController = tabController.getController();
+				fieldsControllers = privilegeTabController.addRow();
+				break;
+		}
     }
 
 
@@ -230,6 +234,10 @@ public class AddEditDeleteButtonsController {
 	    		CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
 	    		fieldsControllers = competitiveGroupsTabController.deleteRow();
 	    		break;
+			case "Привилегии":
+				PrivilegeTabController privilegeTabController = tabController.getController();
+				fieldsControllers = privilegeTabController.deleteRow();
+				break;
         }
     }
 
@@ -382,6 +390,9 @@ public class AddEditDeleteButtonsController {
 			case "Конкурсные группы":
 				CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
 				return competitiveGroupsTabController.checkData();
+			case "Привилегии":
+				PrivilegeTabController privilegeTabController = tabController.getController();
+				return privilegeTabController.checkData();
 	    	default:
 	    		return 0;
     	}
