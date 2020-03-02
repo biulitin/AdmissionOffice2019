@@ -388,13 +388,13 @@ public class ModelDBConnection {
 						"AbiturientDocumentQuota.series_document, AbiturientDocumentQuota.number_document, " +
 						"AbiturientDocumentQuota.issued_by, AbiturientDocumentQuota.dateOf_issue FROM " +
 						"AbiturientQuota JOIN Abiturient ON (Abiturient.aid = AbiturientQuota.id_abiturient) " +
-						"JOIN AbiturientDocumentQuota on (Abiturient.aid = AbiturientDocumentQuota.id_abiturient);";
+						"JOIN AbiturientDocumentQuota on (Abiturient.aid = AbiturientDocumentQuota.id_abiturient)";
 			case "Преимущественное право":
 				return "SELECT AbiturientPreferredRight.id_preferredRight, AbiturientDocumentsPreferredRight.nameOfDocument, " +
 						"AbiturientDocumentsPreferredRight.series_document, AbiturientDocumentsPreferredRight.number_document, " +
 						"AbiturientDocumentsPreferredRight.issued_by, AbiturientDocumentsPreferredRight.dateOf_issue FROM " +
 						"AbiturientPreferredRight JOIN Abiturient ON (Abiturient.aid = AbiturientPreferredRight.id_abiturient) " +
-						"JOIN AbiturientDocumentsPreferredRight on (Abiturient.aid = AbiturientDocumentsPreferredRight.id_abiturient);";
+						"JOIN AbiturientDocumentsPreferredRight on (Abiturient.aid = AbiturientDocumentsPreferredRight.id_abiturient)";
 			default:
 				return "";
 		}
@@ -1099,4 +1099,249 @@ public class ModelDBConnection {
 		//Удалить все индивидуальные достижения по aid абитуриента
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientIndividAchievement", aid, fieldsNames, fieldsData, 0);
 	}
+
+    //Вкладка PrivilegeTab
+    public static String[] getAbiturientBVIByID(String aid) throws SQLException {
+        try {
+            String query = ModelDBConnection.getQueryByTabName("БВИ")
+                    + " WHERE Abiturient.aid = " + aid + ";";
+
+            System.out.println(query);
+
+            cstmt = con.prepareCall(query, 1004, 1007);
+
+            rset = cstmt.executeQuery();
+
+            int countStrings = rset.last() ? rset.getRow() : 0;
+            rset.beforeFirst();
+
+            //Случай, если данных по абитуриенту еще нет
+            if (countStrings == 0) return null;
+
+            ResultSetMetaData rsmd = rset.getMetaData();
+            int numberOfColumns = rsmd.getColumnCount();
+
+            String[] result = new String[countStrings * numberOfColumns];
+            for (int i = 0; i < result.length; i++)
+                result[i] = "";
+
+            int curPos = 0;
+
+            while (rset.next()) {
+                for (int i = 0; i < numberOfColumns; i++) {
+                    if (rset.getObject(i + 1) != null)
+                        if (rset.getObject(i + 1) instanceof Date) {
+                            SimpleDateFormat format = new SimpleDateFormat();
+                            format.applyPattern("yyyy-MM-dd");
+                            Date docDate = format.parse(rset.getObject(i + 1).toString());
+                            //format.applyPattern("dd.MM.yyyy");
+                            result[curPos] = format.format(docDate);
+                        } else
+                            result[curPos] = rset.getObject(i + 1).toString();
+
+                    curPos++;
+                }
+            }
+            cstmt.close();
+            rset.close();
+            return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String[] getAbiturientQuotaByID(String aid) throws SQLException {
+        try {
+            String query = ModelDBConnection.getQueryByTabName("Квота")
+                    + " WHERE Abiturient.aid = " + aid + ";";
+
+            System.out.println(query);
+
+            cstmt = con.prepareCall(query, 1004, 1007);
+
+            rset = cstmt.executeQuery();
+
+            int countStrings = rset.last() ? rset.getRow() : 0;
+            rset.beforeFirst();
+
+            //Случай, если данных по абитуриенту еще нет
+            if (countStrings == 0) return null;
+
+            ResultSetMetaData rsmd = rset.getMetaData();
+            int numberOfColumns = rsmd.getColumnCount();
+
+            String[] result = new String[countStrings * numberOfColumns];
+            for (int i = 0; i < result.length; i++)
+                result[i] = "";
+
+            int curPos = 0;
+
+            while (rset.next()) {
+                for (int i = 0; i < numberOfColumns; i++) {
+                    if (rset.getObject(i + 1) != null)
+                        if (rset.getObject(i + 1) instanceof Date) {
+                            SimpleDateFormat format = new SimpleDateFormat();
+                            format.applyPattern("yyyy-MM-dd");
+                            Date docDate = format.parse(rset.getObject(i + 1).toString());
+                            //format.applyPattern("dd.MM.yyyy");
+                            result[curPos] = format.format(docDate);
+                        } else
+                            result[curPos] = rset.getObject(i + 1).toString();
+
+                    curPos++;
+                }
+            }
+            cstmt.close();
+            rset.close();
+            return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String[] getAbiturientPreferredRightByID(String aid) throws SQLException {
+        try {
+            String query = ModelDBConnection.getQueryByTabName("Преимущественное право")
+                    + " WHERE Abiturient.aid = " + aid + ";";
+
+            System.out.println(query);
+
+            cstmt = con.prepareCall(query, 1004, 1007);
+
+            rset = cstmt.executeQuery();
+
+            int countStrings = rset.last() ? rset.getRow() : 0;
+            rset.beforeFirst();
+
+            //Случай, если данных по абитуриенту еще нет
+            if (countStrings == 0) return null;
+
+            ResultSetMetaData rsmd = rset.getMetaData();
+            int numberOfColumns = rsmd.getColumnCount();
+
+            String[] result = new String[countStrings * numberOfColumns];
+            for (int i = 0; i < result.length; i++)
+                result[i] = "";
+
+            int curPos = 0;
+
+            while (rset.next()) {
+                for (int i = 0; i < numberOfColumns; i++) {
+                    if (rset.getObject(i + 1) != null)
+                        if (rset.getObject(i + 1) instanceof Date) {
+                            SimpleDateFormat format = new SimpleDateFormat();
+                            format.applyPattern("yyyy-MM-dd");
+                            Date docDate = format.parse(rset.getObject(i + 1).toString());
+                            //format.applyPattern("dd.MM.yyyy");
+                            result[curPos] = format.format(docDate);
+                        } else
+                            result[curPos] = rset.getObject(i + 1).toString();
+
+                    curPos++;
+                }
+            }
+            cstmt.close();
+            rset.close();
+            return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void updateAbiturientBVIByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsBVI", aid, fieldsNames, fieldsData, 0);
+
+        if(fieldsData.length == 0) return;
+
+        String[] privilegeDocsData = new String[fieldsNames.length - 1],
+                typePrivilegeData = new String[1],
+                privilegeDocsNames = new String[fieldsNames.length - 1],
+                typePrivilegeNames = new String[1];
+
+        typePrivilegeData[0] = fieldsData[0];
+        typePrivilegeNames[0] = fieldsNames[0];
+
+        ModelDBConnection.updateElementInTableByExpression("AbiturientBVI", aid, typePrivilegeNames, typePrivilegeData, 0);
+
+        for (int i = 1, j = 0; i < fieldsData.length; i++, j++) {
+            privilegeDocsData[j] = fieldsData[i];
+            privilegeDocsNames[j] = fieldsNames[j + 1];
+
+            if((i + 1 )% fieldsNames.length  == 0) {
+                i++;
+                j = -1;
+
+                ModelDBConnection.updateElementInTableByExpression("AbiturientDocumentsBVI", aid, privilegeDocsNames, privilegeDocsData, 1);
+            }
+        }
+    }
+
+    public static void updateAbiturientQuotaByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentQuota", aid, fieldsNames, fieldsData, 0);
+
+        if(fieldsData.length == 0) return;
+
+        String[] privilegeDocsData = new String[fieldsNames.length - 1],
+                typePrivilegeData = new String[1],
+                privilegeDocsNames = new String[fieldsNames.length - 1],
+                typePrivilegeNames = new String[1];
+
+        typePrivilegeData[0] = fieldsData[0];
+        typePrivilegeNames[0] = fieldsNames[0];
+
+        ModelDBConnection.updateElementInTableByExpression("AbiturientQuota", aid, typePrivilegeNames, typePrivilegeData, 0);
+
+        for (int i = 1, j = 0; i < fieldsData.length; i++, j++) {
+            privilegeDocsData[j] = fieldsData[i];
+            privilegeDocsNames[j] = fieldsNames[j +1 ];
+
+            if((i +1 )% fieldsNames.length  == 0) {
+                i++;
+                j = -1;
+
+                ModelDBConnection.updateElementInTableByExpression("AbiturientDocumentQuota", aid, privilegeDocsNames, privilegeDocsData, 1);
+            }
+        }
+    }
+
+    public static void updateAbiturienPreferredRightByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsPreferredRight", aid, fieldsNames, fieldsData, 0);
+
+        if(fieldsData.length == 0) return;
+
+        String[] privilegeDocsData = new String[fieldsNames.length - 1],
+                typePrivilegeData = new String[1],
+                privilegeDocsNames = new String[fieldsNames.length - 1],
+                typePrivilegeNames = new String[1];
+
+        typePrivilegeData[0] = fieldsData[0];
+        typePrivilegeNames[0] = fieldsNames[0];
+
+        ModelDBConnection.updateElementInTableByExpression("AbiturientPreferredRight", aid, typePrivilegeNames, typePrivilegeData, 0);
+
+        for (int i = 1, j = 0; i < fieldsData.length; i++, j++) {
+            privilegeDocsData[j] = fieldsData[i];
+            privilegeDocsNames[j] = fieldsNames[j + 1];
+
+            if((i + 1 )% fieldsNames.length  == 0) {
+                i++;
+                j = -1;
+
+                ModelDBConnection.updateElementInTableByExpression("AbiturientDocumentsPreferredRight", aid, privilegeDocsNames, privilegeDocsData, 1);
+            }
+        }
+    }
+
+
+    public static void deleteAbiturientDocumentsBVIByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsBVI", aid, fieldsNames, fieldsData, 0);
+    }
+
+    public static void deleteAbiturientDocumentsQuotaByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentQuota", aid, fieldsNames, fieldsData, 0);
+    }
+
+    public static void deleteAbiturientDocumentsPreferredRightByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsPreferredRight", aid, fieldsNames, fieldsData, 0);
+    }
 }

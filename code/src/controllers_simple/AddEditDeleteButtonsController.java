@@ -130,6 +130,10 @@ public class AddEditDeleteButtonsController {
 					    		CompetitiveGroupsTabController competitiveGroupsTabController = tabController.getController();
 					    		competitiveGroupsTabController.uploadFieldsDataToDataBase(fieldsData);
 					    		break;
+                            case "Привилегии":
+                                PrivilegeTabController privilegeTabController = tabController.getController();
+                                privilegeTabController.uploadFieldsDataToDataBase(fieldsData);
+                                break;
 				    	}
 
 		    			this.setEditable(activate);
@@ -392,7 +396,7 @@ public class AddEditDeleteButtonsController {
 				return competitiveGroupsTabController.checkData();
 			case "Привилегии":
 				PrivilegeTabController privilegeTabController = tabController.getController();
-				return privilegeTabController.checkData();
+//				return privilegeTabController.checkData();
 	    	default:
 	    		return 0;
     	}

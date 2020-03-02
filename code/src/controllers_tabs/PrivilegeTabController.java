@@ -57,7 +57,6 @@ public class PrivilegeTabController {
         fieldsTable.getItems().clear();
         buttonsPane.getChildren().clear();
         list.clear();
-        System.out.println(privilege);
         if(!privilege.equals("")){
             ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(ModelDBConnection.getQueryByTabName(privilege));
             countFields = rsmd.getColumnCount();
@@ -202,6 +201,8 @@ public class PrivilegeTabController {
 
             AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
 
+            setFieldsData("0");
+
             addEditDeleteButtonsController.setParameters("Привилегии", tabController, fields, fieldsTypes, fieldsControllers);
 
             setEditable(false);
@@ -257,6 +258,90 @@ public class PrivilegeTabController {
         }
     }
 
+    public void setFieldsData(String aid) throws Exception {
+        this.aid = aid;
+        String[] privilegeData = null;
+        switch(choicePrivilege.getSelectionModel().selectedItemProperty().getValue().toString()){
+            case "БВИ":
+                privilegeData = ModelDBConnection.getAbiturientBVIByID(aid);
+                break;
+            case "Квота":
+                 privilegeData = ModelDBConnection.getAbiturientQuotaByID(aid);
+                break;
+            case "Преимущественное право":
+                privilegeData = ModelDBConnection.getAbiturientPreferredRightByID(aid);
+                break;
+            default:
+                break;
+        }
+        if(privilegeData != null) {
+            for (int i = 0; i < privilegeData.length / fields.length; i++)
+                addRow();
+
+            for (int i = 0, j = 0; i < privilegeData.length; i++, j++) {
+                if (j == countFields)
+                    j = 0;
+                switch (fieldsTypes[j]) {
+                    case "date":
+                        DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                        dateInputPatternController.setFieldData(privilegeData[i]);
+                        break;
+                    case "int":
+                        if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
+                            ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                            choiceInputPatternController.setFieldData(privilegeData[i]);
+                        }
+                        break;
+                    case "varchar":
+                        if (Pattern.compile("(name).*").matcher(fields[j]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(privilegeData[i]);
+                        }
+                        if (Pattern.compile("(series).*").matcher(fields[j]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(privilegeData[i]);
+                        }
+                        if (Pattern.compile("(num).*").matcher(fields[j]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(privilegeData[i]);
+                        }
+                        if (Pattern.compile("(issued).*").matcher(fields[j]).matches()) {
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(privilegeData[i]);
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+
+    public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
+        //Выгружаем данные только если в таблицу была добавлена хотя бы 1 строка
+        switch(choicePrivilege.getSelectionModel().selectedItemProperty().getValue().toString()){
+            case "БВИ":
+                if (!isEmpty())
+                    ModelDBConnection.updateAbiturientBVIByID(aid, fieldsOriginalNames, fieldsData);
+                else
+                    ModelDBConnection.deleteAbiturientDocumentsBVIByID(aid, fieldsOriginalNames, fieldsData);
+                break;
+            case "Квота":
+                if (!isEmpty())
+                    ModelDBConnection.updateAbiturientQuotaByID(aid, fieldsOriginalNames, fieldsData);
+                else
+                    ModelDBConnection.deleteAbiturientDocumentsQuotaByID(aid, fieldsOriginalNames, fieldsData);
+                break;
+            case "Преимущественное право":
+                if (!isEmpty())
+                    ModelDBConnection.updateAbiturienPreferredRightByID(aid, fieldsOriginalNames, fieldsData);
+                else
+                    ModelDBConnection.deleteAbiturientDocumentsPreferredRightByID(aid, fieldsOriginalNames, fieldsData);
+                break;
+            default:
+                break;
+        }
+    }
+
     public int checkData() {
         int errorCount = 0, currentErrorCode = 0;
 
@@ -273,11 +358,23 @@ public class PrivilegeTabController {
                     currentErrorCode = dateInputPatternController.checkData();
                     break;
                 case "int":
-                    if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = choiceInputPatternController.checkData();
                         if (currentErrorCode > 0) {
-                            MessageProcessing.displayErrorMessage(510);
+                            switch(choicePrivilege.getSelectionModel().selectedItemProperty().getValue().toString()){
+                                case "БВИ":
+                                    MessageProcessing.displayErrorMessage(510);
+                                    break;
+                                case "Квота":
+                                    // изменить код ошибки
+                                    MessageProcessing.displayErrorMessage(510);
+                                    break;
+                                case "Преимущественное право":
+                                    // изменить код ошибки
+                                    MessageProcessing.displayErrorMessage(510);
+                                    break;
+                            }
                             return currentErrorCode;
                         }
                     }
@@ -287,19 +384,18 @@ public class PrivilegeTabController {
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
-                    if(Pattern.compile("(series).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(series).*").matcher(fields[j]).matches() ){
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
-                    if(Pattern.compile("(num).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(num).*").matcher(fields[j]).matches() ){
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
-                    if(Pattern.compile("(issued).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(issued).*").matcher(fields[j]).matches() ){
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
-
                     break;
             }
             //errorCount += currentErrorCode;
@@ -431,15 +527,15 @@ public class PrivilegeTabController {
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
-                    if(Pattern.compile("(series).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(series).*").matcher(fields[j]).matches() ){
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
-                    if(Pattern.compile("(num).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(num).*").matcher(fields[j]).matches() ){
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
-                    if(Pattern.compile("(issued).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(issued).*").matcher(fields[j]).matches() ){
                         TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = textInputPatternController.checkData();
                     }
