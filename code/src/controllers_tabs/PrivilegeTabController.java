@@ -99,6 +99,7 @@ public class PrivilegeTabController {
                             fieldsTable.getColumns().add(fieldData);
                             paneObservableList.add(newPane);
                         }
+                        break;
                     case "int":
                         if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
                             loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
@@ -111,6 +112,7 @@ public class PrivilegeTabController {
                             choiceInputPatternController.setFieldData("");
                             mainGridPane.add(newPane,0,1);
                         }
+                        break;
                     case "varchar":
                         if(Pattern.compile("(name).*").matcher(fields[i]).matches() ){
                             TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientDocumentsBVI"));
@@ -207,8 +209,8 @@ public class PrivilegeTabController {
 
             setEditable(false);
         }
-
     }
+
 
     public void setEditable(Boolean value) {
         for (int i = 0, j = 0; i < fieldsControllers.length; i++, j++) {
@@ -258,6 +260,7 @@ public class PrivilegeTabController {
         }
     }
 
+
     public void setFieldsData(String aid) throws Exception {
         this.aid = aid;
         String[] privilegeData = null;
@@ -275,7 +278,7 @@ public class PrivilegeTabController {
                 break;
         }
         if(privilegeData != null) {
-            for (int i = 0; i < privilegeData.length / fields.length; i++)
+            for (int i = 1; i < privilegeData.length / fields.length; i++)
                 addRow();
 
             for (int i = 0, j = 0; i < privilegeData.length; i++, j++) {
@@ -309,12 +312,12 @@ public class PrivilegeTabController {
                             TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
                             textInputPatternController.setFieldData(privilegeData[i]);
                         }
-
                         break;
                 }
             }
         }
     }
+
 
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
         //Выгружаем данные только если в таблицу была добавлена хотя бы 1 строка
@@ -342,10 +345,28 @@ public class PrivilegeTabController {
         }
     }
 
+
     public int checkData() {
         int errorCount = 0, currentErrorCode = 0;
 
-        //Если в таблицу ничего не добавляли, то никаких проверок не осуществляем
+        //Если в таблицу ничего не добавляли, но выбран элемент в выпадающем списке, то ошибка
+        if (isEmptyOnlyTable()) {
+            switch(choicePrivilege.getSelectionModel().selectedItemProperty().getValue().toString()){
+	            case "БВИ":
+	                MessageProcessing.displayErrorMessage(516);
+	                break;
+	            case "Квота":
+	                MessageProcessing.displayErrorMessage(616);
+	                break;
+	            case "Преимущественное право":
+	                MessageProcessing.displayErrorMessage(716);
+	                break;
+            }
+        	return 1;
+        }
+
+        //Если в таблицу ничего не добавляли и в выпадающем списке ничего не выбрано, 
+        //то никаких проверок не осуществляем
         if (isEmpty()) return 0;
 
         for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
@@ -367,12 +388,10 @@ public class PrivilegeTabController {
                                     MessageProcessing.displayErrorMessage(510);
                                     break;
                                 case "Квота":
-                                    // изменить код ошибки
-                                    MessageProcessing.displayErrorMessage(510);
+                                    MessageProcessing.displayErrorMessage(610);
                                     break;
                                 case "Преимущественное право":
-                                    // изменить код ошибки
-                                    MessageProcessing.displayErrorMessage(510);
+                                    MessageProcessing.displayErrorMessage(710);
                                     break;
                             }
                             return currentErrorCode;
@@ -405,6 +424,7 @@ public class PrivilegeTabController {
         return errorCount;
     }
 
+
     public  FXMLLoader[] addRow() throws IOException {
         FXMLLoader loader;
         Pane newPane;
@@ -433,15 +453,18 @@ public class PrivilegeTabController {
                     break;
                 case "int":
                     if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
-                        loader = new FXMLLoader();
-                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+                    	if (fieldsControllers[j] == null) {
+                    		loader = new FXMLLoader();
+                            loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
-                        newPane = (Pane) loader.load();
-                        fieldsControllers[i] = loader;
-                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
-                        choiceInputPatternController.setWidthHeight(410.0,35.0, 0.0);
-                        choiceInputPatternController.setParameters(fields[j], "");
-                        choiceInputPatternController.setFieldData("");
+                            newPane = (Pane) loader.load();
+                            fieldsControllers[i] = loader;
+                            ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                            choiceInputPatternController.setWidthHeight(410.0,35.0, 0.0);
+                            choiceInputPatternController.setParameters(fields[j], "");
+                            choiceInputPatternController.setFieldData("");
+                    	} else
+                    		fieldsControllers[i] = fieldsControllers[j];
                     }
                     break;
                 case "varchar":
@@ -498,6 +521,7 @@ public class PrivilegeTabController {
         return fieldsControllers;
     }
 
+
     public boolean isEmpty() {
         if (fieldsControllers == null)
             return true;
@@ -543,19 +567,87 @@ public class PrivilegeTabController {
             }
             errorCount += currentErrorCode;
         }
-        return (errorCount == fields.length - countBooleanFields ? true : false);
+        return (errorCount == fields.length - countBooleanFields);
     }
+
+    public boolean isEmptyOnlyTable() {
+        int errorCount = 0, currentErrorCode = 0, countChoiceFields = 0;;
+
+        for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
+            if(j == countFields)
+                j=0;
+
+            switch (fieldsTypes[j]) {
+                case "date":
+                    DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = dateInputPatternController.checkData();
+                    break;
+                case "int":
+                    if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = choiceInputPatternController.checkData();
+                        countChoiceFields++;
+                    }
+                    break;
+                case "varchar":
+                    if (Pattern.compile("(name).*").matcher(fields[j]).matches()) {
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = textInputPatternController.checkData();
+                    }
+                    if(Pattern.compile("(series).*").matcher(fields[j]).matches() ){
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = textInputPatternController.checkData();
+                    }
+                    if(Pattern.compile("(num).*").matcher(fields[j]).matches() ){
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = textInputPatternController.checkData();
+                    }
+                    if(Pattern.compile("(issued).*").matcher(fields[j]).matches() ){
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = textInputPatternController.checkData();
+                    }
+                    break;
+            }
+            errorCount += currentErrorCode;
+        }
+        return (errorCount == fields.length - countChoiceFields);
+    }
+
 
     public FXMLLoader[] deleteRow() throws Exception {
         int row = fieldsTable.getSelectionModel().getSelectedIndex();
 
-        for(int i = row * countFields, j = (row + 1) * countFields; j < fieldsControllers.length; i++, j++) {
-            fieldsControllers[i] = fieldsControllers[j];
-        }
+        //Если удаляется единственная строка в таблице, то 
+        //просто сбрасываем значения во всех элементах таблицы, а выпадающий список не трогаем
+        if (fieldsControllers.length == fieldsOriginalNames.length) {
+            for (int i = 0, j = 0; i < fieldsControllers.length; i++, j++) {
+                if (j == countFields)
+                    j = 0;
+                switch (fieldsTypes[j]) {
+                    case "date":
+                        DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                        dateInputPatternController.setFieldData("");
+                        break;
+                    case "int":
+                        if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
+                        	break;
+                        }
+                        break;
+                    case "varchar":
+                        TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                        textInputPatternController.setFieldData("");
+                        break;
+                }
+            }
+        } else {
+	        for(int i = row * countFields, j = (row + 1) * countFields; j < fieldsControllers.length; i++, j++) {
+	            fieldsControllers[i] = fieldsControllers[j];
+	        }
 
-        fieldsControllers = Arrays.copyOfRange(fieldsControllers,0,fieldsControllers.length - countFields);
-        fieldsTable.getItems().remove(row);
-        list.remove(row);
+	        fieldsControllers = Arrays.copyOfRange(fieldsControllers,0,fieldsControllers.length - countFields);
+	        fieldsTable.getItems().remove(row);
+	        list.remove(row);
+        }
 
         if (fieldsControllers.length == 0)
             addRow();

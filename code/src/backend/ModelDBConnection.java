@@ -1267,7 +1267,7 @@ public class ModelDBConnection {
             privilegeDocsData[j] = fieldsData[i];
             privilegeDocsNames[j] = fieldsNames[j + 1];
 
-            if((i + 1 )% fieldsNames.length  == 0) {
+            if((i + 1) % fieldsNames.length  == 0) {
                 i++;
                 j = -1;
 
@@ -1293,9 +1293,9 @@ public class ModelDBConnection {
 
         for (int i = 1, j = 0; i < fieldsData.length; i++, j++) {
             privilegeDocsData[j] = fieldsData[i];
-            privilegeDocsNames[j] = fieldsNames[j +1 ];
+            privilegeDocsNames[j] = fieldsNames[j + 1];
 
-            if((i +1 )% fieldsNames.length  == 0) {
+            if((i + 1) % fieldsNames.length == 0) {
                 i++;
                 j = -1;
 
@@ -1323,7 +1323,7 @@ public class ModelDBConnection {
             privilegeDocsData[j] = fieldsData[i];
             privilegeDocsNames[j] = fieldsNames[j + 1];
 
-            if((i + 1 )% fieldsNames.length  == 0) {
+            if((i + 1) % fieldsNames.length  == 0) {
                 i++;
                 j = -1;
 
@@ -1334,14 +1334,17 @@ public class ModelDBConnection {
 
 
     public static void deleteAbiturientDocumentsBVIByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-        ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsBVI", aid, fieldsNames, fieldsData, 0);
+    	ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsBVI", aid, fieldsNames, fieldsData, 0);
+    	ModelDBConnection.deleteElementInTableByExpression("AbiturientBVI", aid, fieldsNames, fieldsData, 0);
     }
 
     public static void deleteAbiturientDocumentsQuotaByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
         ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentQuota", aid, fieldsNames, fieldsData, 0);
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientQuota", aid, fieldsNames, fieldsData, 0);
     }
 
     public static void deleteAbiturientDocumentsPreferredRightByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
         ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsPreferredRight", aid, fieldsNames, fieldsData, 0);
+        ModelDBConnection.deleteElementInTableByExpression("AbiturientPreferredRight", aid, fieldsNames, fieldsData, 0);
     }
 }

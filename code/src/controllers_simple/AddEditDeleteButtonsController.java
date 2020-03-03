@@ -396,7 +396,7 @@ public class AddEditDeleteButtonsController {
 				return competitiveGroupsTabController.checkData();
 			case "Привилегии":
 				PrivilegeTabController privilegeTabController = tabController.getController();
-//				return privilegeTabController.checkData();
+				return privilegeTabController.checkData();
 	    	default:
 	    		return 0;
     	}
