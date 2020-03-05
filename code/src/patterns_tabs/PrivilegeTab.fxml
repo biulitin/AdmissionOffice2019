@@ -22,10 +22,7 @@
         </rowConstraints>
          <children>
             <Pane fx:id="buttonsPane" prefHeight="60.0" prefWidth="200.0" GridPane.rowIndex="3" />
-            <TableView fx:id="fieldsTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy></TableView>
+            <TableView fx:id="fieldsTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
                   <ChoiceBox fx:id="choicePrivilege" layoutX="14.0" layoutY="13.0" prefHeight="27.0" prefWidth="219.0" AnchorPane.leftAnchor="31.0" AnchorPane.topAnchor="13.0" />
