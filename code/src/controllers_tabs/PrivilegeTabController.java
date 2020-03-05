@@ -4,6 +4,7 @@ import backend.MessageProcessing;
 import backend.ModelDBConnection;
 import controllers_simple.*;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -83,13 +84,16 @@ public class PrivilegeTabController {
                     case "date":
                         if(Pattern.compile("(date).*").matcher(fields[i]).matches() ){
                             TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientDocumentsBVI"));
+                            fieldData.setResizable(false);
+                            fieldData.setMinWidth(200.0);
+
                             loader = new FXMLLoader();
                             loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
 
                             newPane = (Pane) loader.load();
                             fieldsControllers[i] = loader;
                             DateInputPatternController dateInputPatternController = loader.getController();
-                            dateInputPatternController.setWidthHeight(175.0, 35.0, 0.0);
+                            dateInputPatternController.setWidthHeight(fieldData.getWidth()*0.90, 35.0, 0.0);
                             dateInputPatternController.setParameters(fields[i],"");
                             fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                                 public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
@@ -116,73 +120,85 @@ public class PrivilegeTabController {
                     case "varchar":
                         if(Pattern.compile("(name).*").matcher(fields[i]).matches() ){
                             TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientDocumentsBVI"));
+                            fieldData.setPrefWidth(220.0);
+
                             loader = new FXMLLoader();
                             loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
                             newPane = (Pane) loader.load();
                             fieldsControllers[i] = loader;
                             TextInputPatternController textInputPatternController = loader.getController();
-                            textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                            textInputPatternController.setWidthHeight(fieldData.getPrefWidth()*0.85,35.0, 0.0);
                             textInputPatternController.setParameters(fields[i], "");
                             fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                                 public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
                                     return new SimpleObjectProperty<>((Pane) param.getValue().get(0));
                                 }
                             });
+                            widthColumnListener(fieldData);
                             fieldsTable.getColumns().add(fieldData);
                             paneObservableList.add(newPane);
                         }
                         if(Pattern.compile("(series).*").matcher(fields[i]).matches() ){
                             TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientDocumentsBVI"));
+                            fieldData.setPrefWidth(200.0);
+
                             loader = new FXMLLoader();
                             loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
                             newPane = (Pane) loader.load();
                             fieldsControllers[i] = loader;
                             TextInputPatternController textInputPatternController = loader.getController();
-                            textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                            textInputPatternController.setWidthHeight(fieldData.getPrefWidth()*0.85,35.0, 0.0);
                             textInputPatternController.setParameters(fields[i], "");
                             fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                                 public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
                                     return new SimpleObjectProperty<>((Pane) param.getValue().get(1));
                                 }
                             });
+                            widthColumnListener(fieldData);
                             fieldsTable.getColumns().add(fieldData);
                             paneObservableList.add(newPane);
                         }
                         if(Pattern.compile("(num).*").matcher(fields[i]).matches() ){
                             TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientDocumentsBVI"));
+                            fieldData.setPrefWidth(200.0);
+
                             loader = new FXMLLoader();
                             loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
                             newPane = (Pane) loader.load();
                             fieldsControllers[i] = loader;
                             TextInputPatternController textInputPatternController = loader.getController();
-                            textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                            textInputPatternController.setWidthHeight(fieldData.getPrefWidth()*0.85,35.0, 0.0);
                             textInputPatternController.setParameters(fields[i], "");
                             fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                                 public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
                                     return new SimpleObjectProperty<>((Pane) param.getValue().get(2));
                                 }
                             });
+                            widthColumnListener(fieldData);
                             fieldsTable.getColumns().add(fieldData);
                             paneObservableList.add(newPane);
                         }
                         if(Pattern.compile("(issued).*").matcher(fields[i]).matches() ){
                             TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],"AbiturientDocumentsBVI"));
+                            fieldData.setPrefWidth(250.0);
+
                             loader = new FXMLLoader();
                             loader.setLocation(getClass().getResource("../patterns_simple/TextInputPattern.fxml"));
 
                             newPane = (Pane) loader.load();
                             fieldsControllers[i] = loader;
                             TextInputPatternController textInputPatternController = loader.getController();
-                            textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                            textInputPatternController.setWidthHeight(fieldData.getPrefWidth()*0.85,35.0, 0.0);
                             textInputPatternController.setParameters(fields[i], "");
                             fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
                                 public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
                                     return new SimpleObjectProperty<>((Pane) param.getValue().get(3));
                                 }
                             });
+                            widthColumnListener(fieldData);
                             fieldsTable.getColumns().add(fieldData);
                             paneObservableList.add(newPane);
                         }
@@ -446,7 +462,7 @@ public class PrivilegeTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         DateInputPatternController dateInputPatternController = loader.getController();
-                        dateInputPatternController.setWidthHeight(175.0, 35.0, 0.0);
+                        dateInputPatternController.setWidthHeight(fieldsTable.getColumns().get(j - 1).getWidth()*0.90, 35.0, 0.0);
                         dateInputPatternController.setParameters(fields[j],"");
                         paneObservableList.add(newPane);
                     }
@@ -475,7 +491,7 @@ public class PrivilegeTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                        textInputPatternController.setWidthHeight(fieldsTable.getColumns().get(j - 1).getWidth()*0.85,35.0, 0.0);
                         textInputPatternController.setParameters(fields[j], "");
                         paneObservableList.add(newPane);
                     }
@@ -486,7 +502,7 @@ public class PrivilegeTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                        textInputPatternController.setWidthHeight(fieldsTable.getColumns().get(j - 1).getWidth()*0.85,35.0, 0.0);
                         textInputPatternController.setParameters(fields[j], "");
                         paneObservableList.add(newPane);
                     }
@@ -497,7 +513,7 @@ public class PrivilegeTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                        textInputPatternController.setWidthHeight(fieldsTable.getColumns().get(j - 1).getWidth()*0.85,35.0, 0.0);
                         textInputPatternController.setParameters(fields[j], "");
                         paneObservableList.add(newPane);
 
@@ -509,7 +525,7 @@ public class PrivilegeTabController {
                         newPane = (Pane) loader.load();
                         fieldsControllers[i] = loader;
                         TextInputPatternController textInputPatternController = loader.getController();
-                        textInputPatternController.setWidthHeight(175.0,35.0, 0.0);
+                        textInputPatternController.setWidthHeight(fieldsTable.getColumns().get(j - 1).getWidth()*0.85,35.0, 0.0);
                         textInputPatternController.setParameters(fields[j], "");
                         paneObservableList.add(newPane);
                     }
@@ -653,5 +669,37 @@ public class PrivilegeTabController {
             addRow();
 
         return fieldsControllers;
+    }
+
+    void widthColumnListener(final TableColumn listerColumn) {
+        listerColumn.widthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                int i = fieldsTable.getVisibleLeafIndex(listerColumn) + 1;
+                for (int j = i; j < fieldsControllers.length; j = j + countFields) {
+                    switch (fieldsTypes[i]) {
+                        case "varchar":
+                            if (Pattern.compile("(name).*").matcher(fields[i]).matches()) {
+                                TextInputPatternController textInputPatternController = fieldsControllers[j].getController();
+                                textInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
+                            }
+                            if (Pattern.compile("(series).*").matcher(fields[i]).matches()) {
+                                TextInputPatternController textInputPatternController = fieldsControllers[j].getController();
+                                textInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
+                            }
+                            if (Pattern.compile("(num).*").matcher(fields[i]).matches()) {
+                                TextInputPatternController textInputPatternController = fieldsControllers[j].getController();
+                                textInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
+                            }
+                            if (Pattern.compile("(issued).*").matcher(fields[i]).matches()) {
+                                TextInputPatternController textInputPatternController = fieldsControllers[j].getController();
+                                textInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
+                            }
+                            break;
+                    }
+                }
+            }
+        });
     }
 }
