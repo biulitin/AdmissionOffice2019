@@ -448,7 +448,7 @@ public class CompetitiveGroupsTabController {
                 j=0;
             switch (fieldsTypes[j]){
                 case "date":
-                    if(Pattern.compile("(date).*").matcher(fields[j]).matches() ){
+                	if(Pattern.compile(".*(Date).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/DateInputPattern.fxml"));
 
@@ -461,7 +461,7 @@ public class CompetitiveGroupsTabController {
                     }
                     break;
                 case "int":
-                    if(Pattern.compile("(id_category).*").matcher(fields[j]).matches() ){
+                    if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
                         loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
@@ -472,6 +472,32 @@ public class CompetitiveGroupsTabController {
                         choiceInputPatternController.setParameters(fields[j], "");
                         choiceInputPatternController.setFieldData("");
                         paneObservableList1.add(newPane);
+                    }
+                    if(Pattern.compile("(have).*").matcher(fields[j]).matches() ){
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/BoolInputPattern.fxml"));
+                    	
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+                        BoolInputPatternController boolInputPatternController = loader.getController();
+                        boolInputPatternController.setWidthHeight(50.0,35.0);
+                        boolInputPatternController.setParameters(fields[j], "");
+                        paneObservableList1.add(newPane);
+                        break;
+                    }
+                    if( Pattern.compile("(competitiveScore)").matcher(fields[j]).matches() ||
+                    		Pattern.compile("(scoresIndAchievements)").matcher(fields[j]).matches() ||
+                    		Pattern.compile("(priority)").matcher(fields[j]).matches() ){
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+                        IntInputPatternController intInputPatternController = loader.getController();
+                        intInputPatternController.setWidthHeight(100.0,35.0, 0.0);
+                        intInputPatternController.setParameters(fields[j], "");
+                        paneObservableList1.add(newPane);
+                        break;
                     }
                     break;
                 case "varchar":
@@ -512,10 +538,24 @@ public class CompetitiveGroupsTabController {
 	                currentErrorCode = dateInputPatternController.checkData();
 	                break;
 	            case "int":
-	                if (Pattern.compile("(id_category).*").matcher(fields[j]).matches()) {
-	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
-	                    currentErrorCode = choiceInputPatternController.checkData();
-	                }
+                    if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = choiceInputPatternController.checkData();
+                        break;
+                    }
+                    if(Pattern.compile("(have).*").matcher(fields[j]).matches() ){
+                    	BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+                    	currentErrorCode = boolInputPatternController.checkData();
+                    	countBooleanFields++;
+                        break;
+                    }
+                    if( Pattern.compile("(competitiveScore)").matcher(fields[j]).matches() ||
+                    		Pattern.compile("(scoresIndAchievements)").matcher(fields[j]).matches() ||
+                    		Pattern.compile("(priority)").matcher(fields[j]).matches() ) {
+                    	IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                    	currentErrorCode = intInputPatternController.checkData();
+                        break;
+                    }
 	                break;
 	            case "varchar":
                     TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
@@ -525,7 +565,7 @@ public class CompetitiveGroupsTabController {
 			errorCount += currentErrorCode;
 		}
 
-		return (errorCount == fields.length - countBooleanFields ? true : false);
+		return (errorCount == fields.length - countBooleanFields);
     }
 
     public FXMLLoader[] deleteRow() throws Exception {
