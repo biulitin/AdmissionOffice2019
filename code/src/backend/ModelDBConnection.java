@@ -229,7 +229,7 @@ public class ModelDBConnection {
 			case "registrationdate": return "Дата подачи заявления";
 			case "returnDate": return "Дата возврата документов";
 			case "id_returnReason": return "Причина возврата документов";
-			case "needSpecConditions": return "Нуждается в спеицальных условиях на ВИ";
+			case "needSpecConditions": return "Нуждается в специальных условиях на ВИ";
 			case "is_enrolled": return "Зачислен";
 			//Таблица AbiturientPassport
 			case "id_abiturient": return "№ Личного дела";
