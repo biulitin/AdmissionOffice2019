@@ -142,6 +142,7 @@ public class AddEditDeleteButtonsController {
                             case "Справочник":
                                 CatalogController catalogController = tabController.getController();
                                 catalogController.uploadFieldsDataToDataBase(fieldsData);
+                                break;
 				    	}
 
 		    			this.setEditable(activate);
