@@ -12,6 +12,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 
@@ -395,6 +396,46 @@ public class ModelDBConnection {
 						"AbiturientDocumentsPreferredRight.issued_by, AbiturientDocumentsPreferredRight.dateOf_issue FROM " +
 						"AbiturientPreferredRight JOIN Abiturient ON (Abiturient.aid = AbiturientPreferredRight.id_abiturient) " +
 						"JOIN AbiturientDocumentsPreferredRight on (Abiturient.aid = AbiturientDocumentsPreferredRight.id_abiturient)";
+            case "Пол":
+                return "SELECT * FROM Gender ";
+            case "Гражданство":
+                return "SELECT * FROM Nationality ";
+            case "Причины возврата":
+                return "SELECT * FROM ReturnReasons ";
+            case "Типы паспортов":
+                return "SELECT * FROM TypePassport ";
+            case "Регионы":
+                return "SELECT * FROM Region ";
+            case "Типы населенных пунктов":
+                return "SELECT * FROM TypeSettlement ";
+            case "Формы вступительных испытаний":
+                return "SELECT * FROM FormOfExam ";
+            case "Языки вступительных испытаний":
+                return "SELECT * FROM LanguageOfExam ";
+            case "Основания для оценки":
+                return "SELECT * FROM BasisMark ";
+            case "Олимпиады":
+                return "SELECT * FROM Olympiad ";
+            case "Уровни образования":
+                return "SELECT * FROM LevelEducation ";
+            case "Типы образования":
+                return "SELECT * FROM TypeEducation ";
+            case "Специальности":
+                return "SELECT * FROM Speciality ";
+            case "Формы обучения":
+                return "SELECT * FROM FormOfEducation ";
+            case "Конкурсные группы ":
+                return "SELECT * FROM CompetitiveGroup ";
+            case "Целевые организации":
+                return "SELECT * FROM TargetOrganization ";
+            case "Типы БВИ":
+                return "SELECT * FROM TypeOfBVI ";
+            case "Типы Квоты":
+                return "SELECT * FROM TypeOfQuote ";
+            case "Типы Преимущественного права":
+                return "SELECT * FROM TypeOfPreferredRight ";
+            case "Категории допсведений":
+                return "SELECT * FROM CategoryOfExtraInfo ";
 			default:
 				return "";
 		}
@@ -1346,5 +1387,53 @@ public class ModelDBConnection {
     public static void deleteAbiturientDocumentsPreferredRightByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
         ModelDBConnection.deleteElementInTableByExpression("AbiturientDocumentsPreferredRight", aid, fieldsNames, fieldsData, 0);
         ModelDBConnection.deleteElementInTableByExpression("AbiturientPreferredRight", aid, fieldsNames, fieldsData, 0);
+    }
+
+    // Справочники
+    public static String[] getCatalog(String table){
+        try {
+            String query = ModelDBConnection.getQueryByTabName(table);
+
+			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
+
+			cstmt.setString(1, aid);*/
+            cstmt = con.prepareCall(query, 1004, 1007);
+
+            rset = cstmt.executeQuery();
+
+            int countStrings = rset.last() ? rset.getRow() : 0;
+            rset.beforeFirst();
+
+            ResultSetMetaData rsmd = rset.getMetaData();
+            int numberOfColumns = rsmd.getColumnCount();
+
+            String[] result = new String[numberOfColumns*countStrings];
+
+                for(int j = 0; j < numberOfColumns*countStrings; ){
+                    while (rset.next()){
+                        for (int i = 1; i < numberOfColumns+1; i++,j++){
+                            result[j] = rset.getString(i);
+                        }
+                    }
+                }
+                cstmt.close();
+                rset.close();
+                return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void updateCatalogData(String[] fieldsNames, String[] fieldsData, String table) throws SQLException {
+        String[] catalogData = new String[fieldsNames.length - 1],
+                catalogNames = new String[fieldsNames.length - 1];
+
+        for(int i = 0; i < fieldsData.length;i += fieldsNames.length){
+            for(int j = i + 1, k = 0; k < catalogNames.length;j++,k++){
+                catalogData[k] = fieldsData[j];
+                catalogNames[k] = fieldsNames[k+1];
+            }
+	    ModelDBConnection.updateElementInTableByExpression(table,fieldsData[i],catalogNames ,catalogData ,0 );
+        }
     }
 }

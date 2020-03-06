@@ -4,24 +4,26 @@ import backend.MessageProcessing;
 import backend.ModelDBConnection;
 import controllers_simple.*;
 import controllers_tabs.*;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.grios.tableadapter.DefaultTableAdapter;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.Properties;
@@ -34,6 +36,7 @@ public class MainWindowController {
     @FXML
     public FlowPane returnInformationField;
     public FlowPane mainField;
+    public Menu itemsCatalog;
 
     @FXML
     private Tab tabCompetitiveGroups, tabEntranceExams, tabIndividualAchievements, tabPrivileges, tabBasisFor100balls, tabEducation, tabAddressAndContacts, tabPassportAndINN, tabExtraInfo;
@@ -66,8 +69,9 @@ public class MainWindowController {
 	private TableView fieldsTable;
 
 	private DefaultTableAdapter dta;
+    private ActionEvent actionEvent;
 
-	public void fillTab(FXMLLoader tabController) throws Exception {
+    public void fillTab(FXMLLoader tabController) throws Exception {
 		ModelDBConnection.setDefaultConnectionParameters();
 		ModelDBConnection.initConnection();
 
@@ -301,6 +305,7 @@ public class MainWindowController {
 		PrivilegeTabController privilegeTabController = tabLoader.getController();
 		privilegeTabController.fillTab(tabLoader);
 	}
+
     
 /*
 	public void prepareTable() throws Exception {
@@ -626,5 +631,21 @@ public class MainWindowController {
 
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
         ModelDBConnection.updateAbiturientPassportByID(aid, fieldsOriginalNames, fieldsData);
+    }
+
+    public void onActionCatalog(ActionEvent actionEvent) throws Exception {
+      MenuItem selectedCatalog =  (MenuItem)actionEvent.getTarget();
+
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("../application/Catalog.fxml"));
+      AnchorPane root = loader.load();
+      CatalogController catalogController = loader.getController();
+      catalogController.fillForm(loader,selectedCatalog.getText());
+
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root));
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.initOwner(tabsPane.getParent().getScene().getWindow());
+      stage.show();
     }
 }

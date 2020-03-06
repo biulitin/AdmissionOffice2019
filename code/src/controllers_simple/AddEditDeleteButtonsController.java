@@ -1,5 +1,6 @@
 package controllers_simple;
 
+import application.CatalogController;
 import application.MainWindowController;
 import controllers_tabs.*;
 
@@ -59,6 +60,10 @@ public class AddEditDeleteButtonsController {
 				PrivilegeTabController privilegeTabController = tabController.getController();
 				fieldsControllers = privilegeTabController.addRow();
 				break;
+            case "Справочник":
+                CatalogController catalogController = tabController.getController();
+                fieldsControllers = catalogController.addRow();
+                break;
 		}
     }
 
@@ -134,6 +139,9 @@ public class AddEditDeleteButtonsController {
                                 PrivilegeTabController privilegeTabController = tabController.getController();
                                 privilegeTabController.uploadFieldsDataToDataBase(fieldsData);
                                 break;
+                            case "Справочник":
+                                CatalogController catalogController = tabController.getController();
+                                catalogController.uploadFieldsDataToDataBase(fieldsData);
 				    	}
 
 		    			this.setEditable(activate);
@@ -242,6 +250,7 @@ public class AddEditDeleteButtonsController {
 				PrivilegeTabController privilegeTabController = tabController.getController();
 				fieldsControllers = privilegeTabController.deleteRow();
 				break;
+
         }
     }
 
@@ -397,6 +406,9 @@ public class AddEditDeleteButtonsController {
 			case "Привилегии":
 				PrivilegeTabController privilegeTabController = tabController.getController();
 				return privilegeTabController.checkData();
+            case "Справочник":
+                CatalogController catalogController = tabController.getController();
+                return catalogController.checkData();
 	    	default:
 	    		return 0;
     	}
