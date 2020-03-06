@@ -49,8 +49,13 @@ public class TextInputPatternController {
     }
 
     public int checkData(){
-        if(fieldData.getText().trim().isEmpty())
+        try {
+            if(fieldData.getText().trim().isEmpty())
+                return 1;
+            else  return 0;
+        }
+        catch (NullPointerException e){
             return 1;
-        else return 0;
+        }
     }
 }
