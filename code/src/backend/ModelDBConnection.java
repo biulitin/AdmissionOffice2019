@@ -436,6 +436,14 @@ public class ModelDBConnection {
                 return "SELECT * FROM TypeOfPreferredRight ";
             case "Категории допсведений":
                 return "SELECT * FROM CategoryOfExtraInfo ";
+            case "Перечень вступительных испытаний":
+                return "SELECT * FROM EntranceExam ";
+            case "Перечень индивидуальных достижений":
+                return "SELECT * FROM IndividualAchievement ";
+            case "Пользователи":
+                return "SELECT * FROM Users ";
+            case "План приема":
+                return "SELECT * FROM AdmissionPlan ";
 			default:
 				return "";
 		}
@@ -1390,50 +1398,72 @@ public class ModelDBConnection {
     }
 
     // Справочники
-    public static String[] getCatalog(String table){
-        try {
+    public static String[] getCatalogData(String table){
+		try {
             String query = ModelDBConnection.getQueryByTabName(table);
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
 			cstmt.setString(1, aid);*/
-            cstmt = con.prepareCall(query, 1004, 1007);
 
-            rset = cstmt.executeQuery();
+			cstmt = con.prepareCall(query, 1004, 1007);
 
-            int countStrings = rset.last() ? rset.getRow() : 0;
-            rset.beforeFirst();
+			rset = cstmt.executeQuery();
 
-            ResultSetMetaData rsmd = rset.getMetaData();
-            int numberOfColumns = rsmd.getColumnCount();
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
 
-            String[] result = new String[numberOfColumns*countStrings];
+			//Случай, если данных по абитуриенту еще нет
+			if (countStrings == 0) return null;
 
-                for(int j = 0; j < numberOfColumns*countStrings; ){
-                    while (rset.next()){
-                        for (int i = 1; i < numberOfColumns+1; i++,j++){
-                            result[j] = rset.getString(i);
-                        }
-                    }
-                }
-                cstmt.close();
-                rset.close();
-                return result;
-        } catch (Exception e) {
-            return null;
-        }
-    }
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
 
-    public static void updateCatalogData(String[] fieldsNames, String[] fieldsData, String table) throws SQLException {
+			String[] result = new String[countStrings * numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+				result[i] = "";
+
+			int curPos = 0;
+
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[curPos] = format.format(docDate);
+						} else
+							result[curPos] = rset.getObject(i + 1).toString();
+
+					curPos++;
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+
+    public static void updateCatalogDataById(String[] fieldsNames, String[] fieldsData, String table) throws SQLException {
         String[] catalogData = new String[fieldsNames.length - 1],
                 catalogNames = new String[fieldsNames.length - 1];
 
-        for(int i = 0; i < fieldsData.length;i += fieldsNames.length){
-            for(int j = i + 1, k = 0; k < catalogNames.length;j++,k++){
-                catalogData[k] = fieldsData[j];
-                catalogNames[k] = fieldsNames[k+1];
+        for(int i = 0; i < fieldsData.length; i += fieldsNames.length){
+            for(int j = 0; j < catalogNames.length; j++){
+                catalogData[j] = fieldsData[i + j + 1];
+                catalogNames[j] = fieldsNames[j + 1];
             }
-	    ModelDBConnection.updateElementInTableByExpression(table,fieldsData[i],catalogNames ,catalogData ,0 );
+
+            ModelDBConnection.updateElementInTableByExpression(table, fieldsData[i], catalogNames, catalogData, 0);
         }
+    }
+
+    public static void deleteCatalogData(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+
     }
 }
