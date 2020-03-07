@@ -675,7 +675,7 @@ public class CatalogController {
                             intInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
                             break;
                         case "varchar":
-                        	if(Pattern.compile("(passw).*").matcher(fields[j]).matches()){
+                        	if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
                         		PasswordPatternController passwordInputPatternController = fieldsControllers[j].getController();
                         		passwordInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
     	                        break;
