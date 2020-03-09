@@ -472,6 +472,9 @@ public class ModelDBConnection {
 		case "AbiturientExtraInfo":
 			id = "id_abiturient";
 			break;
+		case "AdmissionPlan":
+			id = "id_speciality";
+			break;
 		default:
 			id = "id";
 		}
@@ -555,6 +558,9 @@ public class ModelDBConnection {
 		case "AbiturientDocumentsPreferredRight":
 		case "AbiturientExtraInfo":
 			id = "id_abiturient";
+			break;
+		case "AdmissionPlan":
+			id = "id_speciality";
 			break;
 		default:
 			id = "id";
@@ -1463,7 +1469,35 @@ public class ModelDBConnection {
         }
     }
 
-    public static void deleteCatalogData(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+    public static void deleteCatalogData(String aid, String[] fieldsNames, String[] fieldsData, String table) throws SQLException {
 
+    }
+
+    public static void updateAdmissionPlan(String[] fieldsNames, String[] fieldsData, String table) throws SQLException {
+        String[] catalogData = new String[fieldsNames.length - 1],
+                catalogNames = new String[fieldsNames.length - 1];
+
+        for(int i = 0; i < fieldsData.length; i += fieldsNames.length){
+            for(int j = 0; j < catalogNames.length; j++){
+                catalogData[j] = fieldsData[i + j + 1];
+                catalogNames[j] = fieldsNames[j + 1];
+            }
+
+            ModelDBConnection.updateElementInTableByExpression(table, fieldsData[i], catalogNames, catalogData, 3);
+        }
+    }
+
+    public static void deleteAdmissionPlan(String aid, String[] fieldsNames, String[] fieldsData, String table) throws SQLException {
+        /*String[] catalogData = new String[fieldsNames.length - 1],
+                catalogNames = new String[fieldsNames.length - 1];
+
+        for(int i = 0; i < fieldsData.length; i += fieldsNames.length){
+            for(int j = 0; j < catalogNames.length; j++){
+                catalogData[j] = fieldsData[i + j + 1];
+                catalogNames[j] = fieldsNames[j + 1];
+            }
+
+            ModelDBConnection.deleteElementInTableByExpression(table, fieldsData[i], catalogNames, catalogData, 3);
+        }*/
     }
 }

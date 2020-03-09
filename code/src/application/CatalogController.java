@@ -161,7 +161,7 @@ public class CatalogController {
 
         FXMLLoader loader;
         Pane newPane;
-        
+
         //Обычные справочники (3 поля: id, name, codeFIS)
         if (catalogType == 1) {
 	        for (int i = 0; i < countFields; i++) {
@@ -428,7 +428,146 @@ public class CatalogController {
 	        }
         }
         //Справочники План приема (6 полей: id_speciality, id_formOfEducation, id_competitiveGroup, id_targetOrganization, amount_of_places, amount_of_places_quota)
-        
+        if (catalogType == 4) {
+	        for (int i = 0; i < countFields; i++) {
+	            switch (fieldsTypes[i]){
+	                case "int":
+	                    if(Pattern.compile("(id_speciality)").matcher(fields[i]).matches() ){
+	                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i], tableOriginalName));
+	                        fieldData.setPrefWidth(200.0);
+
+	                        loader = new FXMLLoader();
+	                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+	                        newPane = (Pane) loader.load();
+	                        fieldsControllers[i] = loader;
+	                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+	                        choiceInputPatternController.setWidthHeight(fieldData.getWidth()*0.85,35.0, 0.0);
+	                        choiceInputPatternController.setParameters(fields[i], "");
+	                        fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
+	                            public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
+	                                return new SimpleObjectProperty<>((Pane) param.getValue().get(0));
+	                            }
+	                        });
+	                        widthColumnListener(fieldData);
+	                        fieldsTable.getColumns().add(fieldData);
+	                        choiceInputPatternController.setFieldData("");
+	                        paneObservableList.add(newPane);
+	                    }
+	                    if(Pattern.compile("(id_formOfEducation)").matcher(fields[i]).matches() ){
+	                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i], tableOriginalName));
+	                        fieldData.setPrefWidth(200.0);
+
+	                        loader = new FXMLLoader();
+	                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+	                        newPane = (Pane) loader.load();
+	                        fieldsControllers[i] = loader;
+	                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+	                        choiceInputPatternController.setWidthHeight(fieldData.getWidth()*0.85,35.0, 0.0);
+	                        choiceInputPatternController.setParameters(fields[i], "");
+	                        fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
+	                            public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
+	                                return new SimpleObjectProperty<>((Pane) param.getValue().get(1));
+	                            }
+	                        });
+	                        widthColumnListener(fieldData);
+	                        fieldsTable.getColumns().add(fieldData);
+	                        choiceInputPatternController.setFieldData("");
+	                        paneObservableList.add(newPane);
+	                    }
+	                    if(Pattern.compile("(id_competitiveGroup)").matcher(fields[i]).matches() ){
+	                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i], tableOriginalName));
+	                        fieldData.setPrefWidth(200.0);
+
+	                        loader = new FXMLLoader();
+	                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+	                        newPane = (Pane) loader.load();
+	                        fieldsControllers[i] = loader;
+	                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+	                        choiceInputPatternController.setWidthHeight(fieldData.getWidth()*0.85,35.0, 0.0);
+	                        choiceInputPatternController.setParameters(fields[i], "");
+	                        fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
+	                            public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
+	                                return new SimpleObjectProperty<>((Pane) param.getValue().get(2));
+	                            }
+	                        });
+	                        widthColumnListener(fieldData);
+	                        fieldsTable.getColumns().add(fieldData);
+	                        choiceInputPatternController.setFieldData("");
+	                        paneObservableList.add(newPane);
+	                    }
+	                    if(Pattern.compile("(id_targetOrganization)").matcher(fields[i]).matches() ){
+	                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i], tableOriginalName));
+	                        fieldData.setPrefWidth(200.0);
+
+	                        loader = new FXMLLoader();
+	                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
+
+	                        newPane = (Pane) loader.load();
+	                        fieldsControllers[i] = loader;
+	                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+	                        choiceInputPatternController.setWidthHeight(fieldData.getWidth()*0.85,35.0, 0.0);
+	                        choiceInputPatternController.setParameters(fields[i], "");
+	                        fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
+	                            public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
+	                                return new SimpleObjectProperty<>((Pane) param.getValue().get(3));
+	                            }
+	                        });
+	                        widthColumnListener(fieldData);
+	                        fieldsTable.getColumns().add(fieldData);
+	                        choiceInputPatternController.setFieldData("");
+	                        paneObservableList.add(newPane);
+	                    }
+	                    if(Pattern.compile("(amount_of_places)").matcher(fields[i]).matches() ){
+	                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],tableOriginalName));
+	                        fieldData.setPrefWidth(160.0);
+	
+	                        loader = new FXMLLoader();
+	                        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+	
+	                        newPane = (Pane) loader.load();
+	                        fieldsControllers[i] = loader;
+	                        IntInputPatternController intInputPatternController = loader.getController();
+	                        intInputPatternController.setWidthHeight(fieldData.getWidth()*0.85,35.0, 0.0);
+	                        intInputPatternController.setParameters(fields[i], "");
+	                        fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
+	                            public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
+	                                return new SimpleObjectProperty<>((Pane) param.getValue().get(4));
+	                            }
+	                        });
+	                        widthColumnListener(fieldData);
+	                        fieldsTable.getColumns().add(fieldData);
+	                        paneObservableList.add(newPane);
+	                    }
+	                    if(Pattern.compile("(amount_of_places_quota)").matcher(fields[i]).matches() ){
+	                        TableColumn<ObservableList, Pane> fieldData = new TableColumn<>(ModelDBConnection.getTranslationOfField(fields[i],tableOriginalName));
+	                        fieldData.setPrefWidth(160.0);
+	
+	                        loader = new FXMLLoader();
+	                        loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+	
+	                        newPane = (Pane) loader.load();
+	                        fieldsControllers[i] = loader;
+	                        IntInputPatternController intInputPatternController = loader.getController();
+	                        intInputPatternController.setWidthHeight(fieldData.getWidth()*0.85,35.0, 0.0);
+	                        intInputPatternController.setParameters(fields[i], "");
+	                        fieldData.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, Pane>, ObservableValue<Pane>>() {
+	                            public ObservableValue<Pane> call(TableColumn.CellDataFeatures<ObservableList, Pane> param) {
+	                                return new SimpleObjectProperty<>((Pane) param.getValue().get(5));
+	                            }
+	                        });
+	                        widthColumnListener(fieldData);
+	                        fieldsTable.getColumns().add(fieldData);
+	                        paneObservableList.add(newPane);
+	                    }
+	                    break;
+	                case "varchar":
+	                    break;
+	            }
+	        }
+        }
 
 
         list.add(paneObservableList);
@@ -459,8 +598,13 @@ public class CatalogController {
                 j=0;
             switch (fieldsTypes[j]) {
                 case "int":
-                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                    intInputPatternController.setEditable(value);
+                    if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        choiceInputPatternController.setEditable(value);
+                    } else {
+	                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+	                    intInputPatternController.setEditable(value);
+                    }
                     break;
                 case "varchar":
 					if(Pattern.compile("(passw).*").matcher(fields[j]).matches()){
@@ -489,8 +633,13 @@ public class CatalogController {
                     j=0;
                 switch (fieldsTypes[j]) {
                     case "int":
-                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                        intInputPatternController.setFieldData(catalogData[i]);
+                        if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
+                            ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                            choiceInputPatternController.setFieldData(catalogData[i]);
+                        } else {
+	                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+	                        intInputPatternController.setFieldData(catalogData[i]);
+                        }
                         break;
                     case "varchar":
                     	if(Pattern.compile("(passw).*").matcher(fields[j]).matches()){
@@ -509,8 +658,15 @@ public class CatalogController {
 
 
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
-        if (!isEmpty())
-          ModelDBConnection.updateCatalogDataById(fieldsOriginalNames,fieldsData,tableOriginalName);
+        if (!isEmpty()) {
+        	//Отдельный случай для Плана приема
+        	if(catalogType == 4)
+        		ModelDBConnection.updateAdmissionPlan(fieldsOriginalNames,fieldsData,tableOriginalName);
+        	else
+        		ModelDBConnection.updateCatalogDataById(fieldsOriginalNames,fieldsData,tableOriginalName);
+        } else {
+        	//если решим удалять строки из справочника
+        }
     }
 
 
@@ -523,16 +679,58 @@ public class CatalogController {
         for (int i = 0, j = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++, j++) {
             if(j == countFields)
                 j=0;
-
             switch (fieldsTypes[j]) {
                 case "int":
-                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
-                    currentErrorCode = intInputPatternController.checkData();
-                    if (currentErrorCode > 0) {
-                        MessageProcessing.displayErrorMessage(1304);
-                        return currentErrorCode;
-                    }
-                    break;
+	                if (Pattern.compile("(id_speciality)").matcher(fields[j]).matches()) {
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+						if (currentErrorCode > 0) {
+							MessageProcessing.displayErrorMessage(1306);
+							return currentErrorCode;
+						}
+						break;
+	                }
+	                if(Pattern.compile("(id_formOfEducation)").matcher(fields[j]).matches() ){
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+						if (currentErrorCode > 0) {
+							MessageProcessing.displayErrorMessage(1307);
+							return currentErrorCode;
+						}
+						break;
+	                }
+	                if(Pattern.compile("(id_competitiveGroup)").matcher(fields[j]).matches() ){
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+						if (currentErrorCode > 0) {
+							MessageProcessing.displayErrorMessage(1308);
+							return currentErrorCode;
+						}
+						break;
+	                }
+	                if(Pattern.compile("(id_targetOrganization)").matcher(fields[j]).matches() ){
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+	                    break;
+	                }
+	                if(Pattern.compile("(amount_of_places)").matcher(fields[j]).matches() ){
+	                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = intInputPatternController.checkData();
+	                    break;
+	                }
+	                if(Pattern.compile("(amount_of_places_quota)").matcher(fields[j]).matches() ){
+	                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = intInputPatternController.checkData();
+	                    break;
+	                } else {
+	                    IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = intInputPatternController.checkData();
+	                    if (currentErrorCode > 0) {
+	                        MessageProcessing.displayErrorMessage(1304);
+	                        return currentErrorCode;
+	                    }
+	                    break;
+	                }
                 case "varchar":
                     if(Pattern.compile("(name)").matcher(fields[j]).matches() ){
 	                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
@@ -566,16 +764,30 @@ public class CatalogController {
                 j=0;
             switch (fieldsTypes[j]){
                 case "int":
-                    loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+                    if(Pattern.compile("(id_).*").matcher(fields[j]).matches() ){
+                        loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("../patterns_simple/ChoiceInputPattern.fxml"));
 
-                    newPane = (Pane) loader.load();
-                    fieldsControllers[i] = loader;
-                    IntInputPatternController intInputPatternController = loader.getController();
-                    intInputPatternController.setWidthHeight(((TableColumn)fieldsTable.getColumns().get(j)).getWidth()*0.85,35.0, 0.0);
-                    intInputPatternController.setParameters(fields[j], "");
-                    paneObservableList1.add(newPane);
-                    break;
+                        newPane = (Pane) loader.load();
+                        fieldsControllers[i] = loader;
+                        ChoiceInputPatternController choiceInputPatternController = loader.getController();
+                        choiceInputPatternController.setWidthHeight(((TableColumn)fieldsTable.getColumns().get(j)).getWidth()*0.85,35.0, 0.0);
+                        choiceInputPatternController.setParameters(fields[j], "");
+                        choiceInputPatternController.setFieldData("");
+                        paneObservableList1.add(newPane);
+                        break;
+                    } else {
+	                    loader = new FXMLLoader();
+	                    loader.setLocation(getClass().getResource("../patterns_simple/IntInputPattern.fxml"));
+
+	                    newPane = (Pane) loader.load();
+	                    fieldsControllers[i] = loader;
+	                    IntInputPatternController intInputPatternController = loader.getController();
+	                    intInputPatternController.setWidthHeight(((TableColumn)fieldsTable.getColumns().get(j)).getWidth()*0.85,35.0, 0.0);
+	                    intInputPatternController.setParameters(fields[j], "");
+	                    paneObservableList1.add(newPane);
+	                    break;
+                    }
                 case "varchar":
                 	if(Pattern.compile("(passw).*").matcher(fields[j]).matches()){
 	                    loader = new FXMLLoader();
@@ -623,14 +835,18 @@ public class CatalogController {
 
             switch (fieldsTypes[j]) {
                 case "int":
+	                if (Pattern.compile("(id_).*").matcher(fields[j]).matches()) {
+	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+	                    currentErrorCode = choiceInputPatternController.checkData();
+	                    break;
+	                } else {
                         IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = intInputPatternController.checkData();
-                    break;
+                        break;
+	                }
                 case "varchar":
-                    if(Pattern.compile("(name)").matcher(fields[j]).matches() ){
-	                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
-	                    currentErrorCode = textInputPatternController.checkData();
-                    }
+                    TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                    currentErrorCode = textInputPatternController.checkData();
                     break;
             }
             errorCount += currentErrorCode;
@@ -671,8 +887,13 @@ public class CatalogController {
                 for (int j = i; j < fieldsControllers.length; j = j + countFields) {
                     switch (fieldsTypes[i]) {
                         case "int":
-                            IntInputPatternController intInputPatternController = fieldsControllers[j].getController();
-                            intInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
+        	                if (Pattern.compile("(id_).*").matcher(fields[i]).matches()) {
+        	                    ChoiceInputPatternController choiceInputPatternController = fieldsControllers[j].getController();
+        	                    choiceInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
+        	                } else {
+        	                	IntInputPatternController intInputPatternController = fieldsControllers[j].getController();
+        	                	intInputPatternController.setWidthHeight((double) newValue * 0.85, 35.0, 0.0);
+        	                }
                             break;
                         case "varchar":
                         	if(Pattern.compile("(passw).*").matcher(fields[i]).matches()){
