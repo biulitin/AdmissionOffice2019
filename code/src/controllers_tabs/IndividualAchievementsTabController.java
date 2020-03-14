@@ -33,7 +33,7 @@ import javax.xml.soap.Text;
 
 public class IndividualAchievementsTabController {
     @FXML
-    public FlowPane buttonsPane;
+    public Pane buttonsPane;
 
     @FXML
     public TableView<ObservableList> fieldsTable;
