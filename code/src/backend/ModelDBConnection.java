@@ -1500,4 +1500,48 @@ public class ModelDBConnection {
             ModelDBConnection.deleteElementInTableByExpression(table, fieldsData[i], catalogNames, catalogData, 3);
         }*/
     }
+
+	public static String[] getAbiturientData() throws SQLException {
+		try {
+			String query = ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ");
+
+			cstmt = con.prepareCall(query, 1004, 1007);
+
+			rset = cstmt.executeQuery();
+
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
+
+			if (countStrings == 0) return null;
+
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+
+			String[] result = new String[countStrings * numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+				result[i] = "";
+
+			int curPos = 0;
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[curPos] = format.format(docDate);
+						} else
+							result[curPos] = rset.getObject(i + 1).toString();
+
+					curPos++;
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }
