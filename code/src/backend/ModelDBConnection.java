@@ -1501,47 +1501,20 @@ public class ModelDBConnection {
         }*/
     }
 
-	public static String[] getAbiturientData() throws SQLException {
-		try {
-			String query = ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ");
+    public static ObservableList<ObservableList> getAbiturientInfo (ObservableList<ObservableList> info) throws SQLException {
+		String query = ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ");
 
-			cstmt = con.prepareCall(query, 1004, 1007);
+		cstmt = con.prepareCall(query, 1004, 1007);
 
-			rset = cstmt.executeQuery();
+		rset = cstmt.executeQuery();
 
-			int countStrings = rset.last() ? rset.getRow() : 0;
-			rset.beforeFirst();
-
-			if (countStrings == 0) return null;
-
-			ResultSetMetaData rsmd = rset.getMetaData();
-			int numberOfColumns = rsmd.getColumnCount();
-
-			String[] result = new String[countStrings * numberOfColumns];
-			for (int i = 0; i < result.length; i++)
-				result[i] = "";
-
-			int curPos = 0;
-			while (rset.next()) {
-				for (int i = 0; i < numberOfColumns; i++) {
-					if (rset.getObject(i + 1) != null)
-						if (rset.getObject(i + 1) instanceof Date) {
-							SimpleDateFormat format = new SimpleDateFormat();
-							format.applyPattern("yyyy-MM-dd");
-							Date docDate = format.parse(rset.getObject(i + 1).toString());
-							//format.applyPattern("dd.MM.yyyy");
-							result[curPos] = format.format(docDate);
-						} else
-							result[curPos] = rset.getObject(i + 1).toString();
-
-					curPos++;
-				}
+		while (rset.next()) {
+			ObservableList<String> row = FXCollections.observableArrayList();
+			for (int i = 1; i <= rset.getMetaData().getColumnCount(); i++) {
+				row.add(rset.getString(i));
 			}
-			cstmt.close();
-			rset.close();
-			return result;
-		} catch (Exception e) {
-			return null;
+			info.add(row);
 		}
+		return info;
 	}
 }
