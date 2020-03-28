@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -1558,8 +1559,9 @@ public class ModelDBConnection {
         }*/
     }
 
-    public static ObservableList<ObservableList> getAbiturientInfo (ObservableList<ObservableList> info) throws SQLException {
-		String query = ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ");
+    public static ObservableList<ObservableList> getAbiturientInfo (ObservableList<ObservableList> info) throws Exception {
+		String query = ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ") +
+						" order by aid";
 
 		cstmt = con.prepareCall(query, 1004, 1007);
 
@@ -1568,7 +1570,18 @@ public class ModelDBConnection {
 		while (rset.next()) {
 			ObservableList<String> row = FXCollections.observableArrayList();
 			for (int i = 1; i <= rset.getMetaData().getColumnCount(); i++) {
-				row.add(rset.getString(i));
+				if (rset.getObject(i) != null) {
+					if (rset.getObject(i) instanceof Date) {
+						SimpleDateFormat format = new SimpleDateFormat();
+						format.applyPattern("yyyy-MM-dd");
+						Date docDate = format.parse(rset.getObject(i).toString());
+						//format.applyPattern("dd.MM.yyyy");
+						row.add(format.format(docDate));
+					} else
+						row.add(rset.getObject(i).toString());
+				} else {
+					row.add("");
+				}
 			}
 			info.add(row);
 		}
