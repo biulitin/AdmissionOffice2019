@@ -848,7 +848,24 @@ public class ModelDBConnection {
 	}
 
 	public static void updateAbiturientAddressByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		ModelDBConnection.updateElementInTableByExpression("AbiturientAdress", aid, fieldsNames, fieldsData, 0);
+    	String[] addressData = new String[fieldsData.length - 2],
+      			 abiturientData = new String[2],
+      			 addressFieldsNames = new String[fieldsData.length - 2],
+      	    	 abiturientFieldsNames = new String[2];
+
+       	abiturientData[0] = fieldsData[fieldsData.length - 1];
+       	abiturientData[1] = fieldsData[fieldsData.length - 2];
+
+       	abiturientFieldsNames[0] = fieldsNames[fieldsNames.length - 1];
+       	abiturientFieldsNames[1] = fieldsNames[fieldsNames.length - 2];
+
+   	   	for (int i = 0; i < addressData.length; i++) {
+   	   		addressData[i] = fieldsData[i];
+   	   		addressFieldsNames[i] = fieldsNames[i];
+   	   	}
+
+   	   	ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientData, 0);
+   	   	ModelDBConnection.updateElementInTableByExpression("AbiturientAdress", aid, addressFieldsNames, addressData, 0);
 	}
 
 	//Вкладка 100б

@@ -153,6 +153,7 @@ public class AddressTabController {
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
         addEditDeleteButtonsController.setParameters("Адрес и контакты",tabController, fields, fieldsTypes, fieldsControllers);
 
+        setFieldsData("0");
         setEditable(false);
     }
 
@@ -248,8 +249,9 @@ public class AddressTabController {
         }
     }
 
+
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
-        ModelDBConnection.updateAbiturientPassportByID(aid, fieldsOriginalNames, fieldsData);
+        ModelDBConnection.updateAbiturientAddressByID(aid, fieldsOriginalNames, fieldsData);
     }
 
 
@@ -267,11 +269,20 @@ public class AddressTabController {
                     currentErrorCode = doubleInputPatternController.checkData();
                     break;
                 case "int":
-                    if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+                    if(Pattern.compile("(id_r).*").matcher(fields[i]).matches() ){
                         ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
                         currentErrorCode = choiceInputPatternController.checkData();
                         if (currentErrorCode > 0) {
-                            MessageProcessing.displayErrorMessage(1110);
+                            MessageProcessing.displayErrorMessage(1010);
+                            return currentErrorCode;
+                        }
+                        break;
+                    }
+                    if(Pattern.compile("(id_t).*").matcher(fields[i]).matches() ){
+                        ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = choiceInputPatternController.checkData();
+                        if (currentErrorCode > 0) {
+                            MessageProcessing.displayErrorMessage(1011);
                             return currentErrorCode;
                         }
                         break;

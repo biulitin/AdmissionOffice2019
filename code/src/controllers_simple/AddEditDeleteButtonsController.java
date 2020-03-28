@@ -115,6 +115,10 @@ public class AddEditDeleteButtonsController {
 					            EducationTabController educationTabController = tabController.getController();
 					            educationTabController.uploadFieldsDataToDataBase(fieldsData);
 					    		break;
+				            case "Адрес и контакты":
+				            	AddressTabController addresTabController = tabController.getController();
+				                addresTabController.uploadFieldsDataToDataBase(fieldsData);
+				                break;
 					    	case "Вступительные испытания":
 					    		EntranceExamTabController entranceExamTabController = tabController.getController();
 					    		entranceExamTabController.uploadFieldsDataToDataBase(fieldsData);
@@ -389,6 +393,9 @@ public class AddEditDeleteButtonsController {
 	    	case "Образование":
 	            EducationTabController educationTabController = tabController.getController();
 	    		return educationTabController.checkData();
+            case "Адрес и контакты":
+            	AddressTabController addresTabController = tabController.getController();
+                return addresTabController.checkData();
 	    	case "Вступительные испытания":
 	    		EntranceExamTabController entranceExamTabController = tabController.getController();
 	    		return entranceExamTabController.checkData();
