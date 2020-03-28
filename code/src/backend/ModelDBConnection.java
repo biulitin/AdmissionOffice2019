@@ -329,6 +329,14 @@ public class ModelDBConnection {
 						+ "AbiturientEducation.number_document, "
 						+ "AbiturientEducation.yearOf_graduation "
 						+ "FROM AbiturientEducation JOIN Abiturient ON (Abiturient.aid = AbiturientEducation.id_abiturient)";
+			case "Адрес и контакты":
+				return "SELECT AbiturientAdress.id_region,  "
+						+ "AbiturientAdress.id_typeSettlement, "
+						+ "AbiturientAdress.postcode, "
+						+ "AbiturientAdress.adress, "
+						+ "Abiturient.phoneNumbers, "
+						+ "Abiturient.email "
+						+ "FROM AbiturientAdress JOIN Abiturient ON (Abiturient.aid = AbiturientAdress.id_abiturient)";
 			case "Вступительные испытания":
 				return "SELECT AbiturientEntranceExam.id_entranceExam, "
 						+ "AbiturientEntranceExam.id_formOfExam, "
@@ -731,9 +739,8 @@ public class ModelDBConnection {
 			String[] result = new String[countStrings * numberOfColumns];
 			for (int i = 0; i < result.length; i++)
 					result[i] = "";
-
+				
 			int curPos = 0;
-
 			while (rset.next()) {
 				for (int i = 0; i < numberOfColumns; i++) {
 					if (rset.getObject(i + 1) != null)
@@ -791,7 +798,57 @@ public class ModelDBConnection {
 		//Удалить все вступительные испытания по aid абитуриента
 		ModelDBConnection.deleteElementInTableByExpression("AbiturientEntranceExam", aid, fieldsNames, fieldsData, 0);
 	}
+//Вкладка AddressTab
+	public static String[] getAbiturientAddressByID(String aid) throws SQLException {
+		try {
+			String query = ModelDBConnection.getQueryByTabName("Адрес и контакты")
+					+ " WHERE Abiturient.aid = " + aid + ";";
 
+			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
+
+			cstmt.setString(1, aid);*/
+
+			cstmt = con.prepareCall(query, 1004, 1007);
+
+			rset = cstmt.executeQuery();
+
+			int countStrings = rset.last() ? rset.getRow() : 0;
+			rset.beforeFirst();
+
+			//Случай, если данных по абитуриенту еще нет
+			if (countStrings == 0) return null;
+
+			ResultSetMetaData rsmd = rset.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+
+			String[] result = new String[numberOfColumns];
+			for (int i = 0; i < result.length; i++)
+				result[i] = "";
+
+			while (rset.next()) {
+				for (int i = 0; i < numberOfColumns; i++) {
+					if (rset.getObject(i + 1) != null)
+						if (rset.getObject(i + 1) instanceof Date) {
+							SimpleDateFormat format = new SimpleDateFormat();
+							format.applyPattern("yyyy-MM-dd");
+							Date docDate = format.parse(rset.getObject(i + 1).toString());
+							//format.applyPattern("dd.MM.yyyy");
+							result[i] = format.format(docDate);
+						} else
+							result[i] = rset.getObject(i + 1).toString();
+				}
+			}
+			cstmt.close();
+			rset.close();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static void updateAbiturientAddressByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+		ModelDBConnection.updateElementInTableByExpression("AbiturientAdress", aid, fieldsNames, fieldsData, 0);
+	}
 
 	//Вкладка 100б
 	public static String[] getAbiturientOlympiadsInfoByID(String aid) throws SQLException {

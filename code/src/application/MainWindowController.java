@@ -241,6 +241,7 @@ public class MainWindowController {
 		addExtraInfoTab();
         addEntranceExamTab();
         addPrivilegeTab();
+		addAddressTab();
     }
 
     public void addCompetitiveGroupsTab() throws Exception {
@@ -251,6 +252,16 @@ public class MainWindowController {
 		tabCompetitiveGroups.setContent((Node) tabLoader.load());
 		CompetitiveGroupsTabController competitiveGroupsTabController = tabLoader.getController();
 		competitiveGroupsTabController.fillTab(tabLoader);
+	}
+	
+	public void addAddressTab() throws Exception {
+		FXMLLoader tabLoader;
+		tabLoader = new FXMLLoader();
+		tabLoader.setLocation(getClass().getResource("../patterns_tabs/AddressTab.fxml"));
+
+		tabAddressAndContacts.setContent((Node) tabLoader.load());
+		AddressTabController addresTabController = tabLoader.getController();
+		addresTabController.fillTab(tabLoader);
 	}
 
 	public void addIndividualAchievements() throws Exception {
