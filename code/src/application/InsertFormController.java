@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
+import javafx.geometry.Orientation;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
@@ -21,6 +23,7 @@ public class InsertFormController {
 	int countFields = 0;
 	String[] fields, fieldsTypes, fieldsOriginalNames;
 	FXMLLoader[] fieldsControllers;
+    FXMLLoader tabController;
 
 	String aid;
 
@@ -29,7 +32,7 @@ public class InsertFormController {
 		//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
 
-		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(ModelDBConnection.getQueryByTabName("SampleTab"));
+		ResultSetMetaData rsmd = ModelDBConnection.getQueryMetaData(ModelDBConnection.getQueryByTabName("Добавление Абитуриента"));
 		countFields = rsmd.getColumnCount();
 
     	fields = new String[countFields];
@@ -45,6 +48,7 @@ public class InsertFormController {
 
 		FXMLLoader loader;
 		Pane newPane;
+		this.tabController = tabController;
 
 		for (int i = 0; i < countFields; i++) {
 			switch (fieldsTypes[i]) {
@@ -98,6 +102,7 @@ public class InsertFormController {
 
 						BoolInputPatternController boolInputPatternController = loader.getController();
 						boolInputPatternController.setParameters(fields[i], ModelDBConnection.getTranslationOfField(fields[i], "Abiturient"));
+						boolInputPatternController.flowPane.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 						break;
 					}
 					/* If we don't need "is_enrolled" change select or:
@@ -167,12 +172,11 @@ public class InsertFormController {
 		buttonsPane.getChildren().add(newPane);
 
 		AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
-		addEditDeleteButtonsController.setParameters("SampleTab", tabController, fields, fieldsTypes, fieldsControllers);
-		
-		setEditable(false);
-		setFieldsData("0");
+		addEditDeleteButtonsController.hideButton2(1);
+		addEditDeleteButtonsController.hideButton2(1);
+		addEditDeleteButtonsController.setParameters("Добавление Абитуриента", tabController, fields, fieldsTypes, fieldsControllers);
 	}
-
+/*
     public void setEditable(Boolean value) {
 		for (int i = 0; i < fieldsControllers.length; i++) {
 			switch (fieldsTypes[i]) {
@@ -219,7 +223,7 @@ public class InsertFormController {
 			}
 		}
     }
-    
+
     public void setFieldsData(String aid) throws Exception {
     	this.aid = aid;
     	String[] generalInfoData = ModelDBConnection.getAbiturientGeneralInfoByID(aid);
@@ -271,9 +275,9 @@ public class InsertFormController {
             }
     	}
     }
-
+*/
     public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
-    	ModelDBConnection.updateAbiturientGeneralInfoByID(aid, fieldsOriginalNames, fieldsData);
+    	ModelDBConnection.insertAbiturientInfo(fieldsData[0], fieldsOriginalNames, fieldsData);
     }
 
     public int checkData() {
@@ -299,8 +303,17 @@ public class InsertFormController {
 					IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
 					currentErrorCode = intInputPatternController.checkData();
 					if (currentErrorCode > 0) {
-						MessageProcessing.displayErrorMessage(18);
+						MessageProcessing.displayErrorMessage(100);
 						return currentErrorCode;
+					}
+					try {
+						if(ModelDBConnection.getAbiturientGeneralInfoByID(intInputPatternController.getFieldData()) != null){
+							currentErrorCode++;
+							MessageProcessing.displayErrorMessage(103);
+							return currentErrorCode;
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
 					}
 					break;
 				}
@@ -337,5 +350,6 @@ public class InsertFormController {
 
 		return errorCount;
     }
+
     
 }

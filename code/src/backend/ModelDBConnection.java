@@ -302,16 +302,21 @@ public class ModelDBConnection {
 	//Общие функции
 	public static String getQueryByTabName(String tabName) {
 		switch(tabName) {
-			case "SampleTab":
-				return "SELECT * "
-						+ "FROM Abiturient";
-            case "АРМ по приему в ВУЗ":
-                return "SELECT Abiturient.aid, Abiturient.registrationdate, " +
-                        "Abiturient.SName, Abiturient.id_gender, Abiturient.id_nationality," +
-                        "Abiturient.FName, Abiturient.Birthday, Abiturient.needHostel," +
-                        "Abiturient.MName, Abiturient.id_returnReason," +
-                        "Abiturient.returnDate, Abiturient.is_enrolled " +
-                        "FROM AbiturientPassport JOIN Abiturient ON (Abiturient.aid=AbiturientPassport.id_abiturient)";
+			case "Добавление Абитуриента":
+				return "SELECT Abiturient.aid,  Abiturient.SName, Abiturient.FName, Abiturient.MName, " +
+						"Abiturient.id_gender, Abiturient.id_nationality," +
+						"Abiturient.Birthday, Abiturient.registrationdate, " +
+						"Abiturient.needHostel," +
+						"Abiturient.id_returnReason," +
+						"Abiturient.returnDate, Abiturient.is_enrolled " +
+						"FROM Abiturient";
+			case "АРМ по приему в ВУЗ":
+				return "SELECT Abiturient.aid, Abiturient.registrationdate, " +
+						"Abiturient.SName, Abiturient.id_gender, Abiturient.id_nationality," +
+						"Abiturient.FName, Abiturient.Birthday, Abiturient.needHostel," +
+						"Abiturient.MName, Abiturient.id_returnReason," +
+						"Abiturient.returnDate, Abiturient.is_enrolled " +
+						"FROM Abiturient";
 			case "Паспорт и ИНН":
 				return "SELECT AbiturientPassport.id_typePassport, "
 						+ "AbiturientPassport.series_document, "
@@ -1025,8 +1030,8 @@ public class ModelDBConnection {
 	//InsertForm
 	public static String[] getAbiturientGeneralInfoByID(String aid) throws SQLException {
 		try {
-			String query = ModelDBConnection.getQueryByTabName("SampleTab")
-							+ " WHERE Abiturient.aid = " + aid + ";";
+			String query = ModelDBConnection.getQueryByTabName("Добавление Абитуриента")
+					+ " WHERE Abiturient.aid = " + aid + ";";
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
 
@@ -1604,4 +1609,17 @@ public class ModelDBConnection {
 		}
 		return info;
 	}
+
+    public static void insertAbiturientInfo(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        String[] abiturientData = new String[fieldsData.length-1],
+                abiturientFieldsNames = new String[fieldsData.length-1];
+
+        for (int i = 0, j = 1; i < abiturientData.length; i++, j++) {
+            abiturientData[i] = fieldsData[j];
+            abiturientFieldsNames[i] = fieldsNames[j];
+        }
+
+        ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientData, 0);
+
+    }
 }

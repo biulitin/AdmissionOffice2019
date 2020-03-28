@@ -12,8 +12,12 @@ import application.InsertFormController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class AddEditDeleteButtonsController {
 	private String tabName;
@@ -63,6 +67,27 @@ public class AddEditDeleteButtonsController {
             case "Справочник":
                 CatalogController catalogController = tabController.getController();
                 fieldsControllers = catalogController.addRow();
+                break;
+            case "АРМ по приему в ВУЗ":
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("../application/InsertForm.fxml"));
+                AnchorPane root = loader.load();
+                InsertFormController insertFormController = loader.getController();
+                insertFormController.createForm(loader);
+
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(addButton.getParent().getScene().getWindow());
+                stage.show();
+                break;
+            case "Добавление Абитуриента":
+                InsertFormController insertForm = tabController.getController();
+                if(checkData() == 0){
+                    insertForm.uploadFieldsDataToDataBase(getFieldsData());
+                    ((Stage)addButton.getScene().getWindow()).close();
+                    MainWindowController.refreshTable();
+                }
                 break;
 		}
     }
@@ -381,12 +406,12 @@ public class AddEditDeleteButtonsController {
     public int checkData() {
     	// Проверка в зависимости от вкладки
     	switch (tabName) {
-			case "АРМ по приему в ВУЗ":
-				MainWindowController mainWindowController = tabController.getController();
-				return mainWindowController.checkData();
-	    	case "SampleTab":
-	    		InsertFormController insertFormController = tabController.getController();
-	    		return insertFormController.checkData();
+            case "АРМ по приему в ВУЗ":
+                MainWindowController mainWindowController = tabController.getController();
+                return mainWindowController.checkData();
+            case "Добавление Абитуриента":
+                InsertFormController insertFormController = tabController.getController();
+                return insertFormController.checkData();
 	    	case "Паспорт и ИНН":
 	            PassportTabController passportTabController = tabController.getController();
 	    		return passportTabController.checkData();
