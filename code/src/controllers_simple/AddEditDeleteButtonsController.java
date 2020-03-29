@@ -12,6 +12,7 @@ import application.InsertFormController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -340,10 +341,15 @@ public class AddEditDeleteButtonsController {
 	}
 
 
-    public void hideButton(int numberOfButton) {
-    	this.addButton.setVisible(numberOfButton == 0 ? false : true);
-    	this.editButton.setVisible(numberOfButton == 1 ? false : true);
-    	this.deleteButton.setVisible(numberOfButton == 2 ? false : true);
+    public void hideButton(int ... numberOfButton) {
+		for (int v : numberOfButton) {
+			if (v == 0) this.addButton.setVisible(false);
+			else if (v == 1) this.editButton.setVisible(false);
+			else if (v == 2) this.deleteButton.setVisible(false);
+		}
+			/*this.addButton.setVisible(numberOfButton == 0 ? false : true);
+			this.editButton.setVisible(numberOfButton == 1 ? false : true);
+			this.deleteButton.setVisible(numberOfButton == 2 ? false : true);*/
 
 		//this.buttonsBox.getChildren().remove(numberOfButton);
 	}

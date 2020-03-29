@@ -152,7 +152,8 @@ public class AddressTabController {
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
         addEditDeleteButtonsController.setParameters("Адрес и контакты",tabController, fields, fieldsTypes, fieldsControllers);
-
+        addEditDeleteButtonsController.hideButton(0, 2);
+        addEditDeleteButtonsController.setWidthHideButtons(155.0, 35.0, 1);
         setFieldsData("0");
         setEditable(false);
     }

@@ -158,7 +158,8 @@ public class PassportTabController {
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
         addEditDeleteButtonsController.setParameters("Паспорт и ИНН", tabController, fields, fieldsTypes, fieldsControllers);
-
+        addEditDeleteButtonsController.hideButton(0, 2);
+        addEditDeleteButtonsController.setWidthHideButtons(155.0, 35.0, 1);
         setEditable(false);
         setFieldsData("0");
     }
