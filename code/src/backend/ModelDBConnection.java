@@ -230,7 +230,7 @@ public class ModelDBConnection {
 			case "returnDate": return "Дата возврата документов";
 			case "id_returnReason": return "Причина возврата документов";
 			case "needSpecConditions": return "Нуждается в специальных условиях на ВИ";
-			case "is_enrolled": return "Зачислен";
+			case "is_enrolled": return "Забрал документы";//"Зачислен";
 			//Таблица AbiturientPassport
 			case "id_abiturient": return "№ Личного дела";
 			case "id_typePassport": return "Тип документа (паспорт)";
@@ -304,9 +304,7 @@ public class ModelDBConnection {
 				return "SELECT Abiturient.aid,  Abiturient.SName, Abiturient.FName, Abiturient.MName, " +
 						"Abiturient.id_gender, Abiturient.id_nationality," +
 						"Abiturient.Birthday, Abiturient.registrationdate, " +
-						"Abiturient.needHostel," +
-						"Abiturient.id_returnReason," +
-						"Abiturient.returnDate, Abiturient.is_enrolled " +
+						"Abiturient.needHostel " +
 						"FROM Abiturient";
 			case "АРМ по приему в ВУЗ":
 				return "SELECT Abiturient.aid, Abiturient.registrationdate, " +

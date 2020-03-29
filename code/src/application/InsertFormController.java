@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
-import javafx.geometry.Orientation;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
@@ -294,9 +293,22 @@ public class InsertFormController {
 				currentErrorCode = doubleInputPatternController.checkData();
 				break;
 			case "int":
-				if(Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
+				if (Pattern.compile("(id_g).*").matcher(fields[i]).matches() ){
 					ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 					currentErrorCode = choiceInputPatternController.checkData();
+					if (currentErrorCode > 0) {
+						MessageProcessing.displayErrorMessage(119);
+						return currentErrorCode;
+					}
+					break;
+				}
+				if (Pattern.compile("(id_n).*").matcher(fields[i]).matches() ){
+					ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+					currentErrorCode = choiceInputPatternController.checkData();
+					if (currentErrorCode > 0) {
+						MessageProcessing.displayErrorMessage(116);
+						return currentErrorCode;
+					}
 					break;
 				}
 				if(Pattern.compile("aid").matcher(fields[i]).matches() ){
@@ -350,6 +362,4 @@ public class InsertFormController {
 
 		return errorCount;
     }
-
-    
 }
