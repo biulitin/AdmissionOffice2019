@@ -22,7 +22,7 @@ public class PhoneMaskInputPatternController {
         if (checkData() != 0)
             return "";
         else {
-            System.out.println(fieldData.getText());
+            //System.out.println(fieldData.getText());
             return fieldData.getText();
         }
     }

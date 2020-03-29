@@ -29,7 +29,6 @@ public class Main extends Application {
 
             MainWindowController mainWindowController = loader.getController();
             mainWindowController.fillTab(loader);
-            mainWindowController.fillTabsContent();
 
             /*InsertFormController insertFormController = loader.getController();
             insertFormController.createForm(loader);

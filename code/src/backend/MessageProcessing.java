@@ -156,10 +156,6 @@ public abstract class MessageProcessing {
 			titleMessage = "Результат проверки данных";
 			message = "Дата подачи заявления не задана либо указана неверно";
 			break;
-		case 107:
-			titleMessage = "Результат проверки данных";
-			message = "Не указан Пол";
-			break;
 		case 115:
 			titleMessage = "Результат проверки данных";
 			message = "Дата рождения не задана либо указана неверно";
@@ -175,6 +171,10 @@ public abstract class MessageProcessing {
 		case 118:
 			titleMessage = "Результат проверки данных";
 			message = "Дата возврата документов не задана либо указана неверно";
+			break;
+		case 119:
+			titleMessage = "Результат проверки данных";
+			message = "Не указан Пол";
 			break;
 
 		//Конкурсные группы
