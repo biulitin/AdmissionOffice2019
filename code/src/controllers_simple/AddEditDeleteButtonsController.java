@@ -127,6 +127,7 @@ public class AddEditDeleteButtonsController {
 							case "АРМ по приему в ВУЗ":
 								MainWindowController mainWindowController = tabController.getController();
 								mainWindowController.uploadFieldsDataToDataBase(fieldsData);
+								MainWindowController.refreshTable();
 								break;
 					    	case "SampleTab":
 					    		InsertFormController insertFormController = tabController.getController();
@@ -280,7 +281,11 @@ public class AddEditDeleteButtonsController {
 				PrivilegeTabController privilegeTabController = tabController.getController();
 				fieldsControllers = privilegeTabController.deleteRow();
 				break;
-
+			case "АРМ по приему в ВУЗ":
+			    MainWindowController mainWindowController = tabController.getController();
+                mainWindowController.deleteAbiturientDataFromDataBase(getFieldsData());
+                MainWindowController.refreshTable();
+                break;
         }
     }
 

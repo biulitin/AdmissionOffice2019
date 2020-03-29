@@ -40,6 +40,8 @@ public class DateInputPatternController {
 
     		fieldData.setValue(date);
     	}
+    	else
+            fieldData.setValue(null);
     }
     
     public void setParameters(String originalNameOfField, String nameOfField) {

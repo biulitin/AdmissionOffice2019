@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -451,20 +452,84 @@ public class MainWindowController {
 		}
 	}
 
+    public void setFieldsData(String aid) throws Exception {
+        this.aid = aid;
+        String[] generalData = ModelDBConnection.getAbiturientGeneralInfoByID(aid);
+
+        if(generalData != null) {
+            for (int i = 0; i < generalData.length; i++) {
+                switch (fieldsTypes[i]) {
+                    case "date":
+                        DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
+                        dateInputPatternController.setFieldData(generalData[i]);
+                        break;
+                    case "int":
+                        if (Pattern.compile("(id_).*").matcher(fields[i]).matches()) {
+                            ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
+                            choiceInputPatternController.setFieldData(generalData[i]);
+                            break;
+                        }
+                        else if (fields[i].equals("needHostel") || fields[i].equals("is_enrolled")) {
+                            BoolInputPatternController boolInputPatternController = fieldsControllers[i].getController();
+                            boolInputPatternController.setFieldData(generalData[i]);
+                            break;
+                        }
+                        else {
+                            IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                            intInputPatternController.setFieldData(generalData[i]);
+                        }
+                        break;
+                    case "varchar":
+                            TextInputPatternController textInputPatternController = fieldsControllers[i].getController();
+                            textInputPatternController.setFieldData(generalData[i]);
+                            break;
+                }
+            }
+        }
+    }
+
 	public int checkData() {
 		int errorCount = 0, currentErrorCode = 0;
 
 		for (int i = 0; i < (fieldsControllers == null ? 0 : fieldsControllers.length); i++) {
 			switch (fieldsTypes[i]) {
 				case "date":
+                    if (Pattern.compile("returnDate").matcher(fields[i]).matches()){
+                        break;
+                    }
+                    else {
 					DateInputPatternController dateInputPatternController = fieldsControllers[i].getController();
 					currentErrorCode = dateInputPatternController.checkData();
 					break;
+                    }
 				case "double":
 					DoubleInputPatternController doubleInputPatternController = fieldsControllers[i].getController();
 					currentErrorCode = doubleInputPatternController.checkData();
 					break;
 				case "int":
+                    if(Pattern.compile("aid").matcher(fields[i]).matches() ){
+                        IntInputPatternController intInputPatternController = fieldsControllers[i].getController();
+                        currentErrorCode = intInputPatternController.checkData();
+                        if (currentErrorCode > 0) {
+                            MessageProcessing.displayErrorMessage(100);
+                            return currentErrorCode;
+                        }
+                        try {
+                            if(!aid.equals(intInputPatternController.getFieldData())) {
+                                if (ModelDBConnection.getAbiturientGeneralInfoByID(intInputPatternController.getFieldData()) != null) {
+                                    currentErrorCode++;
+                                    MessageProcessing.displayErrorMessage(103);
+                                    return currentErrorCode;
+                                }
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+				    if (Pattern.compile("id_returnReason").matcher(fields[i]).matches()){
+                        break;
+                    }
 					if (Pattern.compile("(id_).*").matcher(fields[i]).matches() ){
 						ChoiceInputPatternController choiceInputPatternController = fieldsControllers[i].getController();
 						currentErrorCode = choiceInputPatternController.checkData();
@@ -500,14 +565,14 @@ public class MainWindowController {
 						break;
 					}
 			}
-			errorCount += currentErrorCode;
+//			errorCount += currentErrorCode;
 		}
 
 		return errorCount;
 	}
 
 	public void uploadFieldsDataToDataBase(String[] fieldsData) throws Exception {
-		ModelDBConnection.updateAbiturientPassportByID(aid, fieldsOriginalNames, fieldsData);
+		ModelDBConnection.updateAbiturientGeneralInfoByID(aid, fieldsOriginalNames, fieldsData);
 	}
 
 	public void onActionCatalog(ActionEvent actionEvent) throws Exception {
@@ -530,4 +595,17 @@ public class MainWindowController {
 		abiturientData.clear();
 		ModelDBConnection.getAbiturientInfo(abiturientData);
 	}
+
+	public void deleteAbiturientDataFromDataBase(String[] fieldsData) throws SQLException {
+      ModelDBConnection.deleteAbiturientByID(aid, fieldsOriginalNames, fieldsData);
+    }
+
+    public void getSelectedAbiturient(MouseEvent mouseEvent) {
+        try {
+           if(fieldsTable.getSelectionModel().getSelectedIndex() > -1)
+            setFieldsData(((ObservableList)(fieldsTable.getSelectionModel().getSelectedItems().get(0))).get(0).toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

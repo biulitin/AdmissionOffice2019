@@ -11,9 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 
@@ -1030,7 +1028,7 @@ public class ModelDBConnection {
 	//InsertForm
 	public static String[] getAbiturientGeneralInfoByID(String aid) throws SQLException {
 		try {
-			String query = ModelDBConnection.getQueryByTabName("Добавление Абитуриента")
+			String query = ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ")
 					+ " WHERE Abiturient.aid = " + aid + ";";
 
 			/*cstmt = con.prepareCall("{call getAbiturientPassportByID(?)}", 1004, 1007);
@@ -1076,18 +1074,18 @@ public class ModelDBConnection {
 	}
 
 	public static void updateAbiturientGeneralInfoByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
-		String[] abiturientFieldsNames = new String[fieldsNames.length - 1],
-				 abiturientFieldsData = new String[fieldsData.length - 1];
+		String[] abiturientData = new String[fieldsData.length],
+				abiturientFieldsNames = new String[fieldsData.length];
 
-		for (int i = 0; i < abiturientFieldsNames.length; i++) {
-			abiturientFieldsNames[i] = fieldsNames[i + 1];
-			abiturientFieldsData[i] = fieldsData[i + 1];
+		for (int i = 0; i < abiturientData.length; i++) {
+			abiturientData[i] = fieldsData[i];
+			abiturientFieldsNames[i] = fieldsNames[i];
 		}
 
-		ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientFieldsData, 0);
+		ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientData, 0);
 	}
 
-    // Competitive Groups Tab
+		// Competitive Groups Tab
     public static String[] getAbiturientCompetitiveGroupsByID(String aid) throws SQLException {
         try {
             String query = ModelDBConnection.getQueryByTabName("Конкурсные группы")
@@ -1581,6 +1579,7 @@ public class ModelDBConnection {
         }*/
     }
 
+    // MainWindow
     public static ObservableList<ObservableList> getAbiturientInfo (ObservableList<ObservableList> info) throws Exception {
 		String query = ModelDBConnection.getQueryByTabName("АРМ по приему в ВУЗ") +
 						" order by aid";
@@ -1621,5 +1620,9 @@ public class ModelDBConnection {
 
         ModelDBConnection.updateElementInTableByExpression("Abiturient", aid, abiturientFieldsNames, abiturientData, 0);
 
+    }
+
+    public static void deleteAbiturientByID(String aid, String[] fieldsNames, String[] fieldsData) throws SQLException {
+        ModelDBConnection.deleteElementInTableByExpression("Abiturient", aid, fieldsNames, fieldsData, 0);
     }
 }
