@@ -30,7 +30,7 @@ public class AddressTabController {
     String aid;
 
 
-    public void fillTab(FXMLLoader tabController) throws Exception {
+    public void fillTab(FXMLLoader tabController, String aid) throws Exception {
         //parentGridPane.autosize();
         //childGridPane.autosize();
 
@@ -154,7 +154,7 @@ public class AddressTabController {
         addEditDeleteButtonsController.setParameters("Адрес и контакты",tabController, fields, fieldsTypes, fieldsControllers);
         addEditDeleteButtonsController.hideButton(0, 2);
         addEditDeleteButtonsController.setWidthHideButtons(155.0, 35.0, 1);
-        setFieldsData("0");
+        setFieldsData(aid);
         setEditable(false);
     }
 

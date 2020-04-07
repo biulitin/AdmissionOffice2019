@@ -50,7 +50,7 @@ public class IndividualAchievementsTabController {
     String aid;
     ObservableList<ObservableList> list = FXCollections.observableArrayList();
 
-    public void fillTab(FXMLLoader tabController) throws Exception {
+    public void fillTab(FXMLLoader tabController, String aid) throws Exception {
         mainGridPane.autosize();
         ModelDBConnection.setDefaultConnectionParameters();
         ModelDBConnection.initConnection();
@@ -246,7 +246,7 @@ public class IndividualAchievementsTabController {
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
 
-        setFieldsData("0");
+        setFieldsData(aid);
 
         addEditDeleteButtonsController.setParameters("Индивидуальные достижения", tabController, fields, fieldsTypes, fieldsControllers);
 

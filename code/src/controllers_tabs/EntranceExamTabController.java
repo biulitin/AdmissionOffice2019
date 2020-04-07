@@ -33,7 +33,7 @@ public class EntranceExamTabController {
 
     ObservableList<ObservableList> list = FXCollections.observableArrayList();
 
-    public void fillTab(FXMLLoader tabController) throws Exception {
+    public void fillTab(FXMLLoader tabController, String aid) throws Exception {
         mainGridPane.autosize();
         ModelDBConnection.setDefaultConnectionParameters();
     	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
@@ -240,7 +240,7 @@ public class EntranceExamTabController {
 
         AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
 
-        setFieldsData("0");
+        setFieldsData(aid);
 
         addEditDeleteButtonsController.setParameters("Вступительные испытания", tabController, fields, fieldsTypes, fieldsControllers);
 

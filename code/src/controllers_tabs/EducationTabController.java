@@ -28,7 +28,7 @@ public class EducationTabController {
 
     String aid;
 
-    public void fillTab(FXMLLoader tabController) throws Exception {
+    public void fillTab(FXMLLoader tabController, String aid) throws Exception {
     	ModelDBConnection.setDefaultConnectionParameters();
     	//ModelDBConnection.setConnectionParameters("MSServer", "localhost", "Abiturient", "igor_sa", "200352");
 		ModelDBConnection.initConnection();
@@ -176,7 +176,7 @@ public class EducationTabController {
         addEditDeleteButtonsController.hideButton(0, 2);
         addEditDeleteButtonsController.setWidthHideButtons(155.0, 35.0, 1);
         setEditable(false);
-        setFieldsData("0");
+        setFieldsData(aid);
     }
 
     public void setEditable(Boolean value) {

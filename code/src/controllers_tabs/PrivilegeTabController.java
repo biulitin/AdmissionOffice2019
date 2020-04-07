@@ -34,7 +34,7 @@ public class PrivilegeTabController {
 
     ObservableList<ObservableList> list = FXCollections.observableArrayList();
 
-    public void fillTab(FXMLLoader tabController) {
+    public void fillTab(FXMLLoader tabController, String aid) {
         ModelDBConnection.setDefaultConnectionParameters();
         ModelDBConnection.initConnection();
 
@@ -42,7 +42,7 @@ public class PrivilegeTabController {
 
         choicePrivilege.getSelectionModel().selectedItemProperty().addListener((observableValue, old_val, new_val) -> {
             try {
-                getPrivilegeTypes(tabController,new_val.toString());
+                getPrivilegeTypes(tabController, new_val.toString(), aid);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -50,7 +50,7 @@ public class PrivilegeTabController {
     }
 
 
-    void getPrivilegeTypes(FXMLLoader tabController, String privilege) throws Exception {
+    void getPrivilegeTypes(FXMLLoader tabController, String privilege, String aid) throws Exception {
         if(mainGridPane.getChildren().size() > 3)
             mainGridPane.getChildren().remove(3);
 
@@ -219,7 +219,7 @@ public class PrivilegeTabController {
 
             AddEditDeleteButtonsController addEditDeleteButtonsController = loader.getController();
 
-            setFieldsData("0");
+            setFieldsData(aid);
 
             addEditDeleteButtonsController.setParameters("Привилегии", tabController, fields, fieldsTypes, fieldsControllers);
 

@@ -24,7 +24,7 @@ public class PassportTabController {
 
     String aid;
 
-    public void fillTab(FXMLLoader tabController) throws Exception {
+    public void fillTab(FXMLLoader tabController, String aid) throws Exception {
         parentGridPane.autosize();
         childGridPane.autosize();
 
@@ -161,7 +161,7 @@ public class PassportTabController {
         addEditDeleteButtonsController.hideButton(0, 2);
         addEditDeleteButtonsController.setWidthHideButtons(155.0, 35.0, 1);
         setEditable(false);
-        setFieldsData("0");
+        setFieldsData(aid);
     }
 
 

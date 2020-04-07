@@ -411,8 +411,10 @@ public class MainWindowController {
 
     public void getSelectedAbiturient(MouseEvent mouseEvent) {
         try {
-        	if(allAbiturientsTable.getSelectionModel().getSelectedIndex() > -1)
-        		setFieldsData(((ObservableList)(allAbiturientsTable.getSelectionModel().getSelectedItems().get(0))).get(0).toString());
+        	if(allAbiturientsTable.getSelectionModel().getSelectedIndex() > -1) {
+				setFieldsData(((ObservableList)(allAbiturientsTable.getSelectionModel().getSelectedItems().get(0))).get(0).toString());
+				fillTabsContent(allAbiturientsTable.getSelectionModel().getSelectedItems().get(0).get(0).toString());
+			}
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -426,124 +428,124 @@ public class MainWindowController {
 
 
 	//Вкладки
-	public void fillTabsContent() throws Exception {
+	public void fillTabsContent(String aid) throws Exception {
 		tabsControllers = new ArrayList<FXMLLoader>();
 
-		addCompetitiveGroupsTab();
-		addIndividualAchievements();
-		addEducationTab();
-		addPassportTab();
-		addOlympiadsTab();
-		addExtraInfoTab();
-		addEntranceExamTab();
-		addPrivilegeTab();
-		addAddressTab();
+		addCompetitiveGroupsTab(aid);
+		addIndividualAchievements(aid);
+		addEducationTab(aid);
+		addPassportTab(aid);
+		addOlympiadsTab(aid);
+		addExtraInfoTab(aid);
+		addEntranceExamTab(aid);
+		addPrivilegeTab(aid);
+		addAddressTab(aid);
 	}
 
-	public void addCompetitiveGroupsTab() throws Exception {
+	public void addCompetitiveGroupsTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/CompetitiveGroupsTab.fxml"));
 
 		tabCompetitiveGroups.setContent((Node) tabLoader.load());
 		CompetitiveGroupsTabController competitiveGroupsTabController = tabLoader.getController();
-		competitiveGroupsTabController.fillTab(tabLoader);
+		competitiveGroupsTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addAddressTab() throws Exception {
+	public void addAddressTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/AddressTab.fxml"));
 
 		tabAddressAndContacts.setContent((Node) tabLoader.load());
 		AddressTabController addresTabController = tabLoader.getController();
-		addresTabController.fillTab(tabLoader);
+		addresTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addIndividualAchievements() throws Exception {
+	public void addIndividualAchievements(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/IndividualAchievementsTab.fxml"));
 
 		tabIndividualAchievements.setContent((Node) tabLoader.load());
 		IndividualAchievementsTabController individualAchievementsTabController = tabLoader.getController();
-		individualAchievementsTabController.fillTab(tabLoader);
+		individualAchievementsTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addEducationTab() throws Exception {
+	public void addEducationTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/EducationTab.fxml"));
 
 		tabEducation.setContent((Node) tabLoader.load());
 		EducationTabController educationTabController = tabLoader.getController();
-		educationTabController.fillTab(tabLoader);
+		educationTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addPassportTab() throws Exception {
+	public void addPassportTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/PassportTab.fxml"));
 
 		tabPassportAndINN.setContent((Node) tabLoader.load());
 		PassportTabController passportTabController = tabLoader.getController();
-		passportTabController.fillTab(tabLoader);
+		passportTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addOlympiadsTab() throws Exception {
+	public void addOlympiadsTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/OlympiadsTab.fxml"));
 
 		tabBasisFor100balls.setContent((Node) tabLoader.load());
 		OlympiadsTabController olympiadsTabController = tabLoader.getController();
-		olympiadsTabController.fillTab(tabLoader);
+		olympiadsTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addExtraInfoTab() throws Exception {
+	public void addExtraInfoTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/AdditionalInfoTab.fxml"));
 
 		tabExtraInfo.setContent((Node) tabLoader.load());
 		AdditionalInfoTabController additionalInfoTabController = tabLoader.getController();
-		additionalInfoTabController.fillTab(tabLoader);
+		additionalInfoTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addEntranceExamTab() throws Exception {
+	public void addEntranceExamTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/EntranceExamTab.fxml"));
 
 		tabEntranceExams.setContent((Node) tabLoader.load());
 		EntranceExamTabController entranceExamTabController = tabLoader.getController();
-		entranceExamTabController.fillTab(tabLoader);
+		entranceExamTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
 
-	public void addPrivilegeTab() throws Exception {
+	public void addPrivilegeTab(String aid) throws Exception {
 		FXMLLoader tabLoader;
 		tabLoader = new FXMLLoader();
 		tabLoader.setLocation(getClass().getResource("../patterns_tabs/PrivilegeTab.fxml"));
 
 		tabPrivileges.setContent((Node) tabLoader.load());
 		PrivilegeTabController privilegeTabController = tabLoader.getController();
-		privilegeTabController.fillTab(tabLoader);
+		privilegeTabController.fillTab(tabLoader, aid);
 
 		tabsControllers.add(tabLoader);
 	}
@@ -575,7 +577,7 @@ public class MainWindowController {
 		ModelDBConnection.getAbiturientInfo(abiturientData);
 		allAbiturientsTable.setItems(abiturientData);
 
-		fillTabsContent();
+		fillTabsContent(aid);
 	}
 
 
