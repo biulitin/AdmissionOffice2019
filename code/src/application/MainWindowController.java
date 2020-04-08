@@ -603,7 +603,9 @@ public class MainWindowController {
 	}
 
 
-	public void deleteAbiturientDataFromDataBase(String[] fieldsData) throws SQLException {
-		generalInfoController.deleteAbiturientDataFromDataBase(fieldsData);
-	}
+    public void deleteAbiturientDataFromDataBase(String[] fieldsData) throws Exception {
+        generalInfoController.deleteAbiturientDataFromDataBase(fieldsData);
+        this.setFieldsData("");
+        fillTabsContent(this.aid);
+    }
 }
