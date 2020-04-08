@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="689.0" prefWidth="398.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.InsertFormController">
+<AnchorPane prefHeight="689.0" prefWidth="398.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.InsertFormController">
    <children>
       <GridPane layoutX="267.0" layoutY="139.0" prefHeight="689.0" prefWidth="398.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
