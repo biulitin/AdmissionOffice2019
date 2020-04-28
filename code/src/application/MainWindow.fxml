@@ -80,7 +80,7 @@
                         <MenuItem mnemonicParsing="false" text="Списки групп на вступительные" />
                         <MenuItem mnemonicParsing="false" text="Результаты вступительных" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Сатистика" />
+                        <MenuItem mnemonicParsing="false" text="Статистика" />
                      </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Конкурс">
